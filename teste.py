@@ -11,19 +11,19 @@ client = MongoClient(connection_string)
 
 db_connection = client["albumatic"]
 
-print(db_connection)
+# print(db_connection)
 
 collection = db_connection.get_collection("collection")
 
-print(collection)
-print()
+print("collection----------------",collection)
+# print()
 
 search_filter = {"estou": "aqui"}
 response = collection.find(search_filter)
 
 for registry in response: print(registry)
 
-collection.insert_one({
-    "estou": "inserindo",
-    "numeros": [123, 456, 789]
-})
+# collection.insert_one({
+#     "estou": "inserindo",
+#     "numeros": [123, 456, 789]
+# })

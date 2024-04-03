@@ -1,15 +1,15 @@
 from pymongo import MongoClient #importação do pymongo, biblioteca que possibilita a integração do python com o banco de dados
 from models.connection_options.mongo_db_configs import mongo_db_infos 
+# from mongo_db_configs import mongo_db_infos
 from urllib.parse import quote_plus #uso do quote_plus para "traduzir" os símbolos gráficos na hora da leitura feita pelo MongoClient
 
 class DBconnectionHandler: 
     def __init__(self) -> None: #construtora da classe DBconnectionHandler, responsável por gerenciar o controle da conexão
-        username= mongo_db_infos["USERNAME"]
-        password = mongo_db_infos["PASSWORD"]
-        self.__connection_string= 'mongodb://{}:{}@cluster0.lb2khsh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'.format(
-            quote_plus(username), 
-            quote_plus(password)
-        )
+        username = "pooalbumatic"
+        password = "tr@balhopoo"
+        # username = mongo_db_infos["USERNAME"]
+        # password = mongo_db_infos["PASSWORD"] problema de importação ao definir, tirar dúvida professora
+        self.__connection_string = f"mongodb+srv://{quote_plus(username)}:{quote_plus(password)}@cluster0.lb2khsh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
         self.dbname= mongo_db_infos["DB_NAME"]
         self.__client=None
         self.__db_connection= None
@@ -25,17 +25,6 @@ class DBconnectionHandler:
             return self.__client
           
 
-
-db_handle= DBconnectionHandler()
-db_handle.connect_to_db()
-getconnection = db_handle.get_db_connection()
-print(getconnection)
-collection = getconnection.get_collection('teste')
-print(collection)
-
-
-    
-        
 
 
 
