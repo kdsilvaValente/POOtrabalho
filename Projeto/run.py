@@ -1,4 +1,4 @@
-from models.connection_options.connection import DBconnectionHandler
+from src.connection_options.connection import DBconnectionHandler
 
 db_handle= DBconnectionHandler()
 db_handle.connect_to_db()

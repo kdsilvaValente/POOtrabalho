@@ -1,5 +1,5 @@
 from pymongo import MongoClient #importação do pymongo, biblioteca que possibilita a integração do python com o banco de dados
-from models.connection_options.mongo_db_configs import mongo_db_infos 
+from src.connection_options.mongo_db_configs import mongo_db_infos 
 # from mongo_db_configs import mongo_db_infos
 from urllib.parse import quote_plus #uso do quote_plus para "traduzir" os símbolos gráficos na hora da leitura feita pelo MongoClient
 
