@@ -18,7 +18,7 @@ class DBconnectionHandler:
     def connect_to_db(self): #função para realizar a conexão inicial com banco de dados
             self.__client = MongoClient(self.__connection_string)
             self.__db_connection = self.__client[quote_plus(self.dbname)] #onde a conexão ocorre, no banco escolhido dado por self.dbname
-            print( self.__db_connection)
+        #     print( self.__db_connection)
     def get_db_connection(self):# retorno da conexão feita, últil para confirmar a conexão 
             return self.__db_connection 
     def get_db_client(self):

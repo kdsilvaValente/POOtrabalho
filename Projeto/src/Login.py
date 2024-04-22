@@ -33,8 +33,7 @@ class Login:
              if isthere_email is None and isthere_password is None:
                  print("Dados incorretos ou usuário inexistente")
 
-login=Login()
-login.login("yuriwada@gmail.com", "euamookauan")
+
                  
                 
            

@@ -70,6 +70,5 @@ class User:
         
     
 
-teste = User("Kauan", "aaaaa", "euamookauan", "japones", "11")
 
 
