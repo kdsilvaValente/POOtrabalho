@@ -36,8 +36,6 @@ class User:
     def get_email(self):
         return self.email
 
-    def get_password(self):
-        return self.password
 
     def get_gender(self):
         return self.gender
