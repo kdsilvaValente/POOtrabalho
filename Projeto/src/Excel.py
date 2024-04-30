@@ -2,6 +2,7 @@ import pandas as pd
 from run import getconnection  
 from Music import Musica
 from Auxiliares_uteis import Auxiliar
+from Albuns import Albuns
 
 class Excel:
     def __init__(self):
@@ -10,29 +11,38 @@ class Excel:
     #metodos para ler o excel
     def importar_excel(self, caminho_arquivo):
         auxiliar = Auxiliar()
+        albuns = Albuns()
+        
         #armazenar as musicas importadas
-        colecao = getconnection.get_collection("Albuns")
+        colecao = getconnection.get_collection("Musica")
 
         dados_excel = pd.read_excel(caminho_arquivo)
 
         #leitura da planilha associando a musicas
         for indice, linha in dados_excel.iterrows():
             titulo = linha['Título']
+            artista = linha['Artista']
             album = linha['Album']
+            genero = linha['Genero']
             compositores = str(linha['Compositores']) if pd.notna(linha['Compositores']) else []
             produtores = str(linha['Produtores']) if pd.notna(linha['Produtores']) else []
             duracao = str(linha['Duração'])
-            numero = indice + 1
+            numero = linha['Número']
+
+            #cria os albuns das músicas
+            albuns.criar_albuns(album, artista, genero)
 
             if titulo not in self.musicas_importadas:
-                # Verificar se a música já existe no banco de dados
-                if not auxiliar.verificar_existencia_musica(titulo):
-                    musica = Musica(numero, titulo, album, compositores, produtores, duracao)
-                    musica.adicionar_para_mongodb(colecao)
+                #verifica se a música já existe no banco de dados
+                if not auxiliar.verificar_existencia_musica(titulo, album, artista):
+                    musica = Musica(numero, titulo, artista, album, genero, compositores, produtores, duracao, 0)
+                    musica.adicionar_para_mongodb_Excel(colecao)
+                    
+                    #atualiza o id do álbum nas musicas
+                    musica.atualizar_no_mongodb()
 
-
-                    self.musicas_importadas.add(titulo)
-
+        #insere as musicas nos albuns já criados
+        albuns.inserir_musicas_em_albuns()
         print("Todas as músicas foram importadas com sucesso!")
         
 excel = Excel()
