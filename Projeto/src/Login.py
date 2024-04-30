@@ -12,8 +12,7 @@ class Login:
         isthere_user = self.collection.find_one(search)
         #realiza o login se o usuário existe e a senha e email está correto
         if isthere_user is not None:
-          print(f"Bem vindo {isthere_user['name']}")
-          return isthere_user
+          return True
 
         #verifica a causa do erro ao logar, se é a senha, o email, ou ambos
         else:
@@ -26,8 +25,8 @@ class Login:
                 }
              isthere_email = self.collection.find_one(search_email)
              if isthere_password is None and isthere_email is not None:
-                 print("Senha incorreto ou usuário inexistente")       
-             
+                 print("Senha incorreto ou usuário inexistente")  
+                 return KeyError     
              if isthere_email is None and isthere_password is not None:
                  print("Email incorreto ou usuário inexistente")
              if isthere_email is None and isthere_password is None:

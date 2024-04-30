@@ -2,15 +2,17 @@ from run import getconnection
 from bson import ObjectId #biblioteca para poder usar o ObjectId e converter no formato bson
 
 class User:
-    def __init__(self, userdata):
+    def __init__(self, _id):
         self.collection = getconnection.get_collection("User")
-        self.name=userdata["name"]
-        self.email=userdata["email"]
-        self.password=userdata["password"]
-        self.gender=userdata["gender"]
-        self.phone_number=userdata["phone_number"]
+        self.user_id = ObjectId(_id["_id"])
+        data= self.collection.find_one({"id":self.user_id })
+        self.name=data["name"]
+        self.email=data["email"]
+        self.password=data["password"]
+        self.gender=data["gender"]
+        self.phone_number=data["phone_number"]
+        self.isonline=data["isonline"]
         # Converte o ID para o formato ObjectId
-        self.user_id = ObjectId(userdata["_id"])
     def newuser(self, userdata):
         user_data = {
                 "name": userdata["name"],
@@ -18,9 +20,11 @@ class User:
                 "gender": userdata["gender"],
                 "phone_number": userdata["phone_number"],
                 "password": userdata["password"],
+                "isonline": userdata["isonline"],
         }
         self.collection.insert_one(user_data)
         print("adicionado")
+        
     def delete(self):
         self.collection.find_one_and_delete({"_id": self.user_id})
     def get_name(self):
@@ -43,22 +47,29 @@ class User:
     def update_name(self, name_new):
         print(name_new)
         self.collection.find_one_and_update({"_id": self.user_id}, {"$set": {"name": name_new}})
+        self.name=name_new #melhorar futuramente, para receber do banco
         
     def update_email(self, email_new):
         print(email_new)
         self.collection.find_one_and_update({"_id": self.user_id}, {"$set":{"email":email_new}})
+        self.email=email_new
+
     
     def update_password(self, password_new):
         print(password_new)
         self.collection.find_one_and_update({"_id": self.user_id}, {"$set":{"password":password_new}})
+        self.password=password_new
     
     def update_gender(self, gender_new):
         print(gender_new)
         self.collection.find_one_and_update({"_id": self.user_id}, {"$set":{"gender":gender_new}})
+        self.gender=gender_new
+
     
     def update_number(self, phone_number_new):
         print(phone_number_new)
         self.collection.find_one_and_update({"_id": self.user_id}, {"$set":{"phone_number":phone_number_new}})
+        self.phone_number=phone_number_new
     def chose_gender(self):
         while True:
             print("Qual seu gênero?\n")
