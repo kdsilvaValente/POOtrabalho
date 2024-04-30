@@ -1,10 +1,11 @@
 from User import*
 from Login import* 
 from Avaliacao import*
+from Album import*
 
 class User_interface:
     def __init__(self, User):
-            self.user =User
+            self.user = User
             self.options()
     def options(self):
             while True:
@@ -19,10 +20,8 @@ class User_interface:
                         print("Digite um número válido")
     def display_main_menu(self):
         print("\nMenu Principal:")
-        print("1. Ver perfil")
-        print("2. Editar informação do perfil")
-        print("3. Deletar perfil")
-        print("4. Sair")
+        print("1. Dar like em musica")
+        
     def display_main_menu_option(self,option):
            if option == 1:
             self.display_user_profile()
@@ -36,12 +35,6 @@ class User_interface:
         self.options()
 
 
-                        
-          
-                
 
-       
-       
-        
 user=User("Kauan", "Kauan@", "Kauan1515", "masculino", 124563)
 teste= User_interface(user)
