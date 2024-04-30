@@ -2,8 +2,8 @@ from run import getconnection
 from fuzzywuzzy import fuzz
 
 class Search:
-    def __init__(self):
-        self.music_collection = getconnection.get_collection("Musica")
+    def __init__(self,collection):
+        self.music_collection = getconnection.get_collection(collection)
         self.minimum_similarity = 70
 
 
