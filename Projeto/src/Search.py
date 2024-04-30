@@ -7,14 +7,23 @@ class Search:
         self.minimum_similarity = 70
 
 
-    def get_by_type(self, type,name_search):#recebe o nome do que você está pesquisando e o onde procurar no banco
+    def get_by_type(self, type,search):#recebe o nome do que você está pesquisando e o onde procurar no banco
         results=[]
-        for document in self.music_collection.find({}):     
+        for document in self.music_collection.find({}):  
             document_title=document.get(type)
-            document_title = str(document_title) 
-            similarity_nivel= fuzz.partial_ratio(name_search.lower(), document_title.lower())
-            if similarity_nivel >= self.minimum_similarity:
-                results.append((document))
-                print(results)
-                return results
+            if isinstance(search,int): #procurando números
+                search=str(search)
+                document_title=str(document_title)
+                similarity_nivel= fuzz.partial_ratio(search, document_title)
+                if similarity_nivel >= self.minimum_similarity:
+                    results.append((document))
+                    print(results)
+                    return results 
+            else:
+                document_title = str(document_title)  #procurando apenas strings
+                similarity_nivel= fuzz.partial_ratio(search.lower(), document_title.lower())
+                if similarity_nivel >= self.minimum_similarity:
+                    results.append((document))
+                    print(results)
+                    return results
     
