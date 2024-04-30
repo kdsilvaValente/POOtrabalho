@@ -1,2 +1,3 @@
 #pip install -r requirements.txt para instalar as dependências
 # /usr/bin/python3 User.py
+# instalar o pip install python-Levenshtein
