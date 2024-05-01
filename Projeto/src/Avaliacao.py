@@ -1,5 +1,6 @@
 from bson.objectid import ObjectId
 from run import getconnection
+from Auxiliares_uteis import calcMedia
 
 class Avaliacao():
     def __init__(self, db_connection) -> None:
@@ -98,4 +99,67 @@ class Avaliacao():
 
         return f"Usuário {idUser} desfez like na música {idmusica}."
 
+# função de avaliação na música (0 a 5 estrelas) e atualiza avaliacao final(NAO ESTA PRONTA)
+    def darNota(self, idmusica, idUser, nota):
+        # adicionando as coleções 
+        musicacollection = self.__db_connection.get_collection(self.__colecaoalbum)
+        usercollection = self.__db_connection.get_collection(self.__colecaouser)
+        avaliacaocollection = self.__db_connection.get_collection(self.__colecaoavaliacao)
+        
+        # nota menor que 1 ou maior que 5
+        if nota < 1 or nota >5:
+            raise ValueError(f"Nota inválida.")
 
+        # acha a musica ou retorna se ela nao for encontrada
+        musica = musicacollection.find_one({"_id": ObjectId(idmusica)})
+        if not musica:
+            raise ValueError(f"Musica não foi encontrada.")
+        
+        # confere se o user existe
+        user = usercollection.find_one({"_id": ObjectId(idUser)})
+        if not user:
+            raise ValueError("Usuário não foi encontrado.")
+        
+        # verificar se o user deu nota nessa musica
+        usuario_avaliou = avaliacaocollection.find_one({
+            "usuario": ObjectId(idUser), 
+            "musica": ObjectId(idmusica), 
+            "acao": "dar nota em musica"
+        })
+
+        if usuario_avaliou:
+            return f"Usuário {idUser} já avaliou a música {idmusica}."
+
+        # dar nota de musica
+        musicacollection.update_one(
+            {"_id": ObjectId(idmusica)},
+            {"$inc": {"avaliacao geral": nota}}  # avalia uma música
+        )
+        musicacollection.update_one(
+            {"_id": ObjectId(idmusica)},
+            {"$inc": {"n de avaliacoes": 1}}  # conta quantas pessoas fizeram uma avaliacao
+        )
+        
+        #calcular nota da avaliação geral
+
+        somatorio = musicacollection.find_one({"_id": ObjectId(idmusica)}, {"avaliacao geral":1})
+        usuarios = musicacollection.find_one({"_id": ObjectId(idmusica)}, {"n de avaliacoes":1})
+        
+        media = calcMedia(somatorio, usuarios)
+        notafinal = media.notaGeral
+        musicacollection.update_one(
+            {"_id": ObjectId(idmusica)},
+            {"$set": {"avaliacao final": notafinal}}  # avalia uma música
+        )
+
+        # registrar avaliação de música
+        avaliacaocollection.insert_one({
+            "usuario": ObjectId(idUser),
+            "musica": ObjectId(idmusica),
+            "acao": "dar nota em musica"
+        })
+
+        return f"Usuário {idUser} deu {nota} estrelas na música{idmusica}."
+
+aval = Avaliacao(getconnection)
+darnota = aval.darNota('66304fabb5978db00d5b294f', '6630f083927b4db79f27a542', 3)

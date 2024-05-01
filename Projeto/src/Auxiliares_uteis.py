@@ -8,3 +8,14 @@ class Auxiliar:
         colecao = getconnection.get_collection("Musica")
         #consultar a existencia de uma música dentro do banco de dados
         return bool(colecao.find_one({'titulo': titulo, 'album': album, 'artista': artista}))
+
+
+class calcMedia():
+    def __init__(self, sum, numUsers):
+        self.sum = sum
+        self.numUsers = numUsers
+
+    def notaGeral(self):
+        if self.numUsers == 0:
+            raise ValueError("Número de usuários não pode ser zero.")
+        return self.sum / self.numUsers
