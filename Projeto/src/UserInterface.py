@@ -2,6 +2,7 @@ from User import*
 from Login import* 
 
 
+
 class User_interface:
     def __init__(self,user):
             self.user=User(user)
@@ -146,12 +147,5 @@ class User_interface:
                 
 
        
-user = {
-    "_id": '6630f0cf83408a9a76959cb2', 
-    "name": "Kauan",
-    "email": "kauanvalentesv@gmail.com",
-    "password": "Kauan22",
-    "gender": "Masculino",
-    "phone_number": 119545
-}
-teste= User_interface(user)
+
+teste= User_interface("6630f083927b4db79f27a542")

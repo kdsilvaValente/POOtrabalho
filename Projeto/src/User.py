@@ -4,8 +4,11 @@ from bson import ObjectId #biblioteca para poder usar o ObjectId e converter no 
 class User:
     def __init__(self, _id):
         self.collection = getconnection.get_collection("User")
-        self.user_id = ObjectId(_id["_id"])
-        data= self.collection.find_one({"id":self.user_id })
+        self.user_id = ObjectId(_id)
+        data= self.collection.find_one({"_id":self.user_id })
+        print("cheguei")
+    
+        print(data)
         self.name=data["name"]
         self.email=data["email"]
         self.password=data["password"]
