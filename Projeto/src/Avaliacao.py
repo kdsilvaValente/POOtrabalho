@@ -141,12 +141,15 @@ class Avaliacao():
         )
         
         #calcular nota da avaliação geral
+        #pegar valores
+        msc = musicacollection.find_one({"_id": ObjectId(idmusica)})
+        usu = musicacollection.find_one({"_id": ObjectId(idmusica)})
+        somatorio = msc["avaliacao geral"]
+        usuarios = usu["n de avaliacoes"]
 
-        somatorio = musicacollection.find_one({"_id": ObjectId(idmusica)}, {"avaliacao geral":1})
-        usuarios = musicacollection.find_one({"_id": ObjectId(idmusica)}, {"n de avaliacoes":1})
-        
+        #instancir classe media e calcular media
         media = calcMedia(somatorio, usuarios)
-        notafinal = media.notaGeral
+        notafinal = media.notaGeral()
         musicacollection.update_one(
             {"_id": ObjectId(idmusica)},
             {"$set": {"avaliacao final": notafinal}}  # avalia uma música
@@ -161,5 +164,3 @@ class Avaliacao():
 
         return f"Usuário {idUser} deu {nota} estrelas na música{idmusica}."
 
-aval = Avaliacao(getconnection)
-darnota = aval.darNota('66304fabb5978db00d5b294f', '6630f083927b4db79f27a542', 3)
