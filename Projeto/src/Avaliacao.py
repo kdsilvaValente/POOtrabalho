@@ -7,6 +7,7 @@ class Avaliacao():
         self.__colecaoalbum = "Musica"
         self.__colecaouser = "User"
         self.__colecaoavaliacao = "Avaliacao"
+        self.__colecaocomentarios = "Comentarios"
         self.__db_connection = db_connection
 
     # função que favorita uma musica 
@@ -155,6 +156,8 @@ class Avaliacao():
             {"$set": {"avaliacao final": notafinal}}  # avalia uma música
         )
 
+        #falta chamar função que muda media do album
+
         # registrar avaliação de música
         avaliacaocollection.insert_one({
             "usuario": ObjectId(idUser),
@@ -164,3 +167,32 @@ class Avaliacao():
 
         return f"Usuário {idUser} deu {nota} estrelas na música{idmusica}."
 
+    def comentar(self, idmusica, idUser, comentario):
+        # adicionando a colecao
+        comentariocollection = self.__db_connection.get_collection(self.__colecaocomentarios)
+        musicacollection = self.__db_connection.get_collection(self.__colecaoalbum)
+        usercollection = self.__db_connection.get_collection(self.__colecaouser)
+
+        # acha a musica ou retorna se ela nao for encontrada
+        musica = musicacollection.find_one({"_id": ObjectId(idmusica)})
+        if not musica:
+            raise ValueError(f"Musica não foi encontrada.")
+        
+        # confere se o user existe
+        user = usercollection.find_one({"_id": ObjectId(idUser)})
+        if not user:
+            raise ValueError("Usuário não foi encontrado.")
+
+        #teste comentario vazio
+        if not comentario.strip():
+                return "O comentário não pode ser vazio."
+        
+        #adicionar comentario e relacionar com a musica e o usuario 
+        comentariocollection.insert_one({
+            "usuario": ObjectId(idUser),
+            "musica": ObjectId(idmusica),
+            "comentario": comentario.strip()
+        })
+
+        return f"Usuário {idUser} fez um comentário na música {idmusica}."
+    
