@@ -1,11 +1,13 @@
 from bson.objectid import ObjectId
 from run import getconnection
+from Auxiliares_uteis import calcMedia
 
 class Avaliacao():
     def __init__(self, db_connection) -> None:
         self.__colecaoalbum = "Musica"
         self.__colecaouser = "User"
         self.__colecaoavaliacao = "Avaliacao"
+        self.__colecaocomentarios = "Comentarios"
         self.__db_connection = db_connection
 
     # função que favorita uma musica 
@@ -98,4 +100,99 @@ class Avaliacao():
 
         return f"Usuário {idUser} desfez like na música {idmusica}."
 
+# função de avaliação na música (0 a 5 estrelas) e atualiza avaliacao final(NAO ESTA PRONTA)
+    def darNota(self, idmusica, idUser, nota):
+        # adicionando as coleções 
+        musicacollection = self.__db_connection.get_collection(self.__colecaoalbum)
+        usercollection = self.__db_connection.get_collection(self.__colecaouser)
+        avaliacaocollection = self.__db_connection.get_collection(self.__colecaoavaliacao)
+        
+        # nota menor que 1 ou maior que 5
+        if nota < 1 or nota >5:
+            raise ValueError(f"Nota inválida.")
 
+        # acha a musica ou retorna se ela nao for encontrada
+        musica = musicacollection.find_one({"_id": ObjectId(idmusica)})
+        if not musica:
+            raise ValueError(f"Musica não foi encontrada.")
+        
+        # confere se o user existe
+        user = usercollection.find_one({"_id": ObjectId(idUser)})
+        if not user:
+            raise ValueError("Usuário não foi encontrado.")
+        
+        # verificar se o user deu nota nessa musica
+        usuario_avaliou = avaliacaocollection.find_one({
+            "usuario": ObjectId(idUser), 
+            "musica": ObjectId(idmusica), 
+            "acao": "dar nota em musica"
+        })
+
+        if usuario_avaliou:
+            return f"Usuário {idUser} já avaliou a música {idmusica}."
+
+        # dar nota de musica
+        musicacollection.update_one(
+            {"_id": ObjectId(idmusica)},
+            {"$inc": {"avaliacao geral": nota}}  # avalia uma música
+        )
+        musicacollection.update_one(
+            {"_id": ObjectId(idmusica)},
+            {"$inc": {"n de avaliacoes": 1}}  # conta quantas pessoas fizeram uma avaliacao
+        )
+        
+        #calcular nota da avaliação geral
+        #pegar valores
+        msc = musicacollection.find_one({"_id": ObjectId(idmusica)})
+        usu = musicacollection.find_one({"_id": ObjectId(idmusica)})
+        somatorio = msc["avaliacao geral"]
+        usuarios = usu["n de avaliacoes"]
+
+        #instancir classe media e calcular media
+        media = calcMedia(somatorio, usuarios)
+        notafinal = media.notaGeral()
+        musicacollection.update_one(
+            {"_id": ObjectId(idmusica)},
+            {"$set": {"avaliacao final": notafinal}}  # avalia uma música
+        )
+
+        #falta chamar função que muda media do album
+
+        # registrar avaliação de música
+        avaliacaocollection.insert_one({
+            "usuario": ObjectId(idUser),
+            "musica": ObjectId(idmusica),
+            "acao": "dar nota em musica"
+        })
+
+        return f"Usuário {idUser} deu {nota} estrelas na música{idmusica}."
+
+    def comentar(self, idmusica, idUser, comentario):
+        # adicionando a colecao
+        comentariocollection = self.__db_connection.get_collection(self.__colecaocomentarios)
+        musicacollection = self.__db_connection.get_collection(self.__colecaoalbum)
+        usercollection = self.__db_connection.get_collection(self.__colecaouser)
+
+        # acha a musica ou retorna se ela nao for encontrada
+        musica = musicacollection.find_one({"_id": ObjectId(idmusica)})
+        if not musica:
+            raise ValueError(f"Musica não foi encontrada.")
+        
+        # confere se o user existe
+        user = usercollection.find_one({"_id": ObjectId(idUser)})
+        if not user:
+            raise ValueError("Usuário não foi encontrado.")
+
+        #teste comentario vazio
+        if not comentario.strip():
+                return "O comentário não pode ser vazio."
+        
+        #adicionar comentario e relacionar com a musica e o usuario 
+        comentariocollection.insert_one({
+            "usuario": ObjectId(idUser),
+            "musica": ObjectId(idmusica),
+            "comentario": comentario.strip()
+        })
+
+        return f"Usuário {idUser} fez um comentário na música {idmusica}."
+    
