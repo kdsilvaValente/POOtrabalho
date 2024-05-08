@@ -2,20 +2,21 @@ from run import getconnection
 from bson import ObjectId #biblioteca para poder usar o ObjectId e converter no formato bson
 
 class User:
-    def __init__(self, _id):
-        self.collection = getconnection.get_collection("User")
-        self.user_id = ObjectId(_id)
-        data= self.collection.find_one({"_id":self.user_id })
-        print("cheguei")
     
-        print(data)
-        self.name=data["name"]
-        self.email=data["email"]
-        self.password=data["password"]
-        self.gender=data["gender"]
-        self.phone_number=data["phone_number"]
-        self.isonline=data["isonline"]
-        # Converte o ID para o formato ObjectId
+    def init_user(self, _id):
+        if _id is None:
+            return 0
+        else:
+            self.collection = getconnection.get_collection("User")
+            self.user_id = ObjectId(_id)
+            data= self.collection.find_one({"_id":self.user_id })
+            self.name=data["name"]
+            self.email=data["email"]
+            self.password=data["password"]
+            self.gender=data["gender"]
+            self.phone_number=data["phone_number"]
+            self.isonline=data["isonline"]
+            # Converte o ID para o formato ObjectId
     def newuser(self, userdata):
         user_data = {
                 "name": userdata["name"],
@@ -23,10 +24,13 @@ class User:
                 "gender": userdata["gender"],
                 "phone_number": userdata["phone_number"],
                 "password": userdata["password"],
-                "isonline": userdata["isonline"],
+                "isonline":False,
         }
+
         self.collection.insert_one(user_data)
         print("adicionado")
+        print(user_data["_id"])
+
         
     def delete(self):
         self.collection.find_one_and_delete({"_id": self.user_id})
@@ -108,14 +112,17 @@ class User:
             else:
                 print("Opção inválida. Por favor, escolha um número entre 1 e 8.")
 
+# userdata={
+#           "name":"Natasha",
+#           "email":"natashacaldeirão@gmail.com" ,
+#           "gender":"Gênero neutro",
+#           "phone_number":11984587624,
+#           "password": "Natashaarrasa",
+#           }
 
-    
-   
+# user= User("66323501e31fdfa9372dda6a")    
+# user.newuser(userdata)
 
-
-
-        
-    
-
+user=User()
 
 

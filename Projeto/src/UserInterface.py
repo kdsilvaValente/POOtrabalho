@@ -1,34 +1,39 @@
 from User import*
 from Login import* 
-
+import emoji
+import sys #para usar o sys.exit()
 
 
 class User_interface:
-    def __init__(self,user):
+    def init_user(self,user):
             self.user=User(user)
             self.options()
             
     def options(self):
-            while True:
-                  try:
-                        self.display_main_menu()
-                        option = int(input("Escolha uma opção: "))
-                        if 1 <= option <= 4:
-                            if option == 4:
-                             return 0
-                            else: self.display_main_menu_option(option)
+        while True:
+            try:
+                self.display_main_menu()
+                option = int(input("Escolha uma opção: "))
+                if 1 <= option <= 4:
+                     if option !=4:
+                        self.display_main_menu_option(option)
+                     else:
+                        print("Encerrando o programa.") 
+                        sys.exit()#corrigindo bug de encerrar programanda
+                               
+                else:
+                    print("Opção inválida. Por favor, escolha uma opção de 1 a 4.")
+            except ValueError:
+                print("Digite um número válido.")
 
-                        else:
-                              return KeyError
-                  except ValueError:
-                        print("Digite um número válido")
     def display_main_menu(self):
         print("-------------------------------")
-        print("Menu Principal:")
+        print(emoji.emojize('Bem vindo ao Menu Principal:grinning_face:: '))
         print("1. Ver perfil")
         print("2. Editar informação do perfil")
         print("3. Deletar perfil")
         print("4. Sair")
+        #opções de navegação, e a opção sair precisa direcionar para a tela principal
         print("-------------------------------")
     def display_main_menu_option(self,option):
            if option == 1:
@@ -42,15 +47,18 @@ class User_interface:
             
     
     def display_user_profile(self):
+        print("-------------------------------")
         print("\nSeu perfil:")
         print(f"Nome: {self.user.get_name()}")
         print(f"Email: {self.user.get_email()}")
         print(f"Gênero: {self.user.get_gender()}")
         print(f"Telefone: {self.user.get_phone_number()}")
+        print("-------------------------------")
         self.options()
     def update_profile(self):
         while True:
             try:
+                print("-------------------------------")
                 print("O que deseja editar?")
                 print("1. Nome")
                 print("2. Email")
@@ -58,6 +66,9 @@ class User_interface:
                 print("4. Gender")
                 print("5. Phone Number")
                 choice = int(input("Escolha a opção de 1 a 5: "))
+                print("-------------------------------")
+
+            
 
                 if choice == 1:
                     new_name = str(input("Digite o novo nome: "))
@@ -136,6 +147,16 @@ class User_interface:
                 print("Senha incompatível")
 
 
+userdata={
+          "name":"Natasha",
+          "email":"natashacaldeirão@gmail.com" ,
+          "gender":"Gênero neutro",
+          "phone_number":11984587624,
+          "password": "Natashaarrasa",
+          }
+teste = User_interface("6632e36d32ea119ca4f5acc3")
+
+
 
             
             
@@ -146,6 +167,4 @@ class User_interface:
           
                 
 
-       
 
-teste= User_interface("6630f083927b4db79f27a542")

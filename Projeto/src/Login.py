@@ -12,6 +12,7 @@ class Login:
         isthere_user = self.collection.find_one(search)
         #realiza o login se o usuário existe e a senha e email está correto
         if isthere_user is not None:
+          isthere_user["isonline"]=True
           return True
 
         #verifica a causa do erro ao logar, se é a senha, o email, ou ambos
@@ -35,8 +36,8 @@ class Login:
                  return False     
 
 
-
-                 
+login=Login()     
+login.login("natashacaldeirão@gmail.com","Natashaarrasa")
                 
            
             

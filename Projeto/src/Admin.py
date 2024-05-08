@@ -3,7 +3,7 @@ from User import*
 class Admin(User):
     #funções de herança de user
     def __init__ (self, _id):
-        super().__init__(self, _id)
+        super().__init__(_id)
     def newuser(self, userdata):
         return super().newuser(userdata)
     def delete(self):
