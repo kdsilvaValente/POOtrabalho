@@ -17,13 +17,10 @@ class Search:
                 similarity_nivel= fuzz.partial_ratio(search, document_title)
                 if similarity_nivel >= self.minimum_similarity:
                     results.append((document))
-                    print(results)
-                    return results 
             else:
                 document_title = str(document_title)  #procurando apenas strings
                 similarity_nivel= fuzz.partial_ratio(search.lower(), document_title.lower())
                 if similarity_nivel >= self.minimum_similarity:
                     results.append((document))
-                    print(results)
-                    return results
+        return results
     

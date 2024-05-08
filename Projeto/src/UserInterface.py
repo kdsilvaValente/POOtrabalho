@@ -147,14 +147,15 @@ class User_interface:
                 print("Senha incompatível")
 
 
-userdata={
-          "name":"Natasha",
-          "email":"natashacaldeirão@gmail.com" ,
-          "gender":"Gênero neutro",
-          "phone_number":11984587624,
-          "password": "Natashaarrasa",
-          }
-teste = User_interface("6632e36d32ea119ca4f5acc3")
+# userdata={
+#           "name":"Natasha",
+#           "email":"natashacaldeirão@gmail.com" ,
+#           "gender":"Gênero neutro",
+#           "phone_number":11984587624,
+#           "password": "Natashaarrasa",
+#           }
+teste = User_interface()
+teste.init_user("66323501e31fdfa9372dda6a")
 
 
 
