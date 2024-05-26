@@ -1,31 +1,27 @@
 from bson.objectid import ObjectId
 from run import getconnection
-from Auxiliares_uteis import calcMedia
+from Auxiliares_uteis import calcMedia, Validador
 
 class Avaliacao():
     def __init__(self, db_connection) -> None:
-        self.__colecaoalbum = "Musica"
+        self.__colecaomusica = "Musica"
         self.__colecaouser = "User"
         self.__colecaoavaliacao = "Avaliacao"
         self.__colecaocomentarios = "Comentarios"
+        self.__colecaoalbum = "Albuns"
         self.__db_connection = db_connection
+        self.__validador = Validador(db_connection)
 
     # função que favorita uma musica 
     def darLike(self, idmusica, idUser):
         # adicionando as coleções 
-        musicacollection = self.__db_connection.get_collection(self.__colecaoalbum)
+        musicacollection = self.__db_connection.get_collection(self.__colecaomusica)
         usercollection = self.__db_connection.get_collection(self.__colecaouser)
         avaliacaocollection = self.__db_connection.get_collection(self.__colecaoavaliacao)
         
-        # acha a musica ou retorna se ela nao for encontrada
-        musica = musicacollection.find_one({"_id": ObjectId(idmusica)})
-        if not musica:
-            raise ValueError(f"Musica não foi encontrada.")
-        
-        # confere se o user existe
-        user = usercollection.find_one({"_id": ObjectId(idUser)})
-        if not user:
-            raise ValueError("Usuário não foi encontrado.")
+        # acha a musica ou retorna se ela nao for encontrada e confere se usuario existe
+        self.__validador.validar_musica(idmusica)
+        self.__validador.validar_usuario(idUser)
         
         # verificar se o user ja deu like nessa musica
         usuario_curtiu = usercollection.find_one(
@@ -58,20 +54,14 @@ class Avaliacao():
     # função que desfaz um like
     def desfazerLike(self, idmusica, idUser):
         # adicionando as coleções 
-        musicacollection = self.__db_connection.get_collection(self.__colecaoalbum)
+        musicacollection = self.__db_connection.get_collection(self.__colecaomusica)
         usercollection = self.__db_connection.get_collection(self.__colecaouser)
         avaliacaocollection = self.__db_connection.get_collection(self.__colecaoavaliacao)
         
-        # acha a musica ou retorna se ela nao for encontrada
-        musica = musicacollection.find_one({"_id": ObjectId(idmusica)})
-        if not musica:
-            raise ValueError(f"Musica não foi encontrada.")
-        
-        # confere se o user existe
-        user = usercollection.find_one({"_id": ObjectId(idUser)})
-        if not user:
-            raise ValueError("Usuário não foi encontrado.")
-        
+        # acha a musica ou retorna se ela nao for encontrada e confere se usuario existe
+        self.__validador.validar_musica(idmusica)
+        self.__validador.validar_usuario(idUser)
+
         # verificar se o user deu like nessa musica
         usuario_curtiu = usercollection.find_one(
             {"_id": ObjectId(idUser), "musicas curtidas": ObjectId(idmusica)}
@@ -101,25 +91,20 @@ class Avaliacao():
         return f"Usuário {idUser} desfez like na música {idmusica}."
 
 # função de avaliação na música (0 a 5 estrelas) e atualiza avaliacao final(NAO ESTA PRONTA)
-    def darNota(self, idmusica, idUser, nota):
+    def darNota(self, idmusica:ObjectId, idUser:ObjectId, idAlbum:ObjectId, nota:int):
         # adicionando as coleções 
-        musicacollection = self.__db_connection.get_collection(self.__colecaoalbum)
+        musicacollection = self.__db_connection.get_collection(self.__colecaomusica)
         usercollection = self.__db_connection.get_collection(self.__colecaouser)
         avaliacaocollection = self.__db_connection.get_collection(self.__colecaoavaliacao)
+        albumcollection = self.__db_connection.get_collection(self.__colecaoalbum)
         
         # nota menor que 1 ou maior que 5
         if nota < 1 or nota >5:
             raise ValueError(f"Nota inválida.")
 
-        # acha a musica ou retorna se ela nao for encontrada
-        musica = musicacollection.find_one({"_id": ObjectId(idmusica)})
-        if not musica:
-            raise ValueError(f"Musica não foi encontrada.")
-        
-        # confere se o user existe
-        user = usercollection.find_one({"_id": ObjectId(idUser)})
-        if not user:
-            raise ValueError("Usuário não foi encontrado.")
+        # acha a musica ou retorna se ela nao for encontrada e confere se usuario existe
+        self.__validador.validar_musica(idmusica)
+        self.__validador.validar_usuario(idUser)
         
         # verificar se o user deu nota nessa musica
         usuario_avaliou = avaliacaocollection.find_one({
@@ -156,8 +141,35 @@ class Avaliacao():
             {"$set": {"avaliacao final": notafinal}}  # avalia uma música
         )
 
-        #falta chamar função que muda media do album
+        album = albumcollection.find_one({"_id": ObjectId(idAlbum)})
+        musicas_do_album = album["musicas"]
 
+        somatorio_album = 0  # Inicializa o somatório das notas do álbum
+        contador_musicas = 0  # Contador de músicas com avaliação final
+
+        for musics_id in musicas_do_album:
+            musica = musicacollection.find_one({"_id": ObjectId(musics_id)})
+            if "avaliacao final" not in musica:
+                # Adiciona campo avaliacao final com valor 0
+                musicacollection.update_one(
+                    {"_id": ObjectId(musics_id)},
+                    {"$set": {"avaliacao final": 0}}
+                )
+                musica["avaliacao final"] = 0
+            if musica["avaliacao final"] != 0:
+                somatorio_album += musica["avaliacao final"]
+                contador_musicas += 1
+    
+        if contador_musicas > 0:
+            notaalbum = somatorio_album / contador_musicas
+        else:
+            notaalbum = 0  # Ou outra lógica que faça sentido caso não haja avaliações finais
+
+        albumcollection.update_one(
+            {"_id": ObjectId(idAlbum)},
+            {"$set": {"nota album": notaalbum}}
+        )
+        
         # registrar avaliação de música
         avaliacaocollection.insert_one({
             "usuario": ObjectId(idUser),
@@ -165,12 +177,12 @@ class Avaliacao():
             "acao": "dar nota em musica"
         })
 
-        return f"Usuário {idUser} deu {nota} estrelas na música{idmusica}."
+        return f"Usuário {idUser} deu {nota} estrelas na música {idmusica}."
 
     def comentar(self, idmusica, idUser, comentario):
         # adicionando a colecao
         comentariocollection = self.__db_connection.get_collection(self.__colecaocomentarios)
-        musicacollection = self.__db_connection.get_collection(self.__colecaoalbum)
+        musicacollection = self.__db_connection.get_collection(self.__colecaomusica)
         usercollection = self.__db_connection.get_collection(self.__colecaouser)
 
         # acha a musica ou retorna se ela nao for encontrada
@@ -196,3 +208,6 @@ class Avaliacao():
 
         return f"Usuário {idUser} fez um comentário na música {idmusica}."
     
+teste = Avaliacao(getconnection)
+testar = teste.darNota("66304fb9b5978db00d5b2962", "663238eec75485d453111a7a", "66304fb3b5978db00d5b295c", 3)
+print(testar)
