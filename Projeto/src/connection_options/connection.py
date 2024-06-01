@@ -5,10 +5,10 @@ from urllib.parse import quote_plus #uso do quote_plus para "traduzir" os símbo
 
 class DBconnectionHandler: 
     def __init__(self) -> None: #construtora da classe DBconnectionHandler, responsável por gerenciar o controle da conexão
-        username = "pooalbumatic" #se tem o congigs, para que colocar essas variáveis aqui? /lucas
-        password = "tr@balhopoo"
-        # username = mongo_db_infos["USERNAME"]
-        # password = mongo_db_infos["PASSWORD"] problema de importação ao definir, tirar dúvida professora
+        # username = "pooalbumatic" #se tem o congigs, para que colocar essas variáveis aqui? /lucas
+        # password = "tr@balhopoo"
+        username = mongo_db_infos["USERNAME"]
+        password = mongo_db_infos["PASSWORD"] 
         self.__connection_string = f"mongodb+srv://{quote_plus(username)}:{quote_plus(password)}@cluster0.lb2khsh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
         self.dbname = mongo_db_infos["DB_NAME"]
         self.__client = None

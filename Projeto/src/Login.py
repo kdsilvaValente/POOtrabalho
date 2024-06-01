@@ -36,10 +36,6 @@ class Login:
                  return False     
 
 
-login=Login()     
-login.login("natashacaldeirão@gmail.com","Natashaarrasa")
-                
-           
             
            
 
