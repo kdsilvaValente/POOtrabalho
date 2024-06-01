@@ -1,6 +1,6 @@
 from bson.objectid import ObjectId
 from run import getconnection
-from Auxiliares_uteis import calcMedia, Validador
+from Auxiliares_uteis import calcMedia 
 
 class Avaliacao():
     def __init__(self, db_connection) -> None:
@@ -10,8 +10,21 @@ class Avaliacao():
         self.__colecaocomentarios = "Comentarios"
         self.__colecaoalbum = "Albuns"
         self.__db_connection = db_connection
-        self.__validador = Validador(db_connection)
 
+    def validar_musica(self, idmusica):
+        musicacollection = self.__db_connection.get_collection(self.__colecaomusica)
+        musica = musicacollection.find_one({"_id": ObjectId(idmusica)})
+        if not musica:
+            raise ValueError(f"Música não foi encontrada.")
+        return musica
+
+    def validar_usuario(self, idUser):
+        usercollection = self.__db_connection.get_collection(self.__colecaouser)
+        user = usercollection.find_one({"_id": ObjectId(idUser)})
+        if not user:
+            raise ValueError("Usuário não foi encontrado.")
+        return user
+    
     # função que favorita uma musica 
     def darLike(self, idmusica, idUser):
         # adicionando as coleções 
@@ -20,8 +33,8 @@ class Avaliacao():
         avaliacaocollection = self.__db_connection.get_collection(self.__colecaoavaliacao)
         
         # acha a musica ou retorna se ela nao for encontrada e confere se usuario existe
-        self.__validador.validar_musica(ObjectId(idmusica))
-        self.__validador.validar_usuario(ObjectId(idUser))
+        self.validar_musica(ObjectId(idmusica))
+        self.validar_usuario(ObjectId(idUser))
         
         # verificar se o user ja deu like nessa musica
         usuario_curtiu = usercollection.find_one(
@@ -59,8 +72,8 @@ class Avaliacao():
         avaliacaocollection = self.__db_connection.get_collection(self.__colecaoavaliacao)
         
         # acha a musica ou retorna se ela nao for encontrada e confere se usuario existe
-        self.__validador.validar_musica(ObjectId(idmusica))
-        self.__validador.validar_usuario(ObjectId(idUser))
+        self.validar_musica(ObjectId(idmusica))
+        self.validar_usuario(ObjectId(idUser))
 
         # verificar se o user deu like nessa musica
         usuario_curtiu = usercollection.find_one(
@@ -106,8 +119,8 @@ class Avaliacao():
             raise ValueError(f"Nota inválida.")
 
         # acha a musica ou retorna se ela nao for encontrada e confere se usuario existe
-        self.__validador.validar_musica(ObjectId(idmusica))
-        self.__validador.validar_usuario(ObjectId(idUser))
+        self.validar_musica(ObjectId(idmusica))
+        self.validar_usuario(ObjectId(idUser))
         
         # verificar se o user deu nota nessa musica
         usuario_avaliou = avaliacaocollection.find_one({
@@ -187,16 +200,10 @@ class Avaliacao():
         comentariocollection = self.__db_connection.get_collection(self.__colecaocomentarios)
         musicacollection = self.__db_connection.get_collection(self.__colecaomusica)
         usercollection = self.__db_connection.get_collection(self.__colecaouser)
-
-        # acha a musica ou retorna se ela nao for encontrada
-        musica = musicacollection.find_one({"_id": ObjectId(idmusica)})
-        if not musica:
-            raise ValueError(f"Musica não foi encontrada.")
         
-        # confere se o user existe
-        user = usercollection.find_one({"_id": ObjectId(idUser)})
-        if not user:
-            raise ValueError("Usuário não foi encontrado.")
+        # acha a musica ou retorna se ela nao for encontrada e confere se usuario existe
+        self.validar_musica(ObjectId(idmusica))
+        self.validar_usuario(ObjectId(idUser))
 
         #teste comentario vazio
         if not comentario.strip():

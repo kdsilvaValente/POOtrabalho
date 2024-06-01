@@ -13,10 +13,6 @@ class Auxiliar:
         #consultar a existencia de uma música dentro do banco de dados
         return bool(colecao.find_one({'titulo': titulo, 'album': album, 'artista': artista}))
 
-class Validador:
-    def __init__(self, db_connection):
-        self.__db_connection = db_connection
-
 class calcMedia():
     def __init__(self, sum, numUsers):
         self.sum = sum
