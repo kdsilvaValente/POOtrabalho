@@ -15,14 +15,14 @@ class Excel:
         #armazenar as musicas importadas
         colecao = getconnection.get_collection("Musica")
 
-        dados_excel = pd.read_excel("musicas_planilha.xlxs")
+        dados_excel = pd.read_excel("musicas_planilha.xlsx")
 
         #leitura da planilha associando a musicas
         for indice, linha in dados_excel.iterrows():
             titulo = linha['Título']
             artista = linha['Artista']
             ano = linha['Ano']
-            album = linha['Album']
+            album = str(linha['Album'])
             genero = linha['Genero']
             compositores = str(linha['Compositores']) if pd.notna(linha['Compositores']) else []
             produtores = str(linha['Produtores']) if pd.notna(linha['Produtores']) else []
@@ -46,3 +46,6 @@ class Excel:
         #insere as musicas nos albuns já criados
         albuns.inserir_musicas_em_albuns()
         print("Todas as músicas foram importadas com sucesso!")
+
+excel = Excel()
+excel.importar_excel()

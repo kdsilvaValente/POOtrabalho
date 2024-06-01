@@ -31,6 +31,23 @@ class Musica:
         self.produtores = str(produtores)
         self.duracao = duracao
         self.album_id = albumid 
+    
+    def __str__(self):
+
+        '''
+        método padrão para imprimir um objeto musica com todas as suas informações de inicialização
+        '''
+
+        return (f"Musica(\n"
+                f"  Numero: {self.numero}\n"
+                f"  Titulo: {self.titulo}\n"
+                f"  Artista: {self.artista}\n"
+                f"  Album: {self.album}\n"
+                f"  Genero: {self.genero}\n"
+                f"  Compositores: {self.compositores}\n"
+                f"  Produtores: {self.produtores}\n"
+                f"  Duracao: {self.duracao}\n"
+                f"  Album ID: {self.album_id}\n)")
 
     def adicionar_para_mongodb_Excel(self, colecao):
         auxiliar = Auxiliar()
@@ -98,7 +115,6 @@ class Musica:
         '''
 
         auxiliar = Auxiliar()
-        album = Albuns()
 
         colecao_musica = getconnection.get_collection("Musica")
 
@@ -121,7 +137,9 @@ class Musica:
 
         #insere no banco de dados na coleção musicas e albuns
         if not auxiliar.verificar_existencia_musica(self.titulo, self.album, self.artista):
+            album = Albuns(self.album, 2004, self.artista, self.genero)
             colecao_musica.insert_one(dados_musica)  
+            album.criar_albuns()
             Albuns.inserir_musicas_em_albuns(album)
 
         else:
@@ -145,7 +163,7 @@ class Musica:
         if not musica:
             print(f"Musica '{titulo}' não encontrado no banco de dados.")
             return
-        
+                
         # relação do inteiro com o que será alterado da musica
         if campo == '1':
             novos_dados = {'titulo': mudança}
@@ -168,7 +186,9 @@ class Musica:
         # atualiza a musica na coleção
         colecao_musicas.update_one({'_id': musica['_id']}, {"$set": novos_dados})
         print(f"Musica '{titulo}' atualizada com sucesso.")
-    
+
+        musica_atualizada = colecao_musicas.find_one({'_id': musica['_id']})
+        print(musica_atualizada)
 
     def apagar_musica(self):
 

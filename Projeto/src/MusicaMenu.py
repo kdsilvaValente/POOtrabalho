@@ -38,19 +38,7 @@ class menuMusica(Menu):
             produtores_array = str(input("Produtores: "))
             duracao = str(input("Duração: "))
 
-            dados_musica = {
-                'titulo': titulo,
-                'album': album,
-                'album_id': 0,
-                'numero': numero,
-                'artista': artista,
-                'genero': generos_array,
-                'compositores': compositores_array,
-                'produtores': produtores_array,
-                'duracao': duracao
-            }
-
-            musica = Musica(dados_musica)
+            musica = Musica(numero, titulo, artista, album, generos_array, compositores_array, produtores_array, duracao, 0)
             musica.adicionar_musica()
 
         elif option == 2:
@@ -58,18 +46,21 @@ class menuMusica(Menu):
             titulo = str(input("Qual o nome da musica que você deseja alterar: "))
             artista = str(input("Qual o nome do artista da musica que você deseja alterar: "))
 
+            musica_data = getconnection.get_collection("Musica").find_one({'titulo': titulo, 'artista': artista})
+            print(musica_data)
+
+
             print("1 - Título\n 2 - Album\n 3 - Artista\n 4 - Gênero\n 5 - Compositores\n 6 - Produtores\n 7 - Duração")
             aux = str(input("Digite o valor correspontente do que você deseja alterar: "))
             mudanca = str(input("Digite a alteração "))
 
-            musica_data = getconnection.get_collection("Musica").find_one({'titulo': titulo, 'artista': artista})
 
             if musica_data:
                 # Cria uma instância de Musica com os dados recuperados do banco de dados
                 musica = Musica(musica_data['numero'], musica_data['titulo'], musica_data['artista'], 
                                         musica_data['album'], musica_data['genero'], musica_data['compositores'], 
                                         musica_data['produtores'], musica_data['duracao'], musica_data['album_id'])
-                
+
                 musica.editar_musica(titulo, artista, aux, mudanca)
                 
             else:
@@ -77,18 +68,18 @@ class menuMusica(Menu):
 
         elif option == 3:
             print("Apagar musica")
-            titulo = str(input("Qual o nome da musica que você deseja alterar: "))
-            artista = str(input("Qual o nome do artista da musica que você deseja alterar: "))
+            titulo = str(input("Qual o nome da musica que você deseja apagar: "))
+            artista = str(input("Qual o nome do artista da musica que você deseja apagar: "))
 
             musica_data = getconnection.get_collection("Musica").find_one({'titulo': titulo, 'artista': artista})
 
             if musica_data:
-                # Cria uma instância de Musica com os dados recuperados do banco de dados
+                #cria musica
                 musica = Musica(musica_data['numero'], musica_data['titulo'], musica_data['artista'], 
                                         musica_data['album'], musica_data['genero'], musica_data['compositores'], 
                                         musica_data['produtores'], musica_data['duracao'], musica_data['album_id'])
                 print(musica)
-                aux = int(input("Essa é a musica que você deseja apagar? (S/N) "))
+                aux = str(input("Essa é a musica que você deseja apagar? (S/N) "))
                 if aux == 'S':
                     musica.apagar_musica()
                 elif aux == 'N':
@@ -102,3 +93,7 @@ class menuMusica(Menu):
             return None
 
         return self  
+    
+menu = menuMusica()
+menu.render()
+menu.next(2)
