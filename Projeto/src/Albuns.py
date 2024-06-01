@@ -111,4 +111,3 @@ class Albuns:
         #apaga o álbum
         colecao_albuns.delete_one({'album': self.nome})
         print(f"Álbum '{self.nome}' apagado com sucesso.")
-
