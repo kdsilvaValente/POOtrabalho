@@ -1,5 +1,8 @@
 from run import getconnection
 from bson.objectid import ObjectId
+import os
+import platform
+
 
 class Auxiliar:
     def __init__(self):
@@ -23,3 +26,11 @@ class calcMedia():
         if self.numUsers == 0:
             raise ValueError("Número de usuários não pode ser zero.")
         return self.sum / self.numUsers
+
+
+def limpar_terminal():
+    sistema = platform.system()
+    if sistema == "Windows":
+        os.system("cls")
+    else:
+        os.system("clear")
