@@ -1,34 +1,53 @@
 from run import getconnection
 
 class Albuns:
-    def __init__(self):
-        pass
+    def __init__(self, nome:str, ano:int, artista:str, genero:str) -> None:
+        
+        ''''
+        construtor de albuns
+        
+        :param nome: nome do álbum
+        :param ano: ano de lançamento do álbum
+        :param artista: artista ou banda que gravou o álbum
+        :param genero: lista de gêneros musicais do album
+        
+        '''
+        
+        self.nome = nome
+        self.ano = ano
+        self.artista = artista
+        self.genero = genero
 
-    #funçao que cria albuns
-    def criar_albuns(self, nome_album, artista, genero):
+    def criar_albuns(self):
+
+        '''
+        metodo que cria albuns sem musicas associadas
+        '''
+
         colecao_albuns = getconnection.get_collection("Albuns")
         
         #verifica se o álbum já foi criado
-        if colecao_albuns.find_one({'album': nome_album}):
+        if colecao_albuns.find_one({'album': self.nome}):
             return
         
-        generos_array = genero.split(" · ")
+        generos_array = self.genero.split(" · ")
 
-        #cria um documento
         album_doc = {
-            'album': nome_album,
-            'artista': artista,
+            'album': self.nome,
+            'artista': self.artista,
             'gênero': generos_array,
-            'musicas': []  #não associa nenhuma música a album
+            'musicas': [] #não associa nenhuma música a album
             
         }
         #insere o álbum, sem musicas ao documento
         colecao_albuns.insert_one(album_doc)
 
-    #método para adicionar o ID das musicas em Albuns
     def inserir_musicas_em_albuns(self):
 
-        #conexão com as coleções
+        '''
+        metodo que insere musicas a um álbum já criado
+        '''
+
         colecao_albuns = getconnection.get_collection("Albuns")
         colecao_musicas = getconnection.get_collection("Musica")
 
@@ -46,3 +65,49 @@ class Albuns:
             #atualiza a lista vazia
             colecao_albuns.update_one({'_id': album_id}, {"$set": {'musicas': ids_musicas}})
 
+    def editar_album(self, campo:int, mudanca:str):
+
+        '''
+        metodo que edita um album no banco de dados
+    
+        :param campo: inteiro correspondente a o que será alterado
+        :param mudanca: valor da alteração que será feita
+
+        '''
+        colecao_albuns = getconnection.get_collection("Albuns")
+        
+        album = colecao_albuns.find_one({'album': self.nome})
+        if not album:
+            print(f"Álbum '{self.nome}' não encontrado no banco de dados.")
+            return
+        
+        # relação do inteiro com o que será alterado no álbum
+        if campo == 1:
+            novos_dados = {'album': mudanca}
+        elif campo == 2:
+            novos_dados = {'ano': int(mudanca)}
+        elif campo == 3:
+            novos_dados = {'artista': mudanca}
+        else:
+            print("Campo inválido.")
+            return
+            
+        # atualiza o álbum
+        colecao_albuns.update_one({'_id': album['_id']}, {"$set": novos_dados})
+        print(f"Álbum '{self.nome}' atualizado com sucesso.")
+    
+    def apagar_album(self):
+
+        '''
+        metodo que apaga um album do banco de dados
+        '''
+        colecao_albuns = getconnection.get_collection("Albuns")
+            
+        # Verifica se o álbum existe
+        if not colecao_albuns.find_one({'album': self.nome}):
+            print(f"Álbum '{self.nome}' não encontrado no banco de dados.")
+            return
+            
+        #apaga o álbum
+        colecao_albuns.delete_one({'album': self.nome})
+        print(f"Álbum '{self.nome}' apagado com sucesso.")

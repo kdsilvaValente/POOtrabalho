@@ -22,5 +22,16 @@ class Search:
                 similarity_nivel= fuzz.partial_ratio(search.lower(), document_title.lower())
                 if similarity_nivel >= self.minimum_similarity:
                     results.append((document))
+            
         return results
+    def get_by_id(self,id):
+        results=[]
+        for document in self.music_collection.find({}):
+            results.append((document))
+        return results
+
+       
     
+
+
+teste=Search("ALBUM")

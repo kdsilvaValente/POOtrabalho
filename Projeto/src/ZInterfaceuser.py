@@ -2,9 +2,10 @@ from User import*
 from Login import* 
 import emoji
 import sys #para usar o sys.exit()
+from Auxiliares_uteis import*
 
 
-class User_interface:
+class User_interface():
     def init_user(self,user):
             self.user=User(user)
             self.options()
@@ -37,16 +38,19 @@ class User_interface:
         print("-------------------------------")
     def display_main_menu_option(self,option):
            if option == 1:
+            limpar_terminal()
             self.display_user_profile()
            if option == 2:
+            limpar_terminal()
             self.update_profile()
            if option == 3:
+             limpar_terminal()
              self.delete_profile()
            
 
             
     
-    def display_user_profile(self):
+    def display_user_profile(self): # mostrando informações do perfil
         print("-------------------------------")
         print("\nSeu perfil:")
         print(f"Nome: {self.user.get_name()}")
@@ -97,8 +101,8 @@ class User_interface:
                 self.options()
             except ValueError:
                 print("Opção inválida. Por favor, escolha uma opção de 1 a 5.")
-
-    def chose_gender(self):
+ 
+    def chose_gender(self):# menu de escolher o genêro
         while True:
             print("Qual seu gênero?\n")
             print("1. Mulher trans")
@@ -133,10 +137,10 @@ class User_interface:
             else:
                 print("Opção inválida. Por favor, escolha um número entre 1 e 8.")
 
-    def delete_profile(self):
+    def delete_profile(self): #deletando perfil
           while True:
             try:
-                password=str(input("Confirme sua senha atual antes de deletar o perfil:"))
+                password=str(input("Confirme sua senha atual antes de deletar o perfil:"))#confirmando senha
                 if password == self.user.get_password():
                     self.user.delete()
                     print("Perfil deletado")

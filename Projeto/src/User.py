@@ -10,7 +10,6 @@ class User:
             self.collection = getconnection.get_collection("User")
             self.user_id = ObjectId(_id)
             data= self.collection.find_one({"_id":self.user_id })
-            print("chegou 1 ")
             self.name=data["name"]
             self.email=data["email"]
             self.password=data["password"]
