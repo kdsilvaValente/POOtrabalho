@@ -1,9 +1,6 @@
 from run import getconnection
-<<<<<<< HEAD
 import os
-=======
 from bson.objectid import ObjectId
->>>>>>> main
 
 class Auxiliar:
     def __init__(self):
@@ -44,7 +41,6 @@ class calcMedia():
         if self.numUsers == 0:
             raise ValueError("Número de usuários não pode ser zero.")
         return self.sum / self.numUsers
-<<<<<<< HEAD
 
 
 def limpar_terminal():
@@ -52,5 +48,3 @@ def limpar_terminal():
         os.system('clear')  # Limpa o terminal no Unix
     elif os.name == 'nt':  # Verifica se é Windows
         os.system('cls')    # Limpa o terminal no Windows
-=======
->>>>>>> main
