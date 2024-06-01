@@ -1,4 +1,5 @@
 from run import getconnection
+from bson.objectid import ObjectId
 
 class Auxiliar:
     def __init__(self):
@@ -9,6 +10,23 @@ class Auxiliar:
         #consultar a existencia de uma música dentro do banco de dados
         return bool(colecao.find_one({'titulo': titulo, 'album': album, 'artista': artista}))
 
+class Validador:
+    def __init__(self, db_connection):
+        self.__db_connection = db_connection
+
+    def validar_musica(self, idmusica):
+        musicacollection = self.__db_connection.get_collection("Musica")
+        musica = musicacollection.find_one({"_id": ObjectId(idmusica)})
+        if not musica:
+            raise ValueError(f"Música não foi encontrada.")
+        return musica
+
+    def validar_usuario(self, idUser):
+        usercollection = self.__db_connection.get_collection("User")
+        user = usercollection.find_one({"_id": ObjectId(idUser)})
+        if not user:
+            raise ValueError("Usuário não foi encontrado.")
+        return user
 
 class calcMedia():
     def __init__(self, sum, numUsers):
