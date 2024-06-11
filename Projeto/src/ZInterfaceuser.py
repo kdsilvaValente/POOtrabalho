@@ -7,8 +7,11 @@ from Auxiliares_uteis import*
 
 class User_interface():
     def init_user(self,user):
+        if user != None:
             self.user=User(user)
             self.options()
+        else:
+            self.new_profile_interface()
             
     def options(self):
         while True:
@@ -26,6 +29,7 @@ class User_interface():
                     print("Opção inválida. Por favor, escolha uma opção de 1 a 4.")
             except ValueError:
                 print("Digite um número válido.")
+            return 0
 
     def display_main_menu(self):
         print("-------------------------------")
@@ -137,6 +141,71 @@ class User_interface():
             else:
                 print("Opção inválida. Por favor, escolha um número entre 1 e 8.")
 
+    def new_profile_interface(self):#criando novo perfil 
+         name=str(input("Qual seu nome?: "))
+         email=str(input("Digite seu email: "))
+         gender=self.chose_gender()
+         phone=int(input("Digite seu número com ddd: "))
+         password=self.chose_password()
+         user_data = {
+                "name": name,
+                "email": email,
+                "gender": gender,
+                "phone_number": phone,
+                "password": password,
+                "isonline":False,
+        }
+         user = User(None)
+         user.newuser(user_data)
+         print("Perfil Criado")
+    def chose_gender(self):
+        while True:
+            print("Qual seu gênero?:\n ")
+            print("1. Mulher trans")
+            print("2. Homem trans")
+            print("3. Mulher cis")
+            print("4. Homem cis")
+            print("5. Não binário/agênero")
+            print("6. Dois espíritos/Bigênero")
+            print("7. Gênero neutro")
+            print("8. Gênero fluído")
+            print("Escolha um número:\n")
+
+            escolha = int(input())
+
+            if escolha >= 1 and escolha <= 8:
+                if escolha == 1:
+                    return "Mulher trans"
+                elif escolha == 2:
+                    return "Homem trans"
+                elif escolha == 3:
+                    return "Mulher cis"
+                elif escolha == 4:
+                    return "Homem cis"
+                elif escolha == 5:
+                    return "Não binário/agênero"
+                elif escolha == 6:
+                    return "Dois espíritos/Bigênero"
+                elif escolha == 7:
+                    return "Gênero neutro"
+                elif escolha == 8:
+                    return "Gênero fluído"
+            else:
+                print("Opção inválida. Por favor, escolha um número entre 1 e 8.")
+    def chose_password(self):
+         password = "0"
+         confirm_password = ""
+         while password != confirm_password:
+            password = str(input("Escolha uma senha: "))
+            confirm_password=str(input("Confirme sua senha: "))
+            if password != confirm_password:
+                print("Sua confirmação de senha não condiz com a senha escolhida, tente novamente!")
+            else:
+                return password
+
+           
+        
+
     def delete_profile(self): #deletando perfil
           while True:
             try:
@@ -149,6 +218,7 @@ class User_interface():
                 self.options()
             except ValueError:
                 print("Senha incompatível")
+
 
 
 

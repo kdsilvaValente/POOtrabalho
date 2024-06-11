@@ -4,10 +4,11 @@ from bson import ObjectId #biblioteca para poder usar o ObjectId e converter no 
 class User:
     
     def __init__(self, _id):
+        self.collection = getconnection.get_collection("User")
         if _id is None:
-            return 0
+            pass
+            
         else:
-            self.collection = getconnection.get_collection("User")
             self.user_id = ObjectId(_id)
             data= self.collection.find_one({"_id":self.user_id })
             self.name=data["name"]
@@ -26,10 +27,7 @@ class User:
                 "password": userdata["password"],
                 "isonline":False,
         }
-
         self.collection.insert_one(user_data)
-        print("adicionado")
-        print(user_data["_id"])
 
         
     def delete(self):
@@ -77,51 +75,7 @@ class User:
         print(phone_number_new)
         self.collection.find_one_and_update({"_id": self.user_id}, {"$set":{"phone_number":phone_number_new}})
         self.phone_number=phone_number_new
-    def chose_gender(self):
-        while True:
-            print("Qual seu gênero?\n")
-            print("1. Mulher trans")
-            print("2. Homem trans")
-            print("3. Mulher cis")
-            print("4. Homem cis")
-            print("5. Não binário/agênero")
-            print("6. Dois espíritos/Bigênero")
-            print("7. Gênero neutro")
-            print("8. Gênero fluído")
-            print("Escolha um número:\n")
-
-            escolha = int(input())
-
-            if escolha >= 1 and escolha <= 8:
-                if escolha == 1:
-                    return "Mulher trans"
-                elif escolha == 2:
-                    return "Homem trans"
-                elif escolha == 3:
-                    return "Mulher cis"
-                elif escolha == 4:
-                    return "Homem cis"
-                elif escolha == 5:
-                    return "Não binário/agênero"
-                elif escolha == 6:
-                    return "Dois espíritos/Bigênero"
-                elif escolha == 7:
-                    return "Gênero neutro"
-                elif escolha == 8:
-                    return "Gênero fluído"
-            else:
-                print("Opção inválida. Por favor, escolha um número entre 1 e 8.")
-
-# userdata={
-#           "name":"Natasha",
-#           "email":"natashacaldeirão@gmail.com" ,
-#           "gender":"Gênero neutro",
-#           "phone_number":11984587624,
-#           "password": "Natashaarrasa",
-#           }
-
-# user= User("66323501e31fdfa9372dda6a")    
-# user.newuser(userdata)
+    
 
 
 
