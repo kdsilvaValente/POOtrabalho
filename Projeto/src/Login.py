@@ -1,9 +1,10 @@
 from run import getconnection
 
 class Login:
+    def __init__(self) -> None:
+        self._iduser=0
     def login(self, email, password):
-        self.collection = getconnection.get_collection("User")
-        
+        self.collection = getconnection.get_collection("User")        
         # Verifica se o usuário já existe no banco de dados com base na senha e e-mail
         search = {
             "password": password,
@@ -16,6 +17,7 @@ class Login:
                 {"_id": self.isthere_user["_id"]}, 
                 {"$set": {"isonline": True}}
             )
+            self._iduser= self.isthere_user["_id"]
             return result
         else:
             return result
@@ -43,5 +45,7 @@ class Login:
         if isthere_email is None and isthere_password is None:
             return 3
         return 4 
+    def get_id(self):
+        return self._iduser
 
 

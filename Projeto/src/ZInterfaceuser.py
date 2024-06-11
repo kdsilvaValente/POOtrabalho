@@ -20,7 +20,7 @@ class User_interface():
                         self.display_main_menu_option(option)
                      else:
                         print("Encerrando o programa.") 
-                        sys.exit()#corrigindo bug de encerrar programanda
+                        return 0
                                
                 else:
                     print("Opção inválida. Por favor, escolha uma opção de 1 a 4.")
@@ -151,19 +151,7 @@ class User_interface():
                 print("Senha incompatível")
 
 
-# userdata={
-#           "name":"Natasha",
-#           "email":"natashacaldeirão@gmail.com" ,
-#           "gender":"Gênero neutro",
-#           "phone_number":11984587624,
-#           "password": "Natashaarrasa",
-#           }
-teste = User_interface()
-teste.init_user("66323501e31fdfa9372dda6a")
 
-
-
-            
             
          
 

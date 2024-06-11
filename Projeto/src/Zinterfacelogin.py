@@ -1,5 +1,6 @@
 from Login import *
 import sys
+from Auxiliares_uteis import*
 
 class Interface_login:          
     def login(self):
@@ -12,7 +13,7 @@ class Interface_login:
                 result = self.login_instance.login(email, senha)
               
                 if result == 4: # caso o retorno seja 4, o usuário foi encontrado 
-                    return 0
+                    return self.login_instance.get_id()
                 #encontra o motivo do erro, qual informação está errada
                 elif result == 1:
                     print("Email incorreto ou usuário inexistente") 
@@ -30,11 +31,8 @@ class Interface_login:
                 print("2. Não")
                 option=int(input())
                 if option == 2:
-                  sys.exit()
+                  limpar_terminal
+                  return 0
 
 
 
-
-
-interface = Interface_login()
-interface.login()

@@ -26,8 +26,7 @@ class Search:
         return results
     def get_by_id(self,id):
         results=[]
-        for document in self.music_collection.find({}):
-            results.append((document))
+        results=self.music_collection.find_one({"_id": id})
         return results
 
        

@@ -103,8 +103,8 @@ class Interface_search:
                     "type": "_id"
                 }
                 search = Search(data["collection"])
-                musica = search.get_by_id(vetor_musicas[j])
-                print(f"{j + 1}: {musica['titulo']}")
+                tonho=search.get_by_id(ObjectId(vetor_musicas[j]))
+                print(f"{j}°{tonho['titulo']}")
         self.result = result
 
     def menu_result_musica(self):
@@ -116,6 +116,7 @@ class Interface_search:
         self.result_option_musica()
 
     def menu_result_album(self):
+        
         print('O que deseja fazer?:')
         print("1. Abrir album")
         print("2. Abrir música do album")
