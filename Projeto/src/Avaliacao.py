@@ -11,6 +11,13 @@ class Avaliacao():
         self.__colecaoalbum = "Albuns"
         self.__db_connection = db_connection
 
+    def validar_musica(self, idalbum):
+        albumcollection = self.__db_connection.get_collection(self.__colecaoalbum)
+        album = albumcollection.find_one({"_id": ObjectId(idalbum)})
+        if not album:
+            raise ValueError(f"Album não foi encontrado.")
+        return album
+    
     def validar_musica(self, idmusica):
         musicacollection = self.__db_connection.get_collection(self.__colecaomusica)
         musica = musicacollection.find_one({"_id": ObjectId(idmusica)})
@@ -110,12 +117,14 @@ class Avaliacao():
         usercollection = self.__db_connection.get_collection(self.__colecaouser)
         avaliacaocollection = self.__db_connection.get_collection(self.__colecaoavaliacao)
         albumcollection = self.__db_connection.get_collection(self.__colecaoalbum)
+        self.nota = int(nota)
         
         #pegando o id do album pela musica 
         musica = musicacollection.find_one({"_id": ObjectId(idmusica)})
         idAlbum = musica["album_id"]
+
         # nota menor que 1 ou maior que 5
-        if nota < 1 or nota > 5:
+        if self.nota < 1 or self.nota > 5:
             raise ValueError(f"Nota inválida.")
 
         # acha a musica ou retorna se ela nao for encontrada e confere se usuario existe
@@ -179,7 +188,7 @@ class Avaliacao():
         if contador_musicas > 0:
             notaalbum = somatorio_album / contador_musicas
         else:
-            notaalbum = 0  # Ou outra lógica que faça sentido caso não haja avaliações finais
+            notaalbum = 0  
 
         albumcollection.update_one(
             {"_id": ObjectId(idAlbum)},
@@ -218,3 +227,80 @@ class Avaliacao():
 
         return f"Usuário {idUser} fez um comentário na música {idmusica}."
     
+    # função que favorita um album 
+    def favoritarAlbum(self, idalbum, idUser):
+        # adicionando as coleções 
+        albumcollection = self.__db_connection.get_collection(self.__colecaoalbum)
+        usercollection = self.__db_connection.get_collection(self.__colecaouser)
+        avaliacaocollection = self.__db_connection.get_collection(self.__colecaoavaliacao)
+        
+        # acha a musica ou retorna se ela nao for encontrada e confere se usuario existe
+        self.validar_musica(ObjectId(idalbum))
+        self.validar_usuario(ObjectId(idUser))
+        
+        # verificar se o user ja deu like nessa musica
+        usuario_curtiu = usercollection.find_one(
+            {"_id": ObjectId(idUser), "albuns favoritados": ObjectId(idalbum)}
+        )
+        if usuario_curtiu:
+            return f"Usuário {idUser} já curtiu esse álbum {idalbum}."
+
+        # adicionar o like na coleção de usuários
+        usercollection.update_one(
+            {"_id": ObjectId(idUser)},
+            {"$addToSet": {"albuns favoritados": idalbum}}
+        )
+
+        # adicionar o like na coleção de músicas
+        albumcollection.update_one(
+            {"_id": ObjectId(idalbum)},
+            {"$inc": {"favoritados": 1}}  # Incrementar o contador de likes
+        )
+        
+        # registrar like em avaliação
+        avaliacaocollection.insert_one({
+            "usuario": ObjectId(idUser),
+            "album": ObjectId(idalbum),
+            "acao": "musica curtida"
+        })
+
+        return f"Usuário {idUser} deu like no album {idalbum}."
+
+    # função que desfaz um like
+    def desfavoritarAlbum(self, idalbum:ObjectId, idUser:ObjectId):
+        # adicionando as coleções 
+        albumcollection = self.__db_connection.get_collection(self.__colecaoalbum)
+        usercollection = self.__db_connection.get_collection(self.__colecaouser)
+        avaliacaocollection = self.__db_connection.get_collection(self.__colecaoavaliacao)
+        
+        # acha a musica ou retorna se ela nao for encontrada e confere se usuario existe
+        self.validar_musica(ObjectId(idalbum))
+        self.validar_usuario(ObjectId(idUser))
+        
+        # verificar se o user deu like nessa musica
+        usuario_curtiu = usercollection.find_one(
+            {"_id": ObjectId(idUser), "albuns favoritados": ObjectId(idalbum)}
+        )
+        if not usuario_curtiu:
+            return f"Usuário {idUser} não favoritou esse album {idalbum}."
+
+        # tirar o like na coleção de usuários
+        usercollection.update_one(
+            {"_id": ObjectId(idUser)},
+            {"$pull": {"musicas curtidas": idalbum}}
+        )
+
+        # remover o like da coleção de músicas
+        albumcollection.update_one(
+            {"_id": ObjectId(idalbum)},
+            {"$inc": {"likes": -1}}  # Diminui o contador de likes
+        )
+        
+        # registrar deslike em avaliação
+        avaliacaocollection.insert_one({
+            "usuario": ObjectId(idUser),
+            "album": ObjectId(idalbum),
+            "acao": "desfazer curtida"
+        })
+
+        return f"Usuário {idUser} desfavoritou o album {idalbum}."
