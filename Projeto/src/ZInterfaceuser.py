@@ -3,6 +3,7 @@ from Login import*
 import emoji
 import sys #para usar o sys.exit()
 from Auxiliares_uteis import*
+import re
 
 
 class User_interface():
@@ -144,6 +145,7 @@ class User_interface():
     def new_profile_interface(self):#criando novo perfil 
          name=str(input("Qual seu nome?: "))
          email=str(input("Digite seu email: "))
+        #  email=self.chose_email()
          gender=self.chose_gender()
          phone=int(input("Digite seu número com ddd: "))
          password=self.chose_password()
@@ -157,6 +159,7 @@ class User_interface():
         }
          user = User(None)
          user.newuser(user_data)
+         limpar_terminal()
          print("Perfil Criado")
     def chose_gender(self):
         while True:
@@ -202,6 +205,16 @@ class User_interface():
                 print("Sua confirmação de senha não condiz com a senha escolhida, tente novamente!")
             else:
                 return password
+    def chose_email(self):
+        regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
+        chose = True
+        while chose:
+            email=str(input("Digite seu melhor email:"))
+            if re.match(regex, email):
+                chose = True
+                return email 
+            else:
+                print("Escreva uma email válido:")
 
            
         
