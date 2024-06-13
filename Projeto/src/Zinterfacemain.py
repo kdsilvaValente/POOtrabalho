@@ -3,6 +3,8 @@ from Zinterfacelogin import* #importando interface de login
 from ZInterfaceuser import* #importando  interface de usuário
 from Auxiliares_uteis import*
 class Interface_main(Interface_login, User_interface):
+    def __init__(self) -> None:
+        self.result = None
     def initial_menu(self): # menu principal 
          while True:
             try:
@@ -16,6 +18,7 @@ class Interface_main(Interface_login, User_interface):
                     if option ==1:
                         result =self.login()
                         if result != 0:
+                            self.result=result
                             self.init_user_main(result)    
                     else:
                         self.init_user(None)
