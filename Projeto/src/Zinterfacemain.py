@@ -1,34 +1,49 @@
-import sys
-from Zinterfacelogin import* #importando interface de login
-from ZInterfaceuser import* #importando  interface de usuário
-from Auxiliares_uteis import*
-class Interface_main(Interface_login, User_interface):
+from Zinterfacelogin import *  # Importando interface de login
+from ZInterfaceuser import *   # Importando interface de usuário
+from Zinterfacesearch import *  # Importando interface de busca
+
+class Interface_main:
     def __init__(self) -> None:
-        self.result = None
-    def initial_menu(self): # menu principal 
-         while True:
+        self.user = None
+        self.next = None
+
+    def initial_menu(self):  # Menu principal
+        while True:
             try:
-                limpar_terminal()
                 print("Bem-vindo ao albumatic, o que deseja fazer?")
-                print("1.Login")
-                print("2.Criar perfil")
+                print("1. Login")
+                print("2. Criar perfil")
                 option = int(input())
-                limpar_terminal()
-                if 1 <= option <= 2:
-                    if option ==1:
-                        result =self.login()
-                        if result != 0:
-                            self.result=result
-                            self.init_user_main(result)    
-                    else:
-                        self.init_user(None)
+                if option == 1:
+                    self.login()
+                elif option == 2:
+                    self.create_profile()
                 else:
                     print("Opção inválida. Por favor, escolha uma opção de 1 a 2.")
             except ValueError:
                 print("Digite um número válido.")
-    def init_user_main(self, result): # menu para chamar o menu user 
-            self.init_user(result)
 
-teste= Interface_main()
-teste.initial_menu()
-       
+    def login(self):
+        interface_login = Interface_login()
+        user = interface_login.login()
+        if user:
+            self.user = user
+            self.user_menu()
+
+    def create_profile(self):
+        interface_user = User_interface()
+        interface_user.init_user(None)
+
+    def user_menu(self):
+        interface_user = User_interface()
+        next_action = interface_user.init_user(self.user)
+        if next_action == 1:
+            self.search_menu()
+
+    def search_menu(self):
+        interface_search = Interface_search() #pelo metodo de super não estava dando certo
+        next_action=interface_search.init_search()[1] # o return deve ser o resultado do id e também o número da próxima ação
+
+
+main_interface = Interface_main()
+main_interface.initial_menu()

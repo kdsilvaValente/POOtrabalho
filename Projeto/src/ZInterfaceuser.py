@@ -8,29 +8,31 @@ import re
 
 class User_interface():
     def init_user(self,user):
+        self.next = 0
         if user != None:
             self.user=User(user)
+            self.next = 0
             self.options()
+            return self.next
         else:
-            self.new_profile_interface()
+             self.new_profile_interface()
+
             
     def options(self):
-        while True:
+         while self.next == 0:
             try:
                 self.display_main_menu()
                 option = int(input("Escolha uma opção: "))
-                if 1 <= option <= 4:
-                     if option !=4:
-                        self.display_main_menu_option(option)
+                if 1 <= option <= 5:
+                     if option !=5:
+                        self.display_main_menu_option(option) 
                      else:
-                        print("Encerrando o programa.") 
                         return 0
                                
                 else:
-                    print("Opção inválida. Por favor, escolha uma opção de 1 a 4.")
+                    print("Opção inválida. Por favor, escolha uma opção de 1 a 5.")
             except ValueError:
                 print("Digite um número válido.")
-            return 0
 
     def display_main_menu(self):
         print("-------------------------------")
@@ -38,7 +40,8 @@ class User_interface():
         print("1. Ver perfil")
         print("2. Editar informação do perfil")
         print("3. Deletar perfil")
-        print("4. Sair")
+        print("4. Navegação")
+        print("5. Sair")
         #opções de navegação, e a opção sair precisa direcionar para a tela principal
         print("-------------------------------")
     def display_main_menu_option(self,option):
@@ -51,6 +54,8 @@ class User_interface():
            if option == 3:
              limpar_terminal()
              self.delete_profile()
+           if option == 4:
+             self.next=1
            
 
             
@@ -234,6 +239,8 @@ class User_interface():
 
 
 
+# teste = User_interface()
+# teste.init_user("66323b516d1df881e15c9444")
 
             
          

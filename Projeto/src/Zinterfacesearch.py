@@ -4,16 +4,21 @@ from bson import ObjectId  # biblioteca para poder usar o ObjectId e converter n
 from Search import Search  
 
 class Interface_search:
-    def __init__(self):
+    def init_search(self):
         self.data = []
         self.result = []
+        self.id_result = None
         self.options_value = 0
         self.musicas_album = []
+        self.options()
+        return self.id_result #retorna o id do resultado que você quer abrir 
+        
+
 
     def options(self):
         while True:
             try:
-                # limpar_terminal()
+                limpar_terminal()
                 self.display_main_menu()
                 option = int(input("Escolha uma opção: "))
                 self.options_value = option
@@ -27,7 +32,7 @@ class Interface_search:
                     print("Opção inválida. Por favor, escolha uma opção de 1 a 4.")
             except ValueError:
                 print("Digite um número válido.")
-        return 0
+            return 0
 
     def display_main_menu(self):
         print("-------------------------------")
@@ -129,25 +134,30 @@ class Interface_search:
     def result_option_album(self):
         if self.options_value == 1:
             number= int(input("Qual album? Digite o número:"))
+            self.id_result = (self.result[number-1])['album']
             limpar_terminal()
-            return (self.result[number-1])['album']
+            return 0
             
         elif self.options_value == 2:
            number= int(input("Qual o album? Digite o número: "))
            self.musicas_album = self.result[number-1]['musicas']
            music = int(input("Qual música deseja abrir?: "))
+           self.id_result = self.musicas_album[music-1]
            limpar_terminal()
-           return self.musicas_album[music-1]
+           return 0
         else:
             self.options()  # Retornar para buscas
 
     def result_option_musica(self):
         if self.options_value == 1:
             number= int(input("Qual música? Digite o número:"))
-            return (self.result[number-1])['_id']
+            self.id_result = (self.result[number-1])['_id']
+            limpar_terminal()
+            return 0
+            
         else:
             self.options()  # Retornar para buscas
 
 
 teste = Interface_search()
-teste.options()
+teste.init_search()
