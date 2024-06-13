@@ -11,21 +11,21 @@ class Avaliacao():
         self.__colecaoalbum = "Albuns"
         self.__db_connection = db_connection
 
-    def validar_musica(self, idalbum):
+    def validar_album(self, idalbum: ObjectId):
         albumcollection = self.__db_connection.get_collection(self.__colecaoalbum)
         album = albumcollection.find_one({"_id": ObjectId(idalbum)})
         if not album:
             raise ValueError(f"Album não foi encontrado.")
         return album
     
-    def validar_musica(self, idmusica):
+    def validar_musica(self, idmusica: ObjectId):
         musicacollection = self.__db_connection.get_collection(self.__colecaomusica)
         musica = musicacollection.find_one({"_id": ObjectId(idmusica)})
         if not musica:
             raise ValueError(f"Música não foi encontrada.")
         return musica
 
-    def validar_usuario(self, idUser):
+    def validar_usuario(self, idUser:ObjectId):
         usercollection = self.__db_connection.get_collection(self.__colecaouser)
         user = usercollection.find_one({"_id": ObjectId(idUser)})
         if not user:
@@ -40,8 +40,8 @@ class Avaliacao():
         avaliacaocollection = self.__db_connection.get_collection(self.__colecaoavaliacao)
         
         # acha a musica ou retorna se ela nao for encontrada e confere se usuario existe
-        self.validar_musica(ObjectId(idmusica))
-        self.validar_usuario(ObjectId(idUser))
+        music = self.validar_musica(ObjectId(idmusica))
+        user = self.validar_usuario(ObjectId(idUser))
         
         # verificar se o user ja deu like nessa musica
         usuario_curtiu = usercollection.find_one(
@@ -69,7 +69,10 @@ class Avaliacao():
             "acao": "musica curtida"
         })
 
-        return f"Usuário {idUser} deu like na música {idmusica}."
+        username = user["name"]
+        musicname = music["titulo"]
+
+        return f"Usuário {username} deu like na música {musicname}."
 
     # função que desfaz um like
     def desfazerLike(self, idmusica, idUser):
@@ -79,8 +82,8 @@ class Avaliacao():
         avaliacaocollection = self.__db_connection.get_collection(self.__colecaoavaliacao)
         
         # acha a musica ou retorna se ela nao for encontrada e confere se usuario existe
-        self.validar_musica(ObjectId(idmusica))
-        self.validar_usuario(ObjectId(idUser))
+        music = self.validar_musica(ObjectId(idmusica))
+        user = self.validar_usuario(ObjectId(idUser))
 
         # verificar se o user deu like nessa musica
         usuario_curtiu = usercollection.find_one(
@@ -108,7 +111,10 @@ class Avaliacao():
             "acao": "desfazer curtida"
         })
 
-        return f"Usuário {idUser} desfez like na música {idmusica}."
+        username = user["name"]
+        musicname = music["titulo"]
+
+        return f"Usuário {username} desfez like na música {musicname}."
 
 # função de avaliação na música (0 a 5 estrelas) e atualiza avaliacao final(NAO ESTA PRONTA)
     def darNota(self, idmusica:ObjectId, idUser:ObjectId, nota:int):
@@ -128,8 +134,8 @@ class Avaliacao():
             raise ValueError(f"Nota inválida.")
 
         # acha a musica ou retorna se ela nao for encontrada e confere se usuario existe
-        self.validar_musica(ObjectId(idmusica))
-        self.validar_usuario(ObjectId(idUser))
+        music = self.validar_musica(ObjectId(idmusica))
+        user = self.validar_usuario(ObjectId(idUser))
         
         # verificar se o user deu nota nessa musica
         usuario_avaliou = avaliacaocollection.find_one({
@@ -202,7 +208,10 @@ class Avaliacao():
             "acao": "dar nota em musica"
         })
 
-        return f"Usuário {idUser} deu {nota} estrelas na música {idmusica}."
+        username = user["name"]
+        musicname = music["titulo"]
+
+        return f"Usuário {username} deu {nota} estrelas na música {musicname}."
 
     def comentar(self, idmusica, idUser, comentario):
         # adicionando a colecao
@@ -211,8 +220,8 @@ class Avaliacao():
         usercollection = self.__db_connection.get_collection(self.__colecaouser)
         
         # acha a musica ou retorna se ela nao for encontrada e confere se usuario existe
-        self.validar_musica(ObjectId(idmusica))
-        self.validar_usuario(ObjectId(idUser))
+        music = self.validar_musica(ObjectId(idmusica))
+        user = self.validar_usuario(ObjectId(idUser))
 
         #teste comentario vazio
         if not comentario.strip():
@@ -225,7 +234,10 @@ class Avaliacao():
             "comentario": comentario.strip()
         })
 
-        return f"Usuário {idUser} fez um comentário na música {idmusica}."
+        username = user["name"]
+        musicname = music["titulo"]
+
+        return f"Usuário {username} fez um comentário na música {musicname}."
     
     # função que favorita um album 
     def favoritarAlbum(self, idalbum, idUser):
@@ -235,8 +247,8 @@ class Avaliacao():
         avaliacaocollection = self.__db_connection.get_collection(self.__colecaoavaliacao)
         
         # acha a musica ou retorna se ela nao for encontrada e confere se usuario existe
-        self.validar_musica(ObjectId(idalbum))
-        self.validar_usuario(ObjectId(idUser))
+        alb = self.validar_musica(ObjectId(idalbum))
+        user = self.validar_usuario(ObjectId(idUser))
         
         # verificar se o user ja deu like nessa musica
         usuario_curtiu = usercollection.find_one(
@@ -264,7 +276,10 @@ class Avaliacao():
             "acao": "musica curtida"
         })
 
-        return f"Usuário {idUser} deu like no album {idalbum}."
+        username = user["name"]
+        albumname = alb["album"]
+
+        return f"Usuário {username} deu like no album {albumname}."
 
     # função que desfaz um like
     def desfavoritarAlbum(self, idalbum:ObjectId, idUser:ObjectId):
@@ -274,8 +289,8 @@ class Avaliacao():
         avaliacaocollection = self.__db_connection.get_collection(self.__colecaoavaliacao)
         
         # acha a musica ou retorna se ela nao for encontrada e confere se usuario existe
-        self.validar_musica(ObjectId(idalbum))
-        self.validar_usuario(ObjectId(idUser))
+        alb = self.validar_musica(ObjectId(idalbum))
+        user = self.validar_usuario(ObjectId(idUser))
         
         # verificar se o user deu like nessa musica
         usuario_curtiu = usercollection.find_one(
@@ -302,5 +317,8 @@ class Avaliacao():
             "album": ObjectId(idalbum),
             "acao": "desfazer curtida"
         })
+        
+        username = user["name"]
+        albumname = alb["album"]
 
-        return f"Usuário {idUser} desfavoritou o album {idalbum}."
+        return f"Usuário {username} desfavoritou o album {albumname}."
