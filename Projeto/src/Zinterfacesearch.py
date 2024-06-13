@@ -8,6 +8,7 @@ class Interface_search:
         self.data = []
         self.result = []
         self.options_value = 0
+        self.musicas_album = []
 
     def options(self):
         while True:
@@ -103,8 +104,8 @@ class Interface_search:
                     "type": "_id"
                 }
                 search = Search(data["collection"])
-                tonho=search.get_by_id(ObjectId(vetor_musicas[j]))
-                print(f"{j}°{tonho['titulo']}")
+                music=search.get_by_id(ObjectId(vetor_musicas[j]))
+                print(f"{j+1}°{music['titulo']}")
         self.result = result
 
     def menu_result_musica(self):
@@ -128,9 +129,15 @@ class Interface_search:
     def result_option_album(self):
         if self.options_value == 1:
             number= int(input("Qual album? Digite o número:"))
+            limpar_terminal()
             return (self.result[number-1])['album']
+            
         elif self.options_value == 2:
-            pass  # Ação para abrir a música do álbum
+           number= int(input("Qual o album? Digite o número: "))
+           self.musicas_album = self.result[number-1]['musicas']
+           music = int(input("Qual música deseja abrir?: "))
+           limpar_terminal()
+           return self.musicas_album[music-1]
         else:
             self.options()  # Retornar para buscas
 
