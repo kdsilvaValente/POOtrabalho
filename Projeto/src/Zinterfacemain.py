@@ -43,7 +43,7 @@ class Interface_main:
     def user_menu(self):
         self.interface_user = User_interface()
         next_action = self.interface_user.init_user(self.user)
-        if next_action == 1:
+        if next_action == self.navegação:
             self.search_menu()
 
     def search_menu(self):

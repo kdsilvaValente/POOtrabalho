@@ -11,7 +11,6 @@ class User_interface():
         self.next = 0
         if user != None:
             self.user=User(user)
-            self.next = 0
             self.options()
             return self.next
         else:
@@ -55,7 +54,7 @@ class User_interface():
              limpar_terminal()
              self.delete_profile()
            if option == 4:
-             self.next=1
+             self.next="Navegação"
            
 
             
@@ -68,7 +67,8 @@ class User_interface():
         print(f"Gênero: {self.user.get_gender()}")
         print(f"Telefone: {self.user.get_phone_number()}")
         print("-------------------------------")
-        self.options()
+        # self.options()
+        return 0
     def update_profile(self):
         while True:
             try:
@@ -87,9 +87,11 @@ class User_interface():
                 if choice == 1:
                     new_name = str(input("Digite o novo nome: "))
                     self.user.update_name(new_name)
+                    break
                 elif choice == 2:
                     email_new = str(input("Digite o novo email: "))
                     self.user.update_email(email_new)
+                    break
                 elif choice == 3:
                     while True:
                         try:
@@ -97,20 +99,26 @@ class User_interface():
                             if password == self.user.get_password():
                                 new_password = str(input("Senha correta, digite sua nova senha: "))
                                 self.user.update_password(new_password)
+                                break
                             else:
                                 return KeyError
-                            self.options()
                         except ValueError:
                             print("Senha incompatível")
+                    break
                 elif choice == 4:
                     new_gender=self.chose_gender()
                     self.user.update_gender(new_gender)
+                    break
                 elif choice == 5:
                     new_phone = int(input("Digite o novo número de telefone: "))
                     self.user.update_number(new_phone)
-                self.options()
+                    break
+                # self.options()
             except ValueError:
                 print("Opção inválida. Por favor, escolha uma opção de 1 a 5.")
+            # self.options()
+            return 0
+
  
     def chose_gender(self):# menu de escolher o genêro
         while True:
@@ -146,6 +154,7 @@ class User_interface():
                     return "Gênero fluído"
             else:
                 print("Opção inválida. Por favor, escolha um número entre 1 e 8.")
+                
 
     def new_profile_interface(self):#criando novo perfil 
          name=str(input("Qual seu nome?: "))
@@ -233,7 +242,7 @@ class User_interface():
                     print("Perfil deletado")
                 else:
                     return KeyError
-                self.options()
+                # self.options()
             except ValueError:
                 print("Senha incompatível")
 
