@@ -4,8 +4,14 @@ from Zinterfacesearch import *  # Importando interface de busca
 
 class Interface_main:
     def __init__(self) -> None:
-        self.user = None
         self.next = None
+        self.user = None
+        self.interface_user = None
+        self.interface_login = None
+        self.navegação = "Navegação"
+        self.perfil = "Perfil"
+
+
 
     def initial_menu(self):  # Menu principal
         while True:
@@ -24,25 +30,31 @@ class Interface_main:
                 print("Digite um número válido.")
 
     def login(self):
-        interface_login = Interface_login()
-        user = interface_login.login()
+        self.interface_login = Interface_login()
+        user = self.interface_login .login()
         if user:
             self.user = user
             self.user_menu()
 
     def create_profile(self):
-        interface_user = User_interface()
-        interface_user.init_user(None)
+        self.interface_user = User_interface()
+        self.interface_user.init_user(None)
 
     def user_menu(self):
-        interface_user = User_interface()
-        next_action = interface_user.init_user(self.user)
+        self.interface_user = User_interface()
+        next_action = self.interface_user.init_user(self.user)
         if next_action == 1:
             self.search_menu()
 
     def search_menu(self):
         interface_search = Interface_search() #pelo metodo de super não estava dando certo
-        next_action=interface_search.init_search()[1] # o return deve ser o resultado do id e também o número da próxima ação
+        next_action=interface_search.init_search() # o return deve ser o resultado do id e também o número da próxima ação
+        if next_action == self.perfil:
+            self.user_menu()
+
+
+
+
 
 
 main_interface = Interface_main()

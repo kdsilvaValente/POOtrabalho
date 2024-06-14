@@ -10,8 +10,8 @@ class Interface_search:
         self.id_result = None
         self.options_value = 0
         self.musicas_album = []
-        self.options()
-        return self.id_result #retorna o id do resultado que você quer abrir 
+        return self.options()
+        
         
 
 
@@ -26,8 +26,7 @@ class Interface_search:
                     if option != 4:
                         self.display_main_menu_option(option)
                     else:
-                        print("Encerrando o programa.")
-                        sys.exit()  
+                        return "Perfil"  #chave para próximo menu
                 else:
                     print("Opção inválida. Por favor, escolha uma opção de 1 a 4.")
             except ValueError:
@@ -158,6 +157,3 @@ class Interface_search:
         else:
             self.options()  # Retornar para buscas
 
-
-teste = Interface_search()
-teste.init_search()

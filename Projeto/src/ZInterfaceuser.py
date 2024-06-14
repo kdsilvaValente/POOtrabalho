@@ -239,9 +239,6 @@ class User_interface():
 
 
 
-# teste = User_interface()
-# teste.init_user("66323b516d1df881e15c9444")
-
             
          
 
