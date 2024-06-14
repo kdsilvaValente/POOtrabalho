@@ -6,6 +6,7 @@ from Search import *
 from run import getconnection
             
 mainmenu = Interface_main()
+avaliacao = Avaliacao(getconnection)
 
 class AvaliacaoInterface(Menu):
     def __init__(self, idUser, idmusica):
@@ -20,6 +21,56 @@ class AvaliacaoInterface(Menu):
             "5 - Me mostre os comentários que as pessoas estão fazendo sobre essa música"
         ]
 
+    def inicio(self, idMusica: ObjectId):
+        print("Abrindo a música!! Aqui estão as informações dela:")
+        musica = avaliacao.validar_musica(idMusica)
+        if musica["likes"]:
+            print(f"A musica {musica["titulo"]} tem {musica["likes"]} likes!")
+        else:
+            print(f"A musica {musica["titulo"]} não foi favoritada ainda... Mude isso!!")
+        print("Outras informaçõess sobre ela!! Veja:")
+        print(f"Ela é a faixa {musica["numero"]} do álbum {musica["album"]}")
+        
+        if musica["produtores"]:
+            print("Foi produzida por:")
+            for produtor in musica["produtores"]:
+                print(f"{produtor},\n")
+            else:
+                print("Não há produtores! :( Sabe-se lá como essa música veio ao mundo")
+
+        if musica["compositores"]:
+            print("Foi composta por:")
+            for compositor in musica["compositores"]:
+                print(f"{compositor},\n")
+            else:
+                print("Não há compositores! Um caso de escritor fantasma em nossas mãos")
+        
+        print("A música é do(s) gênero(s):")
+        for gen in musica["genero"]:
+            print(f"{gen},\n")
+        
+        print(f"Duração de {musica["duracao"]}")
+        
+        if musica["avaliacao final"]:
+            print(f"A média da avaliação dos usuários dessa música é de {musica["avaliacao final"]} estrelas!")
+        else:
+            print(f"A musica {musica["titulo"]} não foi avaliada ainda... Mude isso!!")
+        
+        bool = input("Deseja avaliar a música? Responda com 1 para sim e 0 para nao \n") 
+        if bool == 1: 
+            self.render()
+            opcao = input("Digite a opção desejada:")
+            self.next(opcao)
+        elif bool == 0:
+            print("Beleza! voltando ao menu principal")
+            print("...")
+            print("...")
+            print("...")
+            mainmenu.initial_menu()
+        else: 
+            print("Opção invalida, tende novamente:")
+        #tenho que transformar essa última parte numa recursiva 
+        
     def render(self):
         self.search.display_main_menu()
         margem = '=' * (len(self.title) + 5)
