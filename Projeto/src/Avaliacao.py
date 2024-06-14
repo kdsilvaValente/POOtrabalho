@@ -247,7 +247,7 @@ class Avaliacao():
         avaliacaocollection = self.__db_connection.get_collection(self.__colecaoavaliacao)
         
         # acha a musica ou retorna se ela nao for encontrada e confere se usuario existe
-        alb = self.validar_musica(ObjectId(idalbum))
+        alb = self.validar_album(ObjectId(idalbum))
         user = self.validar_usuario(ObjectId(idUser))
         
         # verificar se o user ja deu like nessa musica
@@ -289,7 +289,7 @@ class Avaliacao():
         avaliacaocollection = self.__db_connection.get_collection(self.__colecaoavaliacao)
         
         # acha a musica ou retorna se ela nao for encontrada e confere se usuario existe
-        alb = self.validar_musica(ObjectId(idalbum))
+        alb = self.validar_album(ObjectId(idalbum))
         user = self.validar_usuario(ObjectId(idUser))
         
         # verificar se o user deu like nessa musica
@@ -322,3 +322,29 @@ class Avaliacao():
         albumname = alb["album"]
 
         return f"Usuário {username} desfavoritou o album {albumname}."
+    
+    def comentarAlbum(self, idAlbum, idUser, comentario):
+        # adicionando a colecao
+        comentariocollection = self.__db_connection.get_collection(self.__colecaocomentarios)
+        musicacollection = self.__db_connection.get_collection(self.__colecaomusica)
+        usercollection = self.__db_connection.get_collection(self.__colecaouser)
+        
+        # acha a musica ou retorna se ela nao for encontrada e confere se usuario existe
+        alb = self.validar_album(ObjectId(idAlbum))
+        user = self.validar_usuario(ObjectId(idUser))
+
+        #teste comentario vazio
+        if not comentario.strip():
+                return "O comentário não pode ser vazio."
+        
+        #adicionar comentario e relacionar com a musica e o usuario 
+        comentariocollection.insert_one({
+            "usuario": ObjectId(idUser),
+            "musica": ObjectId(idAlbum),
+            "comentario": comentario.strip()
+        })
+
+        username = user["name"]
+        albumname = alb["album"]
+
+        return f"Usuário {username} fez um comentário na música {albumname}."
