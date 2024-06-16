@@ -33,12 +33,12 @@ class User:
             "phone_number": userdata["phone_number"],
             "password": userdata["password"],
             "isonline": False,
-            "isadmin": data.get("is_admin", False)
+            "is_admin": userdata.get("is_admin", False)
+
         }
         self.collection.insert_one(user_data)
 
     def delete(self) -> None:
-    
         self.collection.find_one_and_delete({"_id": self.user_id})
     
     @property
@@ -85,3 +85,7 @@ class User:
     def phone_number(self, value: str) -> None:
         self.collection.find_one_and_update({"_id": self.user_id}, {"$set": {"phone_number": value}})
         self._phone_number = value
+
+    @property
+    def is_admin(self) -> str:
+        return self.is_admin
