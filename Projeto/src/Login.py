@@ -1,9 +1,11 @@
 from run import getconnection
+from bson.objectid import ObjectId
+
 
 class Login:
     def __init__(self) -> None:
         self._iduser=0
-    def login(self, email, password):
+    def login(self, email: str, password: str)-> str:
         self.collection = getconnection.get_collection("User")        
         # Verifica se o usuário já existe no banco de dados com base na senha e e-mail
         search = {
@@ -23,12 +25,12 @@ class Login:
             return result
       
 
-    def State_update(self):
+    def State_update(self)->None:
           self.collection.find_one_and_update(
                 {"_id": self.isthere_user["_id"]}, 
                 {"$set": {"isonline": False}}
             )
-    def ist_here_user(self, email, password):
+    def ist_here_user(self, email: str, password: str)-> int:
         search_password = {
             "password": password,
         }
@@ -45,7 +47,15 @@ class Login:
         if isthere_email is None and isthere_password is None:
             return 3
         return 4 
-    def get_id(self):
+    
+    @property
+    def id(self)-> str:
         return self._iduser
+    @property
+    def state(self)-> str:
+        return   self.collection.find_one(
+                {"_id": ObjectId(self.id)})
+    
+    
 
 

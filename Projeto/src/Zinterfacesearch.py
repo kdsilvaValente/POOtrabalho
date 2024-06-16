@@ -9,13 +9,15 @@ class Interface_search:
         self.result = []
         self.id_result = None
         self.options_value = 0
+        self.next = "0"
         self.musicas_album = []
-        return self.options()
+        self.options()
+        return self.next
         
         
 
 
-    def options(self):
+    def options(self) -> str:
         while True:
             try:
                 limpar_terminal()
@@ -26,7 +28,8 @@ class Interface_search:
                     if option != 4:
                         self.display_main_menu_option(option)
                     else:
-                        return "Perfil"  #chave para próximo menu
+                        self.next="Perfil" #chave para próximo menu
+                        return 0
                 else:
                     print("Opção inválida. Por favor, escolha uma opção de 1 a 4.")
             except ValueError:
@@ -42,7 +45,7 @@ class Interface_search:
         print("4. Voltar")
         # opções de navegação, e a opção sair precisa direcionar para a tela anterior
 
-    def display_main_menu_option(self, option):
+    def display_main_menu_option(self, option: int)-> None:
         data = {}
         if option == 1:
             data = {
@@ -62,7 +65,7 @@ class Interface_search:
         limpar_terminal()
         self.searching(data, option)
 
-    def searching(self, data, option):
+    def searching(self, data: dict, option: int) -> None:
         search = Search(data["collection"])
         if option == 1 or option == 2:
             if option == 2:
@@ -80,7 +83,7 @@ class Interface_search:
             self.print_album(result)
             self.menu_result_album()
 
-    def print_musica(self, result):  # printa os resultados da pesquisa feita na collection música
+    def print_musica(self, result: list[dict[str, str]])-> None:  # printa os resultados da pesquisa feita na collection música
         result_length = len(result)
         for i in range(result_length):
             print(f"{i + 1}:")
@@ -92,7 +95,7 @@ class Interface_search:
             print(f"produtores: {(result[i])['produtores']}")
         self.result = result
 
-    def print_album(self, result):  # printa os resultados da pesquisa feita na collection album
+    def print_album(self, result: list[dict[str, str]])->None:  # printa os resultados da pesquisa feita na collection album
         result_length = len(result)
         for i in range(result_length):
             print(f"{i + 1}:")
@@ -112,7 +115,7 @@ class Interface_search:
                 print(f"{j+1}°{music['titulo']}")
         self.result = result
 
-    def menu_result_musica(self):
+    def menu_result_musica(self)->None:
         print('O que deseja fazer?:')
         print("1. Abrir música")
         print("2. Retornar para buscas")
@@ -120,7 +123,7 @@ class Interface_search:
         self.options_value = options
         self.result_option_musica()
 
-    def menu_result_album(self):
+    def menu_result_album(self)->None:
         
         print('O que deseja fazer?:')
         print("1. Abrir album")
@@ -130,7 +133,7 @@ class Interface_search:
         self.options_value = options
         self.result_option_album()
 
-    def result_option_album(self):
+    def result_option_album(self) -> int:
         if self.options_value == 1:
             number= int(input("Qual album? Digite o número:"))
             self.id_result = (self.result[number-1])['album']
@@ -147,7 +150,7 @@ class Interface_search:
         else:
             self.options()  # Retornar para buscas
 
-    def result_option_musica(self):
+    def result_option_musica(self)->int:
         if self.options_value == 1:
             number= int(input("Qual música? Digite o número:"))
             self.id_result = (self.result[number-1])['_id']
