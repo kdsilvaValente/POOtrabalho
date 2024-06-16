@@ -1,9 +1,20 @@
 from User import*
 
 class Admin(User):
-    #funções de herança de user
-    def __init__ (self, _id):
+
+    def __init__(self, _id):
         super().__init__(_id)
+        if not self.is_admin:
+            raise PermissionError("nao eh admin")
+
+    def create_admin(self, userdata):
+        if not self.is_admin:
+            raise PermissionError("apenas admin adiciona")
+        userdata["is_admin"] = True
+        self.newuser(userdata)
+        print("admin criado")
+
+    
     def newuser(self, userdata):
         return super().newuser(userdata)
     def delete(self):
@@ -29,4 +40,6 @@ class Admin(User):
     def update_number(self, phone_number_new):
         return super().update_number(phone_number_new)
     
+
+
 

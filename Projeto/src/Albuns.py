@@ -1,5 +1,6 @@
 from run import getconnection
 
+
 class Albuns:
     def __init__(self, nome:str, ano:int, artista:str, genero:str) -> None:
         
@@ -28,14 +29,13 @@ class Albuns:
         
         #verifica se o álbum já foi criado
         if colecao_albuns.find_one({'album': self.nome}):
-            return
+            return self.nome
         
-        generos_array = self.genero.split(" · ")
-
         album_doc = {
             'album': self.nome,
             'artista': self.artista,
-            'gênero': generos_array,
+            'ano': self.ano,
+            'gênero': self.genero,
             'musicas': [] #não associa nenhuma música a album
             
         }
@@ -75,6 +75,7 @@ class Albuns:
 
         '''
         colecao_albuns = getconnection.get_collection("Albuns")
+        colecao_musicas = getconnection.get_collection("Musica")
         
         album = colecao_albuns.find_one({'album': self.nome})
         if not album:
@@ -95,6 +96,12 @@ class Albuns:
         # atualiza o álbum
         colecao_albuns.update_one({'_id': album['_id']}, {"$set": novos_dados})
         print(f"Álbum '{self.nome}' atualizado com sucesso.")
+
+        novos_dados_musica = novos_dados
+        #atualiza as musicas associadas ao álbum
+        colecao_musicas.update_many({'album': self.nome}, {"$set": novos_dados_musica})
+        print(f"Músicas do álbum '{self.nome}' também foram atualizadas com sucesso.")
+
     
     def apagar_album(self):
 
@@ -111,3 +118,5 @@ class Albuns:
         #apaga o álbum
         colecao_albuns.delete_one({'album': self.nome})
         print(f"Álbum '{self.nome}' apagado com sucesso.")
+    
+    

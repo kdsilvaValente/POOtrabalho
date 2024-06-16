@@ -17,6 +17,8 @@ class User:
             self.gender=data["gender"]
             self.phone_number=data["phone_number"]
             self.isonline=data["isonline"]
+            self.is_admin = data.get("is_admin", False)
+
             # Converte o ID para o formato ObjectId
     def newuser(self, userdata):
         user_data = {
@@ -26,10 +28,15 @@ class User:
                 "phone_number": userdata["phone_number"],
                 "password": userdata["password"],
                 "isonline":False,
+                "is_admin": userdata.get("is_admin", False)
+
         }
         self.collection.insert_one(user_data)
 
-        
+    @property
+    def get_is_admin(self):
+        return self.is_admin
+
     def delete(self):
         self.collection.find_one_and_delete({"_id": self.user_id})
     def get_name(self):

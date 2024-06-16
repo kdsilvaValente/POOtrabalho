@@ -1,8 +1,8 @@
 import pandas as pd 
 from run import getconnection  
-from Music import Musica
-from Auxiliares_uteis import Auxiliar
-from Albuns import Albuns
+from Music import *
+from Auxiliares_uteis import *
+from Albuns import *
 
 class Excel:
     def __init__(self):
@@ -17,18 +17,20 @@ class Excel:
 
         dados_excel = pd.read_excel("musicas_planilha.xlsx")
 
+
         #leitura da planilha associando a musicas
         for indice, linha in dados_excel.iterrows():
             titulo = linha['Título']
             artista = linha['Artista']
             ano = linha['Ano']
             album = str(linha['Album'])
-            genero = linha['Genero']
+            genero = str(linha['Genero']) if pd.notna(linha['Genero']) else []
             compositores = str(linha['Compositores']) if pd.notna(linha['Compositores']) else []
             produtores = str(linha['Produtores']) if pd.notna(linha['Produtores']) else []
             duracao = str(linha['Duração'])
             numero = linha['Número']
 
+            
             albuns = Albuns(album, ano, artista, genero)
 
             #cria os albuns das músicas
@@ -46,6 +48,3 @@ class Excel:
         #insere as musicas nos albuns já criados
         albuns.inserir_musicas_em_albuns()
         print("Todas as músicas foram importadas com sucesso!")
-
-excel = Excel()
-excel.importar_excel()

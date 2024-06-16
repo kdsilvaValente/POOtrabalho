@@ -1,7 +1,7 @@
 from Auxiliares_uteis import Auxiliar
 from run import getconnection
 import numpy as np
-from Albuns import Albuns
+from Albuns import *
 
 class Musica:
     def __init__(self, numero:int, titulo:str, artista:str, album:str, genero:str, 
@@ -23,9 +23,9 @@ class Musica:
         '''
 
         self.numero = numero
-        self.titulo = titulo
-        self.artista = artista
-        self.album = album
+        self.titulo = str(titulo)
+        self.artista = str(artista)
+        self.album = str(album)
         self.genero = str(genero)
         self.compositores = str(compositores)
         self.produtores = str(produtores)
@@ -118,20 +118,15 @@ class Musica:
 
         colecao_musica = getconnection.get_collection("Musica")
 
-        compositores_array = input("compositores (separados por vírgula): ").split(',')
-        produtores_array = input("produtores (separados por vírgula): ").split(',')
-        generos_array = input("generos (separados por vírgula): ").split(',')
-
-
         dados_musica = {
             'titulo': self.titulo,
             'album': self.album,
             'album_id': self.album_id,
             'numero': self.numero,
             'artista': self.artista,
-            'genero': generos_array,
-            'compositores': compositores_array,
-            'produtores': produtores_array,
+            'genero': self.genero.split(','),
+            'compositores': self.compositores.split(','),
+            'produtores': self.produtores.split(','),
             'duracao': self.duracao
         }
 
@@ -162,7 +157,7 @@ class Musica:
         musica = colecao_musicas.find_one({'titulo': titulo}, {'artista': artista})
         if not musica:
             print(f"Musica '{titulo}' não encontrado no banco de dados.")
-            return
+            return titulo
                 
         # relação do inteiro com o que será alterado da musica
         if campo == '1':
@@ -204,7 +199,7 @@ class Musica:
             return
         
         # deletando do campo com base no títlo
-        colecao_musicas.delete_one({'musica': self.titulo})
+        colecao_musicas.find_one_and_delete({'titulo': self.titulo})
         print(f"Musica '{self.titulo}' apagada com sucesso.")
     
     @staticmethod
