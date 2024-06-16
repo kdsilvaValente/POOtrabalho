@@ -32,6 +32,7 @@ class User_interface:
             try:
                 self.display_main_menu()
                 option = int(input("Escolha uma opção: "))
+                print("-------------------------------")
                 if 1 <= option <= 5:
                     if option != 5:
                         self.display_main_menu_option(option)
@@ -79,13 +80,12 @@ class User_interface:
         """
         Mostra o perfil atual do usuário na tela.
         """
-        print("-------------------------------")
-        print("\nSeu perfil:")
+        limpar_terminal()
+        print("Seu perfil:")
         print(f"Nome: {self.user.name}")
         print(f"Email: {self.user.email}")
         print(f"Gênero: {self.user.gender}")
         print(f"Telefone: {self.user.phone_number}")
-        print("-------------------------------")
 
     def update_profile(self) -> None:
         """
@@ -100,6 +100,7 @@ class User_interface:
                 print("3. Password")
                 print("4. Gender")
                 print("5. Phone Number")
+                print("6. Voltar")
                 print("-------------------------------")
                 choice = int(input("Escolha a opção de 1 a 5: "))
                 print("-------------------------------")
@@ -142,6 +143,9 @@ class User_interface:
                     self.user.phone_number = new_phone
                     print("Número de telefone atualizado com sucesso!")
                     break
+                elif choice == 6:
+                    return 0
+
 
                 else:
                     print("Opção inválida. Por favor, escolha uma opção de 1 a 5.")
@@ -159,6 +163,7 @@ class User_interface:
             str: Gênero escolhido pelo usuário.
         """
         while True:
+            print("-------------------------------")
             print("Qual seu gênero?\n")
             print("1. Mulher trans")
             print("2. Homem trans")
@@ -168,7 +173,10 @@ class User_interface:
             print("6. Dois espíritos/Bigênero")
             print("7. Gênero neutro")
             print("8. Gênero fluído")
-            print("Escolha um número:\n")
+            print("-------------------------------")
+            print("Escolha um número  ou aperte 9 para cancelar:\n")
+            print("-------------------------------")
+
 
             escolha = int(input())
 
@@ -189,6 +197,8 @@ class User_interface:
                     return "Gênero neutro"
                 elif escolha == 8:
                     return "Gênero fluído"
+                elif escolha == 9:
+                    return 0
             else:
                 print("Opção inválida. Por favor, escolha um número entre 1 e 8.")
 
@@ -196,10 +206,14 @@ class User_interface:
         """
         Cria um novo perfil para o usuário.
         """
+        print("-------------------------------")
         name = str(input("Qual seu nome?: "))
+        print("-------------------------------")
         email = str(input("Digite seu email: "))
+        print("-------------------------------")
         gender = self.chose_gender()
         phone = int(input("Digite seu número com ddd: "))
+        print("-------------------------------")
         password = self.chose_password()
         user_data = {
             "name": name,
@@ -262,5 +276,6 @@ class User_interface:
                     return KeyError
             except ValueError:
                 print("Senha incompatível")
+    
 
 

@@ -53,8 +53,9 @@ class Login:
         return self._iduser
     @property
     def state(self)-> str:
-        return   self.collection.find_one(
+        result=self.collection.find_one(
                 {"_id": ObjectId(self.id)})
+        return  result["isonline"] 
     
     
 

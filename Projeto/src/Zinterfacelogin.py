@@ -9,7 +9,9 @@ class Interface_login:
         print("Vamos fazer seu login?")
         while True:
             try:
+                print("-------------------------------")
                 email = str(input("Digite seu email: "))
+                print("-------------------------------")
                 senha = str(input("Digite sua senha: "))
                 result = self.login_instance.login(email, senha)
               
@@ -37,6 +39,7 @@ class Interface_login:
     def logout(self):
         self.login_instance.State_update()
         return self.login_instance.state
+    
 
 
 

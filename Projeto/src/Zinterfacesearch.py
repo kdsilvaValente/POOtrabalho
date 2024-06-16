@@ -86,6 +86,7 @@ class Interface_search:
     def print_musica(self, result: list[dict[str, str]])-> None:  # printa os resultados da pesquisa feita na collection música
         result_length = len(result)
         for i in range(result_length):
+            print("-------------------------------")
             print(f"{i + 1}:")
             print(f"Título: {(result[i])['titulo']}")
             print(f"album: {(result[i])['album']}")
@@ -93,6 +94,7 @@ class Interface_search:
             print(f"gênero: {(result[i])['genero']}")
             print(f"compositores: {(result[i])['compositores']}")
             print(f"produtores: {(result[i])['produtores']}")
+            print("-------------------------------")
         self.result = result
 
     def print_album(self, result: list[dict[str, str]])->None:  # printa os resultados da pesquisa feita na collection album
