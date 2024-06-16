@@ -31,39 +31,44 @@ class menuAlbum(Menu):
         '''
         
         while True:
-
-            clear_screen()
-            print("-------------------------------")
-            print("Digite as informações do album que deseja adicionar")
             
-            album_titulo = str(input("Nome: "))
-            artista = str(input("Artista: "))
-            generos_array = str(input("generos (separados por vírgula): ")).split(',')
-            ano = int(input("Ano:"))
+            try:
 
-            album = Albuns(album_titulo, ano, artista, generos_array)
-            album.criar_albuns()
-
-            while True:
+                clear_screen()
+                print("-------------------------------")
+                print("Digite as informações do album que deseja adicionar")
                 
-                print("Digite as musicas do álbum:")
-                titulo = str(input("Titulo: "))
-                numero = input("Numero: ")
-                compositores_array = input("compositores (separados por vírgula): ").split(',')
-                produtores_array = input("produtores (separados por vírgula): ").split(',')
-                duracao = str(input("Duração: "))
+                album_titulo = str(input("Nome: "))
+                artista = str(input("Artista: "))
+                generos_array = str(input("generos (separados por vírgula): ")).split(',')
+                ano = int(input("Ano:"))
 
-                musica = Musica(numero, titulo, artista, album, generos_array, compositores_array, produtores_array, duracao, 0)
-                musica.adicionar_musica()
-            
-                adicionar_mais = input("Deseja adicionar outra música? (s/n): ").strip().lower()
-                if adicionar_mais != 's':
-                    album.inserir_musicas_em_albuns()
+                album = Albuns(album_titulo, ano, artista, generos_array)
+                album.criar_albuns()
+
+                while True:
+                    
+                    print("Digite as musicas do álbum:")
+                    titulo = str(input("Titulo: "))
+                    numero = input("Numero: ")
+                    compositores_array = input("compositores (separados por vírgula): ").split(',')
+                    produtores_array = input("produtores (separados por vírgula): ").split(',')
+                    duracao = str(input("Duração: "))
+
+                    musica = Musica(numero, titulo, artista, album, generos_array, compositores_array, produtores_array, duracao, 0)
+                    musica.adicionar_musica()
+                
+                    adicionar_mais = input("Deseja adicionar outra música? (s/n): ").strip().lower()
+                    if adicionar_mais != 's':
+                        album.inserir_musicas_em_albuns()
+                        break
+                
+                adicionar_mais_albuns = input("Deseja adicionar outro album? (s/n): ").strip().lower()
+                if adicionar_mais_albuns != 's':
                     break
-            
-            adicionar_mais_albuns = input("Deseja adicionar outro album? (s/n): ").strip().lower()
-            if adicionar_mais_albuns != 's':
-                break
+
+            except ValueError:
+                print("Entrada inválida! Certifique-se de inserir os tipos de dados corretos.")
     
 
     def editar_album(self) -> None:
@@ -74,37 +79,43 @@ class menuAlbum(Menu):
 
         while True:
 
-            clear_screen()
-            print('aaaaaaaaaaaaaaaaaaaa')
-            print("Editar album")
-            album = str(input("Qual o nome do álbum que você deseja alterar: "))
-            id = auxiliar.buscar_album(album)
-            album_data = getconnection.get_collection("Albuns").find_one({'_id': id})
-            print(album_data)
 
-            print(" 1 - TItulo do album\n 2 - Artista\n 3 - Gênero\n 4 - Ano \n 5 - Musicas")
-            aux = int(input("Digite o valor correspontente do que você deseja alterar: "))
+            try:
+
+                clear_screen()
+                print('aaaaaaaaaaaaaaaaaaaa')
+                print("Editar album")
+                album = str(input("Qual o nome do álbum que você deseja alterar: "))
+                id = auxiliar.buscar_album(album)
+                album_data = getconnection.get_collection("Albuns").find_one({'_id': id})
+                print(album_data)
+
+                print(" 1 - TItulo do album\n 2 - Artista\n 3 - Gênero\n 4 - Ano \n 5 - Musicas")
+                aux = int(input("Digite o valor correspontente do que você deseja alterar: "))
 
 
-            if album_data:
-                #cria uma instância com a
-                album = Albuns(album_data['album'], album_data['ano'], album_data['artista'], album_data['gênero'])
+                if album_data:
+                    #cria uma instância com a
+                    album = Albuns(album_data['album'], album_data['ano'], album_data['artista'], album_data['gênero'])
 
-                if aux == 5:
-                    menu = menuMusica()
-                    menu.mudar_musica()
-                    mudanca = str(input("Digite a alteração "))
-                
-                else:    
-                    mudanca = str(input("Digite a alteração "))
-                    album.editar_album(aux, mudanca)
+                    if aux == 5:
+                        menu = menuMusica()
+                        menu.mudar_musica()
+                        mudanca = str(input("Digite a alteração "))
                     
-            else:
-                print("Album não encontrado no banco de dados.")
-                
-            editar_mais = input("Deseja realizar mais alterações? (s/n): ").strip().lower()
-            if editar_mais != 's':
-                break
+                    else:    
+                        mudanca = str(input("Digite a alteração "))
+                        album.editar_album(aux, mudanca)
+                        
+                else:
+                    print("Album não encontrado no banco de dados.")
+                    
+                editar_mais = input("Deseja realizar mais alterações? (s/n): ").strip().lower()
+                if editar_mais != 's':
+                    break
+            
+            except ValueError:
+                print("Entrada inválida! Certifique-se de inserir os tipos de dados corretos.")
 
 
     def apagar_album(self) -> None:
@@ -114,28 +125,33 @@ class menuAlbum(Menu):
         '''
         
         while True:
+
+            try:
         
-            print("Apagar album")
-            titulo = str(input("Qual o nome da musica que você deseja apagar: "))
-            artista = str(input("Qual o nome do artista da musica que você deseja apagar: "))
+                print("Apagar album")
+                titulo = str(input("Qual o nome da musica que você deseja apagar: "))
+                artista = str(input("Qual o nome do artista da musica que você deseja apagar: "))
 
-            musica_data = getconnection.get_collection("Musica").find_one({'titulo': titulo, 'artista': artista})
+                musica_data = getconnection.get_collection("Musica").find_one({'titulo': titulo, 'artista': artista})
 
-            if musica_data:
-                #cria musica
-                musica = Musica(musica_data['numero'], musica_data['titulo'], musica_data['artista'], 
-                                        musica_data['album'], musica_data['genero'], musica_data['compositores'], 
-                                        musica_data['produtores'], musica_data['duracao'], musica_data['album_id'])
-                print(musica)
-                aux = str(input("Essa é a musica que você deseja apagar? (S/N) "))
-                if aux == 'S':
-                    musica.apagar_musica()
-                elif aux == 'N':
-                    pass   
-            
-            apagar_mais = input("Deseja adicionar outra música? (s/n): ").strip().lower()
-            if apagar_mais != 's':
-                break
+                if musica_data:
+                    #cria musica
+                    musica = Musica(musica_data['numero'], musica_data['titulo'], musica_data['artista'], 
+                                            musica_data['album'], musica_data['genero'], musica_data['compositores'], 
+                                            musica_data['produtores'], musica_data['duracao'], musica_data['album_id'])
+                    print(musica)
+                    aux = str(input("Essa é a musica que você deseja apagar? (S/N) "))
+                    if aux == 'S':
+                        musica.apagar_musica()
+                    elif aux == 'N':
+                        pass   
+                
+                apagar_mais = input("Deseja adicionar outra música? (s/n): ").strip().lower()
+                if apagar_mais != 's':
+                    break
+
+            except ValueError:
+                print("Entrada inválida! Certifique-se de inserir os tipos de dados corretos.")
         
 
     def render(self):
@@ -162,7 +178,12 @@ class menuAlbum(Menu):
         metodo next: capaz de seguir o que o usuario deseja realizar
         '''
 
-        
+        try:
+            option = int(option)
+        except ValueError:
+            print("Opção inválida! Digite um número.")
+            return None
+
         clear_screen()  
         if option == 1:
             self.render()
