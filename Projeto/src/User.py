@@ -10,7 +10,6 @@ class User:
             pass
         else:
             self.user_id = ObjectId(_id)
-<<<<<<< HEAD
             data = self.collection.find_one({"_id": self.user_id})
             if data:
                 self._name = data["name"]
@@ -19,6 +18,8 @@ class User:
                 self._gender = data["gender"]
                 self._phone_number = data["phone_number"]
                 self._isonline = data["isonline"]
+                self.is_admin = data.get("is_admin", False)
+
             else:
                 raise ValueError("Usuário não encontrado com o ID fornecido.")
     
@@ -32,40 +33,12 @@ class User:
             "phone_number": userdata["phone_number"],
             "password": userdata["password"],
             "isonline": False,
+            "isadmin": data.get("is_admin", False)
         }
         self.collection.insert_one(user_data)
 
     def delete(self) -> None:
-=======
-            data= self.collection.find_one({"_id":self.user_id })
-            self.name=data["name"]
-            self.email=data["email"]
-            self.password=data["password"]
-            self.gender=data["gender"]
-            self.phone_number=data["phone_number"]
-            self.isonline=data["isonline"]
-            self.is_admin = data.get("is_admin", False)
-
-            # Converte o ID para o formato ObjectId
-    def newuser(self, userdata):
-        user_data = {
-                "name": userdata["name"],
-                "email": userdata["email"],
-                "gender": userdata["gender"],
-                "phone_number": userdata["phone_number"],
-                "password": userdata["password"],
-                "isonline":False,
-                "is_admin": userdata.get("is_admin", False)
-
-        }
-        self.collection.insert_one(user_data)
-
-    @property
-    def get_is_admin(self):
-        return self.is_admin
-
-    def delete(self):
->>>>>>> main
+    
         self.collection.find_one_and_delete({"_id": self.user_id})
     
     @property
