@@ -110,6 +110,7 @@ class AvaliacaoInterface(Menu):
             search.display_main_menu()
             option = int(input("Escolha uma opção: "))
             self.nextMusic(option)
+            
         else:
             print("Opção inválida.")
             self.finalAcao()
