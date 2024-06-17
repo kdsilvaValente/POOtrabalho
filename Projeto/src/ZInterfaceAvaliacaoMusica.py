@@ -1,16 +1,18 @@
 from Avaliacao import *
 from AbstractMenu import *
-from Zinterfacemain import *
-from Zinterfacesearch import *
-from Search import *
+#from Zinterfacesearch import Interface_search
+#from Zinterfacemain import Interface_main
 from run import getconnection
-            
-mainmenu = Interface_main()
+from Auxiliares_uteis import *
+
+
+#mainmenu = Interface_main()
 avaliacao = Avaliacao(getconnection)
-search = Interface_search()
+#search = Interface_search()
 
 class AvaliacaoInterMsc(Menu):
     def __init__(self, idUser, idmusica, idalbum):
+        self.avaliacao = Avaliacao(getconnection)
         self.user = idUser
         self.musica = idmusica
         self.album = idalbum
@@ -23,9 +25,9 @@ class AvaliacaoInterMsc(Menu):
             "5 - Me mostre os comentários que as pessoas estão fazendo sobre essa música"
         ]
 
-    def iniciotela(self, idMusica: ObjectId):
+    def iniciotela(self):
         print("Abrindo a música!! Aqui estão as informações dela:")
-        musica = avaliacao.validar_musica(idMusica)
+        musica = self.avaliacao.validar_musica(self.musica)
         if musica["likes"]:
             print(f"A musica {musica["titulo"]} tem {musica["likes"]} likes!")
         else:
@@ -70,7 +72,7 @@ class AvaliacaoInterMsc(Menu):
                 print("...")
                 print("...")
                 print("...")
-                mainmenu.initial_menu()
+                #mainmenu.initial_menu()
                 break  # Sai do loop enquanto a opção for válida
             else:
                 print("Opção inválida, tente novamente.")
@@ -87,25 +89,26 @@ class AvaliacaoInterMsc(Menu):
             print(option)
     
     def finalAcao(self):
-        print("O que você deseja fazer agora?")
-        print("1 - Voltar ao menu principal")
-        print("2 - Fazer outra pesquisa")
+        print("deu certo até aqiui")
+        # print("O que você deseja fazer agora?")
+        # print("1 - Voltar ao menu principal")
+        # print("2 - Fazer outra pesquisa")
 
-        next_option = input("Escolha uma opção: ")
+        # next_option = input("Escolha uma opção: ")
 
-        if next_option == '1':
-            mainmenu.initial_menu()
-            option = int(input("Escolha uma opção: "))
-            mainmenu.init_user_main(self.user)
+        # if next_option == '1':
+        #     mainmenu.initial_menu()
+        #     option = int(input("Escolha uma opção: "))
+        #     mainmenu.init_user_main(self.user)
 
-        elif next_option == '2':
-            search.display_main_menu()
-            option = int(input("Escolha uma opção: "))
-            self.next(option)
+        # elif next_option == '2':
+        #     search.display_main_menu()
+        #     option = int(input("Escolha uma opção: "))
+        #     self.next(option)
             
-        else:
-            print("Opção inválida.")
-            self.finalAcao()
+        # else:
+        #     print("Opção inválida.")
+        #     self.finalAcao()
 
     
     def next(self, option):
@@ -114,20 +117,20 @@ class AvaliacaoInterMsc(Menu):
         
         if option == 1:
 
-            like = avaliar.darLike(self.idmusica, self.user)
+            like = avaliar.darLike(self.musica, self.user)
             print(like)
             self.finalAcao()
 
         elif option == 2:
 
-            deslike = avaliar.desfazerLike(self.idmusica, self.user)
+            deslike = avaliar.desfazerLike(self.musica, self.user)
             print(deslike)
             self.finalAcao()
 
         elif option == 3:
             
             nota = input("De uma a 5 estrelas, qual nota você quer dar pra essa música?")
-            darnota = avaliar.darNota(self.idmusica, self.user, nota)
+            darnota = avaliar.darNota(self.musica, self.user, nota)
             print(darnota)
             self.finalAcao()
 
@@ -150,3 +153,9 @@ class AvaliacaoInterMsc(Menu):
             self.finalAcao()
 
         return self  
+
+teste = AvaliacaoInterMsc("666881d43c864f1f7af7caef", "666f314eba8d12c50e7b33c6", "666f314eba8d12c50e7b33c5")
+teste.iniciotela()
+op = teste.render()
+teste.next(op)
+teste.finalAcao

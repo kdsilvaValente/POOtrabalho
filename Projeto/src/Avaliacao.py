@@ -2,6 +2,7 @@ from bson.objectid import ObjectId
 from run import getconnection
 from Auxiliares_uteis import calcMedia 
 
+
 class Avaliacao():
     def __init__(self, db_connection) -> None:
         self.__colecaomusica = "Musica"
