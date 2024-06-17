@@ -1,6 +1,7 @@
 from Zinterfacelogin import *  # Importando interface de login
 from ZInterfaceuser import *   # Importando interface de usuário
 from Zinterfacesearch import *  # Importando interface de busca
+from ZInterfaceAdmin import *
 from connection_options.connection import DBconnectionHandler # import run para testa conexão 
 
 
@@ -13,6 +14,7 @@ class Interface_main:
         self.navegação = "Navegação"
         self.perfil = "Perfil"
         self.sair = "Sair"
+        self.admin = "Admin"
         self.db_handle= DBconnectionHandler()
         self.db_handle.connect_to_db()
 
@@ -24,11 +26,16 @@ class Interface_main:
                 print("Bem-vindo ao albumatic, o que deseja fazer?")
                 print("1. Login")
                 print("2. Criar perfil")
+                print("3. Login como Administrador")
+
                 option = int(input())
                 if option == 1:
                     self.login()
                 elif option == 2:
                     self.create_profile()
+                elif option == 3:
+                    self.admin_login()
+
                 else:
                     print("Opção inválida. Por favor, escolha uma opção de 1 a 2.")
             except ValueError:
@@ -51,7 +58,14 @@ class Interface_main:
         limpar_terminal       
         self.initial_menu
 
-        
+
+    def admin_login(self) -> None:
+        limpar_terminal()
+        self.verificar_conexão()
+        self.interface_login = Interface_login()
+        admin = self.interface_login.login()  
+        if admin and admin.is_admin:  
+            self.admin_menu()
 
     def create_profile(self) -> None:
         limpar_terminal()
@@ -66,6 +80,17 @@ class Interface_main:
             self.search_menu()
         if self.next == self.sair:
             self.logout()
+
+    def admin_menu(self):
+        limpar_terminal()
+        menu = menuAdmin()
+        while True:
+            menu.render()
+            try:
+                option = int(input())
+                menu.next(option)
+            except ValueError:
+                print("Por favor, insira um número válido.")
             
         
 
@@ -80,8 +105,6 @@ class Interface_main:
             return 0
         else:
             print("Falha na conexão, tente novamente mais tarde ou verifique sua conexão com a internet")
-
-
 
 
 

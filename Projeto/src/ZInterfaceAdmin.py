@@ -82,11 +82,8 @@ class menuAdmin(Menu):
             
         elif option == 3:
             self.render()
+            
 
-        elif option == 4:
-            print("Exibindo todas as musicas do banco de dados")
-            Musica.exibir_musicas()
-        
         else:
             print("Opção inválida! Tente novamente.")
             return None
