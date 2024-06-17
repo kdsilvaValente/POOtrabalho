@@ -28,7 +28,7 @@ class AvaliacaoInterMsc(Menu):
         print("Abrindo a música!! Aqui estão as informações dela:")
         musica = self.avaliacao.validar_musica(self.musica)
         
-        if musica["likes"]:
+        if musica['likes']:
             print(f"A música {musica['titulo']} tem {musica['likes']} likes!")
         else:
             print(f"A música {musica['titulo']} não foi favoritada ainda... Mude isso!!")

@@ -22,7 +22,7 @@ class menuAdmin(Menu):
         self.options = [
             "1 - Realizar alterações no banco de dados de musicas",
             "2 - Realizar alterações no banco de dados de albuns",
-            "3 - Realizar alterações no perfil de algum usuário"
+            "3 - Criar usuário administrador"
 
         ]
 
