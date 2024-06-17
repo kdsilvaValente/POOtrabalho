@@ -27,37 +27,40 @@ class AvaliacaoInterMsc(Menu):
     def iniciotela(self):
         print("Abrindo a música!! Aqui estão as informações dela:")
         musica = self.avaliacao.validar_musica(self.musica)
+        
         if musica["likes"]:
-            print(f"A musica {musica["titulo"]} tem {musica["likes"]} likes!")
+            print(f"A música {musica['titulo']} tem {musica['likes']} likes!")
         else:
-            print(f"A musica {musica["titulo"]} não foi favoritada ainda... Mude isso!!")
-        print("Outras informaçõess sobre ela!! Veja:")
-        print(f"Ela é a faixa {musica["numero"]} do álbum {musica["album"]}")
+            print(f"A música {musica['titulo']} não foi favoritada ainda... Mude isso!!")
+        
+        print("Outras informações sobre ela!! Veja:")
+        print(f"Ela é a faixa {musica['numero']} do álbum {musica['album']}")
         
         if musica["produtores"]:
             print("Foi produzida por:")
             for produtor in musica["produtores"]:
-                print(f"{produtor},\n")
-            else:
-                print("Não há produtores! :( Sabe-se lá como essa música veio ao mundo")
+                print(f"{produtor},")
+        else:
+            print("Não há produtores! :( Sabe-se lá como essa música veio ao mundo")
 
         if musica["compositores"]:
             print("Foi composta por:")
             for compositor in musica["compositores"]:
-                print(f"{compositor},\n")
-            else:
-                print("Não há compositores! Um caso de escritor fantasma em nossas mãos")
+                print(f"{compositor},")
+        else:
+            print("Não há compositores! Um caso de escritor fantasma em nossas mãos")
         
         print("A música é do(s) gênero(s):")
         for gen in musica["genero"]:
-            print(f"{gen},\n")
+            print(f"{gen},")
         
-        print(f"Duração de {musica["duracao"]}")
-        
+        print(f"Duração de {musica['duracao']}")
+
         if musica["avaliacao final"]:
-            print(f"A média da avaliação dos usuários dessa música é de {musica["avaliacao final"]} estrelas!")
+            print(f"A média da avaliação dos usuários dessa música é de {musica['avaliacao final']} estrelas!")
         else:
-            print(f"A musica {musica["titulo"]} não foi avaliada ainda... Mude isso!!")
+            print(f"A música {musica['titulo']} não foi avaliada ainda... Mude isso!!")
+
         
         while True:
             bool_str = input("Deseja avaliar a música? Responda com 1 para sim e 0 para não:\n")
