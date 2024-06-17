@@ -1,4 +1,4 @@
-from Avaliacao2 import *
+from Avaliacao import *
 from AbstractMenu import *
 #from Zinterfacesearch import Interface_search
 #from Zinterfacemain import Interface_main
