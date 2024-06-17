@@ -1,18 +1,17 @@
-from Avaliacao import *
+from Avaliacao2 import *
 from AbstractMenu import *
 #from Zinterfacesearch import Interface_search
 #from Zinterfacemain import Interface_main
-from run import getconnection
 from Auxiliares_uteis import *
 
 
 #mainmenu = Interface_main()
-avaliacao = Avaliacao(getconnection)
+avaliacao = Avaliacao()
 #search = Interface_search()
 
 class AvaliacaoInterMsc(Menu):
     def __init__(self, idUser, idmusica, idalbum):
-        self.avaliacao = Avaliacao(getconnection)
+        self.avaliacao = Avaliacao()
         self.user = idUser
         self.musica = idmusica
         self.album = idalbum
@@ -113,7 +112,7 @@ class AvaliacaoInterMsc(Menu):
     
     def next(self, option):
         clear_screen()  # limpa a tela ao iniciar um novo menu
-        avaliar = Avaliacao(getconnection)
+        avaliar = Avaliacao()
         
         if option == 1:
 
