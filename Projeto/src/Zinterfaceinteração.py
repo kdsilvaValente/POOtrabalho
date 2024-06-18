@@ -11,11 +11,12 @@ from bson.objectid import ObjectId
     
   
 class Interface_interação(Menu):    
-    def init_interação(self, user: str, user_pesquisa: str ) -> str:
+    def __init__(self, user: str, user_pesquisa: str = None) -> None:
+        super().__init__()
         self.search = Search("User")
         self.next = "0"
+        self.user = User(user)
         if user_pesquisa == None:
-            self.user = User(user)
             self.options()
         else:
             self.ver_perfil(user_pesquisa)
@@ -71,7 +72,7 @@ class Interface_interação(Menu):
                 option = int(input("Deseja pedir amizade?\n1. Sim\n2. Não, retornar\nEscolha uma opção: "))
                 if 1 <= option <= 2:
                     if option == 1:
-                        self.pedir_amizade(id)
+                        self.pedir_amizade(ObjectId(id))
                     else:
                         self.next = "Amizades"  
                         return 0

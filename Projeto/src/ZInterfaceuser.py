@@ -226,7 +226,7 @@ class User_interface(Menu):
         email = str(input("Digite seu email: "))
         print("-------------------------------")
         gender = self.chose_gender()
-        phone = int(input("Digite seu número com ddd: "))
+        phone = str(input("Digite seu número com ddd: "))
         print("-------------------------------")
         password = self.chose_password()
         user_data = {

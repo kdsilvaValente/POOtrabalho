@@ -119,8 +119,7 @@ class Interface_main:
             print("Falha na conexão, tente novamente mais tarde ou verifique sua conexão com a internet")
     def interações_usuários(self):
         while self.next == "Amizades" or isinstance(self.next, dict):
-            self.interface_interação = Interface_interação()
-            self.next=self.interface_interação.init_interação(self.user, self.user_pesquisa)
+            self.next = Interface_interação(self.user, self.user_pesquisa)
             self.user_pesquisa = None
             if self.next == self.perfil:
                 self.user_menu()
