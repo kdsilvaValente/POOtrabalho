@@ -222,6 +222,22 @@ class Avaliacao():
 
         return f"Usuário {username} fez um comentário na música {musicname}."
     
+    def exibirComentarios(self, idmusica):
+        
+        # acha a musica ou retorna se ela nao for encontrada e confere se usuario existe
+        music = self.validar_musica(ObjectId(idmusica))
+        
+        comentarios = self.__comentariocollection.find({
+            "musica": ObjectId(idmusica),
+        })
+        
+        usuario = self.__usercollection.find_one({
+            "_id": ObjectId(comentarios["user"])
+        })
+
+        
+        return f"{comentarios['user']}"
+
     # função que favorita um album 
     def favoritarAlbum(self, idalbum, idUser):
         
