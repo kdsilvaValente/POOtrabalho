@@ -47,7 +47,7 @@ class Interface_main:
         limpar_terminal()
         self.verificar_conexão()
         self.interface_login = Interface_login()
-        user = self.interface_login .login()
+        user = self.interface_login.login()
         if user:
             self.user = user
             self.user_menu()
@@ -64,10 +64,15 @@ class Interface_main:
     def admin_login(self) -> None:
         limpar_terminal()
         self.verificar_conexão()
+        self.verificar_conexão()
         self.interface_login = Interface_login()
-        admin = self.interface_login.login()  
-        if admin and admin.is_admin:  
+        admin = Admin(self.interface_login.login())
+        if admin:
+            print("Login administrativo bem-sucedido.")
             self.admin_menu()
+        else:
+            print("Acesso negado. Você não possui permissão de administrador.")
+            
 
     def create_profile(self) -> None:
         limpar_terminal()

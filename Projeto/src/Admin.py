@@ -7,13 +7,18 @@ class Admin(User):
         if not self.is_admin:
             raise PermissionError("nao eh admin")
 
-    def create_admin(self, userdata):
-        if not self.is_admin:
-            raise PermissionError("apenas admin adiciona")
-        userdata["is_admin"] = True
-        self.newuser(userdata)
-        print("admin criado")
+    def create_admin(self, name):
+        if not self.can_modify_admin_status():
+            raise PermissionError("Você não tem permissão para criar um administrador.")
 
+        self.collection.update_one(
+            {"name": name},
+            {"$set": {"is_admin": True}}
+        )
+        
+
+    def can_modify_admin_status(self) -> bool:
+        return self.is_admin()
     
     def newuser(self, userdata):
         return super().newuser(userdata)

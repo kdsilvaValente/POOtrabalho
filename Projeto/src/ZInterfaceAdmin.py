@@ -80,16 +80,11 @@ class menuAdmin(Menu):
             self.render()
 
     def create_admin_user(self):
+        
         '''
         Método para criar um novo usuário administrador
         '''
-        print("Digite o nome do novo administrador:")
-        nome = input()
-        print("Digite a senha do novo administrador:")
-        senha = input()
         
-        # Adiciona a lógica de criação de um novo usuário administrador
-        new_admin = Admin(nome, senha)
-        print(f"Usuário administrador '{nome}' criado com sucesso!")
-
-# menu = menuAdmin()
+        name = str(input("name:"))
+        admin = Admin("6671aefb7fd37bc25fe2228d")
+        admin.create_admin(name)
