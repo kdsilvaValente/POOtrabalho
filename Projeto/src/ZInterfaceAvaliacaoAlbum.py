@@ -5,7 +5,6 @@ from Zinterfacesearch import *
 from Search import *
 from run import getconnection
             
-mainmenu = Interface_main()
 avaliacao = Avaliacao(getconnection)
 search = Interface_search()
 
