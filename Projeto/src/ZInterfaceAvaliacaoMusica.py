@@ -1,13 +1,12 @@
 from Avaliacao import *
 from AbstractMenu import *
-#from Zinterfacesearch import Interface_search
-#from Zinterfacemain import Interface_main
+from Zinterfacesearch import Interface_search
+from Zinterfacemain import Interface_main
 from Auxiliares_uteis import *
 
 
-#mainmenu = Interface_main()
-avaliacao = Avaliacao()
-#search = Interface_search()
+mainmenu = Interface_main()
+search = Interface_search()
 
 class AvaliacaoInterMsc(Menu):
     def __init__(self, idUser, idmusica, idalbum):
@@ -27,46 +26,76 @@ class AvaliacaoInterMsc(Menu):
     def iniciotela(self):
         print("Abrindo a música!! Aqui estão as informações dela:")
         musica = self.avaliacao.validar_musica(self.musica)
-        
-        if musica['likes']:
+        if "likes" in musica:
             print(f"A música {musica['titulo']} tem {musica['likes']} likes!")
+            print("==========================================================")
         else:
             print(f"A música {musica['titulo']} não foi favoritada ainda... Mude isso!!")
-        
+            print("==========================================================")
+
         print("Outras informações sobre ela!! Veja:")
-        print(f"Ela é a faixa {musica['numero']} do álbum {musica['album']}")
+        print(f"Ela é a faixa {musica['numero']} do álbum {musica['album']}.")
+        print("==========================================================")
         
-        if musica["produtores"]:
+        if "produtores" in musica:
             print("Foi produzida por:")
-            for produtor in musica["produtores"]:
-                print(f"{produtor},")
+            for i, produtor in enumerate(musica["produtores"]):
+                if i == len(musica["produtores"]) - 1:
+                    print(f"e {produtor}.")
+                else:
+                    print(f"{produtor},")
+            print("==========================================================")
+        
         else:
             print("Não há produtores! :( Sabe-se lá como essa música veio ao mundo")
-
-        if musica["compositores"]:
+            print("==========================================================")
+        
+        if "compositores" in musica:
             print("Foi composta por:")
-            for compositor in musica["compositores"]:
-                print(f"{compositor},")
+            for i, compositor in enumerate(musica["compositores"]):
+                if i == len(musica["compositores"]) - 1:
+                    print(f"e {compositor}.")
+                    print("==========================================================")
+                else:
+                    print(f"{compositor},")
+        
         else:
             print("Não há compositores! Um caso de escritor fantasma em nossas mãos")
+            print("==========================================================")
         
-        print("A música é do(s) gênero(s):")
-        for gen in musica["genero"]:
-            print(f"{gen},")
-        
-        print(f"Duração de {musica['duracao']}")
 
-        if musica["avaliacao final"]:
+        if "genero" in musica: 
+            i = len(musica["genero"])
+            if i == 1:
+                print(f"O genero dessa música é {musica['genero']}!")
+            elif i > 1:
+                print("A música pertence a esses gêneros:")
+                for i, gen in enumerate(musica["genero"]):
+                        if i == len(musica["genero"]) - 1:
+                            print(f"e {gen}.")
+                        else:
+                            print(f"{gen},")
+                print("==========================================================")
+            else:
+                print("Essa música é tão diferente que não consigo pensar em um gênero pra ela...")
+                print("==========================================================")
+                
+        print(f"Duração de {musica['duracao']}")
+        print("==========================================================")
+        if "avaliacao final" in musica:
             print(f"A média da avaliação dos usuários dessa música é de {musica['avaliacao final']} estrelas!")
+            print("==========================================================")
+
         else:
             print(f"A música {musica['titulo']} não foi avaliada ainda... Mude isso!!")
+            print("==========================================================")
 
         
         while True:
             bool_str = input("Deseja avaliar a música? Responda com 1 para sim e 0 para não:\n")
             if bool_str == '1':
                 self.render()
-                opcao = input("Digite a opção desejada:")
+                opcao = int(input("Digite a opção desejada: "))
                 self.next(opcao)
                 break  # Sai do loop enquanto a opção for válida
             elif bool_str == '0':
@@ -81,7 +110,6 @@ class AvaliacaoInterMsc(Menu):
         
 
     def render(self):
-        self.search.display_main_menu()
         margem = '=' * (len(self.title) + 5)
         print(margem)
         print(f"|| {self.title} ||")
@@ -92,55 +120,66 @@ class AvaliacaoInterMsc(Menu):
     
     def finalAcao(self):
         print("deu certo até aqiui")
-        # print("O que você deseja fazer agora?")
-        # print("1 - Voltar ao menu principal")
-        # print("2 - Fazer outra pesquisa")
+        print("O que você deseja fazer agora?")
+        print("1 - Voltar ao menu principal")
+        print("2 - Fazer outra pesquisa")
+        print("3 - Avaliar essa mesma música novamente")
 
-        # next_option = input("Escolha uma opção: ")
 
-        # if next_option == '1':
-        #     mainmenu.initial_menu()
-        #     option = int(input("Escolha uma opção: "))
-        #     mainmenu.init_user_main(self.user)
+        next_option = int(input("Escolha uma opção: "))
 
-        # elif next_option == '2':
-        #     search.display_main_menu()
-        #     option = int(input("Escolha uma opção: "))
-        #     self.next(option)
-            
-        # else:
-        #     print("Opção inválida.")
-        #     self.finalAcao()
+        if next_option == 1:
+            # Retornar para a interface de pesquisa
+            search_interface = Interface_search()
+            self.next = search_interface.init_search()
+
+        elif next_option == 2:
+            # Retornar para o menu principal
+            main_interface = Interface_main()
+            self.next = main_interface.initial_menu()
+
+        elif next_option == 3:
+            # Manter na interface de avaliação
+            self.render()
+            opcao = int(input("Digite a opção desejada: "))
+            self.next(opcao)
+
+        else:
+            print("Opção inválida.")
+            self.finalAcao()
 
     
-    def next(self, option):
+    def next(self, option: int):
         clear_screen()  # limpa a tela ao iniciar um novo menu
-        avaliar = Avaliacao()
         
         if option == 1:
 
-            like = avaliar.darLike(self.musica, self.user)
+            like = self.avaliacao.darLike(self.musica, self.user)
             print(like)
+            print("==========================================================")
             self.finalAcao()
-
+        
         elif option == 2:
 
-            deslike = avaliar.desfazerLike(self.musica, self.user)
+            deslike = self.avaliacao.desfazerLike(self.musica, self.user)
             print(deslike)
+            print("==========================================================")
             self.finalAcao()
 
         elif option == 3:
             
             nota = input("De uma a 5 estrelas, qual nota você quer dar pra essa música?")
-            darnota = avaliar.darNota(self.musica, self.user, nota)
+            darnota = self.avaliacao.darNota(self.musica, self.user, nota)
             print(darnota)
+            print("==========================================================")
             self.finalAcao()
 
         elif option == 4:
 
             comentario = input("Sou todo ouvidos! Me conta o que você tem a dizer:")
-            comt = avaliar.comentarAlbum(self.album, self.user, comentario)
+            comt = self.avaliacao.comentarAlbum(self.album, self.user, comentario)
             print(comt)
+            print("==========================================================")
             self.finalAcao()
 
 
@@ -151,13 +190,11 @@ class AvaliacaoInterMsc(Menu):
                 print(comentarios["comentario"])
 
         else:
-            print("Opção inválida! Tente novamente.")
-            self.finalAcao()
+            op = int(input("Opção inválida! Tente novamente."))
+            self.finalAcao(op)
 
         return self  
 
 teste = AvaliacaoInterMsc("666881d43c864f1f7af7caef", "666f314eba8d12c50e7b33c6", "666f314eba8d12c50e7b33c5")
 teste.iniciotela()
-op = teste.render()
-teste.next(op)
-teste.finalAcao
+
