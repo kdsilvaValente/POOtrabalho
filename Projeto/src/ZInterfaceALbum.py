@@ -20,7 +20,8 @@ class menuAlbum(Menu):
             "2 - Editar album",
             "3 - Apagar album",
             "4 - Exibir albuns do banco",
-            "5 - Ler Excel novamente"
+            "5 - Ler Excel novamente",
+            "6 - Voltar"
         ]
 
 
@@ -201,6 +202,8 @@ class menuAlbum(Menu):
             self.render()
             excel = Excel()
             excel.importar_excel()
+        elif option == 6:
+            return 0
         
         else:
             print("Opção inválida! Tente novamente.")
