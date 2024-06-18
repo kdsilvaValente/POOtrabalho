@@ -11,9 +11,7 @@ class Interface_main:
         self.next = None
         self.user = None
         self.user_pesquisa = None
-        self.interface_user = None
         self.interface_login = None
-        self.interface_interação = None
         self.navegação = "Navegação"
         self.perfil = "Perfil"
         self.sair = "Sair"
@@ -41,7 +39,7 @@ class Interface_main:
                     self.admin_login()
 
                 else:
-                    print("Opção inválida. Por favor, escolha uma opção de 1 a 2.")
+                    print(emoji.emojize("Opção inválida. Por favor, escolha uma opção de 1 a 2:prohibited: "))
             except ValueError:
                 print("Digite um número válido.")
 
@@ -54,12 +52,12 @@ class Interface_main:
             self.user = user
             self.user_menu()
     def logout(self):
+        limpar_terminal()
         self.interface_login.logout()
         self.next = None
         self.user = None
         self.interface_user = None
         self.interface_login = None 
-        limpar_terminal       
         self.initial_menu
 
 
@@ -73,13 +71,13 @@ class Interface_main:
 
     def create_profile(self) -> None:
         limpar_terminal()
-        self.interface_user = User_interface()
-        self.interface_user.init_user(None)
+        self.interface_user = User_interface(None)
+        self.interface_user.init_user()
 
     def user_menu(self):
         limpar_terminal()
-        self.interface_user = User_interface()
-        self.next = self.interface_user.init_user(self.user)
+        self.next = User_interface(self.user)
+        self.next = self.next.next
         print(self.next)
         if self.next == self.navegação:
             self.search_menu()
@@ -100,17 +98,19 @@ class Interface_main:
                 print("Por favor, insira um número válido.")      
 
     def search_menu(self) -> None:
-        limpar_terminal()
-        interface_search = Interface_search() #pelo metodo de super não estava dando certo
-        self.next=interface_search.init_search() # o return deve ser o resultado do id e também o número da próxima ação
-        print(self.next)
-        if self.next == self.perfil:
-            self.user_menu()
-        elif isinstance(self.next, dict):
-            if self.next["next"] == self.amizades:
-                self.user_pesquisa =  str(self.next["id_pesquisa"] )
-                self.next = self.amizades
-                self.interações_usuários()
+        while self.next == self.navegação:
+            limpar_terminal()
+            self.next= Interface_search() #pelo metodo de super não estava dando certo
+            self.next=self.next.next
+            if self.next == self.perfil:
+                self.user_menu()
+            elif isinstance(self.next, dict):
+                if self.next["next"] == self.amizades:
+                    self.user_pesquisa =  str(self.next["id_pesquisa"] )
+                    self.next = self.amizades
+                    self.interações_usuários()
+   
+            
 
     def verificar_conexão(self):
         if  self.db_handle.connect_to_db() == True:
@@ -118,12 +118,14 @@ class Interface_main:
         else:
             print("Falha na conexão, tente novamente mais tarde ou verifique sua conexão com a internet")
     def interações_usuários(self):
+        limpar_terminal()
         while self.next == "Amizades" or isinstance(self.next, dict):
             self.next = Interface_interação(self.user, self.user_pesquisa)
+            self.next=self.next.next
             self.user_pesquisa = None
             if self.next == self.perfil:
                 self.user_menu()
-
+    
           
         
 

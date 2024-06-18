@@ -3,10 +3,12 @@ from Auxiliares_uteis import *
 from bson import ObjectId  # biblioteca para poder usar o ObjectId e converter no formato bson
 from Search import Search  
 from AbstractMenu import *
+import emoji
+
 
 
 class Interface_search(Menu):
-    def init_search(self):
+    def __init__(self)->None:
         self.data = []
         self.result = []
         self.id_result = None
@@ -16,7 +18,6 @@ class Interface_search(Menu):
         self.pessoas_result = []
         self.title = "NAVEGAÇÃO"
         self.options()
-        return self.next
     
     def render(self):
         margem = '=' * (len(self.title) + 5)
@@ -39,7 +40,7 @@ class Interface_search(Menu):
                         self.next="Perfil" #chave para próximo menu
                         return 0
                 else:
-                    print("Opção inválida. Por favor, escolha uma opção de 1 a 4.")
+                    print(emoji.emojize("Opção inválida. Por favor, escolha uma opção de 1 a 4:prohibited: "))
             except ValueError:
                 print("Digite um número válido.")
             return 0
@@ -51,7 +52,7 @@ class Interface_search(Menu):
         print("2. Produtor")
         print("3. Album")
         print("4. Pessoas")
-        print("5. Voltar")
+        print(emoji.emojize("5. Voltar :BACK_arrow: "))
         # opções de navegação, e a opção sair precisa direcionar para a tela anterior
 
     def display_main_menu_option(self, option: int)-> None:
@@ -140,7 +141,7 @@ class Interface_search(Menu):
     def menu_result_musica(self)->None:
         print('O que deseja fazer?:')
         print("1. Abrir música")
-        print("2. Retornar para buscas")
+        print(emoji.emojize("2. Voltar :BACK_arrow: "))
         options = int(input("Escolha uma opção: "))
         self.options_value = options
         self.result_option_musica()
@@ -151,7 +152,7 @@ class Interface_search(Menu):
         print("1. Abrir album")
         print("2. Abrir música do album")
         print("3. Visitar perfil")
-        print("4. Retornar para buscas")
+        print(emoji.emojize("4. Voltar :BACK_arrow: "))
         options = int(input("Escolha uma opção: "))
         self.options_value = options
         self.result_option_album()
@@ -198,7 +199,7 @@ class Interface_search(Menu):
     def menu_result_pessoa(self):
         print('O que deseja fazer?:')
         print("1. Ver perfil de um usuário")
-        print("2. Retornar para buscas")
+        print(emoji.emojize("2. Voltar :BACK_arrow: "))
         self.options_value = int(input("Escolha uma opção: "))
         self.result_option_pessoa()
 
@@ -213,7 +214,7 @@ class Interface_search(Menu):
             limpar_terminal()
             return 0
          else:
-             return 0
+             self.next = "Navegação"
 
 
         

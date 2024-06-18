@@ -1,6 +1,9 @@
 from run import getconnection
 from bson import ObjectId
 from typing import Optional, Dict
+from pymongo import MongoClient
+from bson.objectid import ObjectId
+from typing import Optional
 
 class User:
     
@@ -10,18 +13,20 @@ class User:
             pass
         else:
             self.user_id = ObjectId(_id)
-            data = self.collection.find_one({"_id": self.user_id})
-            if data:
-                self._name = data["name"]
-                self._email = data["email"]
-                self._password = data["password"]
-                self._gender = data["gender"]
-                self._phone_number = data["phone_number"]
-                self._isonline = data["isonline"]
-                self._is_admin = data["is_admin"]
-                self._lista_amigos = data["friends"]
-                self._lista_pedidos = data["ask_friends"]
-
+            self.data = self.collection.find_one({"_id": self.user_id})
+            if self.data:
+                self._name = self.data["name"]
+                self._email = self.data["email"]
+                self._password = self.data["password"]
+                self._gender = self.data["gender"]
+                self._phone_number = self.data["phone_number"]
+                self._isonline = self.data["isonline"]
+                self._is_admin = self.data["is_admin"]
+                self._lista_amigos = self.data["friends"]
+                self._lista_pedidos = self.data["ask_friends"]
+                self._lista_favoritos = self.data.get("favoritos", [])
+                self._status = self.data.get("status", "")
+                self.teste_parametros()
             else:
                 raise ValueError("Usuário não encontrado com o ID fornecido.")
 
@@ -39,24 +44,60 @@ class User:
             "password": userdata["password"],
             "isonline": False,
             "is_admin": userdata.get("is_admin", False),
-            "friends":[], 
-            "ask_friends":[]
+            "friends": [], 
+            "ask_friends": [],
+            "favoritos": [],
+            "status": "Adicione seu status"  # Adicionando status ao criar um novo usuário
         }
         self.collection.insert_one(user_data)
+    
+    def teste_parametros(self):
+        # Verifica se favoritos não está presente e adiciona se necessário
+        if "favoritos" not in self.data:
+            self.collection.update_one(
+                {"_id": self.user_id},
+                {"$set": {"favoritos": []}}
+            )
+        # Verifica se status não está presente e adiciona se necessário
+        if "status" not in self.data:
+            self.collection.update_one(
+                {"_id": self.user_id},
+                {"$set": {"status": ""}}
+            )
 
     def delete(self) -> None:
         self.collection.find_one_and_delete({"_id": self.user_id})
 
-    def excluir_amigo(self,id) -> None:
-        self.collection.update_one( {'_id':  self.user_id }, {'$pull': {'friends': ObjectId(id)}} )
-        self.collection.update_one( {'_id':  ObjectId(id)  }, {'$pull': {'friends': self.user_id}} )
+    def excluir_amigo(self, id) -> None:
+        self.collection.update_one(
+            {'_id':  self.user_id },
+            {'$pull': {'friends': ObjectId(id)}}
+        )
+        self.collection.update_one(
+            {'_id':  ObjectId(id)},
+            {'$pull': {'friends': self.user_id}}
+        )
 
     def pedir_amizade(self, id) -> None:
-        self.collection.update_one( {'_id': ObjectId(id) }, {'$push': {'ask_friends': self.user_id}} )
+        self.collection.update_one(
+            {'_id': ObjectId(id)},
+            {'$push': {'ask_friends': self.user_id}}
+        )
+
     def aceitar_pedido(self, id) -> None:
-        self.collection.update_one( {'_id': self.user_id}, {'$push': {'friends': ObjectId(id)}} )
-        self.collection.update_one( {'_id': self.user_id}, {'$pull': {'ask_friends': ObjectId(id)}} )
-        self.collection.update_one( {'_id': ObjectId(id)}, {'$push': {'friends':  self.user_id}} )
+        self.collection.update_one(
+            {'_id': self.user_id},
+            {'$push': {'friends': ObjectId(id)}}
+        )
+        self.collection.update_one(
+            {'_id': self.user_id},
+            {'$pull': {'ask_friends': ObjectId(id)}}
+        )
+        self.collection.update_one(
+            {'_id': ObjectId(id)},
+            {'$push': {'friends':  self.user_id}}
+        )
+
     @property
     def name(self) -> str:
         return self._name
@@ -105,10 +146,20 @@ class User:
     @property
     def is_admin(self) -> bool:
         return self._is_admin
+
     @property
     def lista_amigos(self) -> str:
         return self._lista_amigos
+
     @property
     def lista_pedidos(self) -> str:
         return self._lista_pedidos
 
+    @property
+    def status(self) -> str:
+        return self._status
+    
+    @status.setter
+    def status(self, value: str) -> None:
+        self.collection.find_one_and_update({"_id": self.user_id}, {"$set": {"status": value}})
+        self._status = value  # Corrigido para atualizar corretamente _status

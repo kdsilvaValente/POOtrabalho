@@ -5,6 +5,8 @@ from ZInterfaceALbum import *
 from ZInterfaceMusica import *
 from Auxiliares_uteis import *
 from Excel import *
+import emoji
+
 
 menua = menuAlbum()
 auxiliar = Auxiliar()
@@ -74,7 +76,7 @@ class menuAdmin(Menu):
         elif option == 3:
             self.create_admin_user()
         else:
-            print("Opção inválida! Tente novamente.")
+            print(emoji.emojize("Opção inválida. tente novamente:prohibited: "))
             self.render()
 
     def create_admin_user(self):

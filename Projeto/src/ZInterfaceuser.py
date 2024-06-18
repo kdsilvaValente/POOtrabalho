@@ -7,22 +7,13 @@ import re
 
 
 class User_interface(Menu):
-    def init_user(self, user: dict) -> str:
-        """
-        Inicia a interface do usuário com base nos dados fornecidos.
-
-        Args:
-            user (dict): Dicionário contendo os dados do usuário.
-
-        Returns:
-            str: Retorna a próxima ação a ser realizada após a interação com o usuário.
-        """
+    def   __init__(self, user: dict) -> str:
+        super().__init__()
         self.title = "PERFIL"
         self.next = "0"
         if user is not None:
             self.user = User(user)
             self.options()
-            return self.next
         else:
             self.new_profile_interface()
 
@@ -33,11 +24,6 @@ class User_interface(Menu):
         print(margem + "\n")
 
     def options(self) -> None:
-        """
-        Mostra as opções disponíveis no menu principal e lida com a escolha do usuário.
-    
-        """
-        re
         while self.next == "0":
             try:
                 self.render()
@@ -51,7 +37,7 @@ class User_interface(Menu):
                         self.next = "Sair"
                         return
                 else:
-                    print("Opção inválida. Por favor, escolha uma opção de 1 a 5.")
+                    print(emoji.emojize("Opção inválida. Por favor, escolha uma opção de 1 a 5:prohibited: "))
             except ValueError:
                 print("Digite um número válido.")
 
@@ -95,12 +81,12 @@ class User_interface(Menu):
         Mostra o perfil atual do usuário na tela.
         """
         limpar_terminal()
-        print("Seu perfil:")
+        print("Suas informações:")
         print(f"Nome: {self.user.name}")
         print(f"Email: {self.user.email}")
         print(f"Gênero: {self.user.gender}")
         print(f"Telefone: {self.user.phone_number}")
-
+        print(f"Status: \"{self.user.status}\"")   
     def update_profile(self) -> None:
         """
         Permite ao usuário editar as informações do perfil.
@@ -114,29 +100,29 @@ class User_interface(Menu):
                 print("3. Password")
                 print("4. Gender")
                 print("5. Phone Number")
-                print("6. Voltar")
+                print("6. Status")
+                print(emoji.emojize("7. Voltar :BACK_arrow: "))
                 print("-------------------------------")
-                choice = int(input("Escolha a opção de 1 a 5: "))
+                
+                choice = int(input("Escolha a opção de 1 a 7: "))
                 print("-------------------------------")
-
+                
                 if choice == 1:
-                    new_name = str(input("Digite o novo nome: "))
+                    new_name = input("Digite o novo nome: ")
                     self.user.name = new_name
                     print("Nome atualizado com sucesso!")
-                    break
-
+                
                 elif choice == 2:
-                    email_new = str(input("Digite o novo email: "))
-                    self.user.email = email_new
+                    new_email = input("Digite o novo email: ")
+                    self.user.email = new_email
                     print("Email atualizado com sucesso!")
-                    break
-
+                
                 elif choice == 3:
                     while True:
                         try:
-                            password = str(input("Confirme sua senha atual antes de editar: "))
-                            if password == self.user.password:
-                                new_password = str(input("Senha correta, digite sua nova senha: "))
+                            current_password = input("Digite sua senha atual para confirmar: ")
+                            if current_password == self.user.password:
+                                new_password = input("Digite sua nova senha: ")
                                 self.user.password = new_password
                                 print("Senha atualizada com sucesso!")
                                 break
@@ -144,30 +130,35 @@ class User_interface(Menu):
                                 print("Senha incorreta. Tente novamente.")
                         except ValueError:
                             print("Erro ao atualizar senha. Tente novamente.")
-                    break
-
+                
                 elif choice == 4:
-                    new_gender = self.chose_gender()
+                    new_gender = self.chose_gender()  # Implemente a função chose_gender() para obter o novo gênero
                     self.user.gender = new_gender
                     print("Gênero atualizado com sucesso!")
-                    break
-
+                
                 elif choice == 5:
-                    new_phone = int(input("Digite o novo número de telefone: "))
+                    new_phone = input("Digite o novo número de telefone: ")
                     self.user.phone_number = new_phone
                     print("Número de telefone atualizado com sucesso!")
-                    break
+                
                 elif choice == 6:
-                    return 0
-
-
+                    new_status = input("Digite o seu novo status: ")
+                    self.user.status = new_status
+                    print("Status atualizado com sucesso!")
+                
+                elif choice == 7:
+                    print("Retornando ao menu anterior...")
+                    break
+                
                 else:
-                    print("Opção inválida. Por favor, escolha uma opção de 1 a 5.")
+                    print(emoji.emojize("Opção inválida. Por favor, escolha uma opção de 1 a 7 :prohibited: "))
 
             except ValueError:
-                print("Opção inválida. Por favor, escolha uma opção de 1 a 5.")
+                print("Opção inválida. Por favor, escolha uma opção de 1 a 7.")
+            
             except Exception as e:
                 print(f"Ocorreu um erro: {str(e)}")
+
 
     def chose_gender(self) -> str:
         """
@@ -214,7 +205,8 @@ class User_interface(Menu):
                 elif escolha == 9:
                     return 0
             else:
-                print("Opção inválida. Por favor, escolha um número entre 1 e 8.")
+                print(emoji.emojize("Opção inválida. Por favor, escolha uma opção de 1 a 8:prohibited: "))
+
 
     def new_profile_interface(self) -> None:
         """
@@ -223,7 +215,7 @@ class User_interface(Menu):
         print("-------------------------------")
         name = str(input("Qual seu nome?: "))
         print("-------------------------------")
-        email = str(input("Digite seu email: "))
+        email=self.chose_email()
         print("-------------------------------")
         gender = self.chose_gender()
         phone = str(input("Digite seu número com ddd: "))
@@ -290,5 +282,7 @@ class User_interface(Menu):
                     return KeyError
             except ValueError:
                 print("Senha incompatível")
+       
+
     
 
