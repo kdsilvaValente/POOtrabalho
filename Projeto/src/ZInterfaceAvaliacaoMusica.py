@@ -121,20 +121,20 @@ class AvaliacaoInterMsc(Menu):
     def finalAcao(self):
         print("deu certo até aqiui")
         print("O que você deseja fazer agora?")
-        print("1 - Voltar ao menu principal")
-        print("2 - Fazer outra pesquisa")
-        print("3 - Avaliar essa mesma música novamente")
+        print("1 - Fazer outra pesquisa")
+        print("2 - Avaliar essa mesma música novamente")
 
 
         next_option = int(input("Escolha uma opção: "))
 
         if next_option == 1:
-            # Retornar para a interface de pesquisa
-            search_interface = Interface_search()
-            self.next = search_interface.init_search()
+            search.display_main_menu()
+            op = input(int("Digite aqui: "))
+            search.display_main_menu_option(op)
+            search.menu_result_musica()
 
         elif next_option == 2:
-            # Retornar para o menu principal
+            
             main_interface = Interface_main()
             self.next = main_interface.initial_menu()
 

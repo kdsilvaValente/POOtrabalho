@@ -121,6 +121,7 @@ class Interface_search:
         print('O que deseja fazer?:')
         print("1. Abrir música")
         print("2. Retornar para buscas")
+        print("3. Avaliar a música")
         options = int(input("Escolha uma opção: "))
         self.options_value = options
         self.result_option_musica()
