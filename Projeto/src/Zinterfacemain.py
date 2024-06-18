@@ -2,6 +2,7 @@ from Zinterfacelogin import *  # Importando interface de login
 from ZInterfaceuser import *   # Importando interface de usuário
 from Zinterfacesearch import *  # Importando interface de busca
 from ZInterfaceAdmin import *
+from Zinterfaceinteração import*
 from connection_options.connection import DBconnectionHandler # import run para testa conexão 
 
 
@@ -9,12 +10,15 @@ class Interface_main:
     def __init__(self) -> None:
         self.next = None
         self.user = None
+        self.user_pesquisa = None
         self.interface_user = None
         self.interface_login = None
+        self.interface_interação = None
         self.navegação = "Navegação"
         self.perfil = "Perfil"
         self.sair = "Sair"
         self.admin = "Admin"
+        self.amizades = "Amizades"
         self.db_handle= DBconnectionHandler()
         self.db_handle.connect_to_db()
 
@@ -76,10 +80,13 @@ class Interface_main:
         limpar_terminal()
         self.interface_user = User_interface()
         self.next = self.interface_user.init_user(self.user)
+        print(self.next)
         if self.next == self.navegação:
             self.search_menu()
         if self.next == self.sair:
             self.logout()
+        if self.next == self.amizades:
+            self.interações_usuários()
 
     def admin_menu(self):
         limpar_terminal()
@@ -90,22 +97,36 @@ class Interface_main:
                 option = int(input())
                 menu.next(option)
             except ValueError:
-                print("Por favor, insira um número válido.")
-            
-        
+                print("Por favor, insira um número válido.")      
 
     def search_menu(self) -> None:
         limpar_terminal()
         interface_search = Interface_search() #pelo metodo de super não estava dando certo
         self.next=interface_search.init_search() # o return deve ser o resultado do id e também o número da próxima ação
+        print(self.next)
         if self.next == self.perfil:
             self.user_menu()
+        elif isinstance(self.next, dict):
+            if self.next["next"] == self.amizades:
+                self.user_pesquisa =  str(self.next["id_pesquisa"] )
+                self.next = self.amizades
+                self.interações_usuários()
+
     def verificar_conexão(self):
         if  self.db_handle.connect_to_db() == True:
             return 0
         else:
             print("Falha na conexão, tente novamente mais tarde ou verifique sua conexão com a internet")
+    def interações_usuários(self):
+        while self.next == "Amizades" or isinstance(self.next, dict):
+            self.interface_interação = Interface_interação()
+            self.next=self.interface_interação.init_interação(self.user, self.user_pesquisa)
+            self.user_pesquisa = None
+            if self.next == self.perfil:
+                self.user_menu()
 
+          
+        
 
 
 

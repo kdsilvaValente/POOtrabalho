@@ -13,6 +13,7 @@ class Interface_search(Menu):
         self.options_value = 0
         self.next = "0"
         self.musicas_album = []
+        self.pessoas_result = []
         self.title = "NAVEGAÇÃO"
         self.options()
         return self.next
@@ -100,8 +101,7 @@ class Interface_search(Menu):
             result = search.get_by_type(data["type"], name)
             print("Abaixo segue os resultados correspondentes:")
             self.print_pessoas(result)
-            self.menu_result_album()
-
+            self.menu_result_pessoa()
 
     def print_musica(self, result: list[dict[str, str]])-> None:  # printa os resultados da pesquisa feita na collection música
         result_length = len(result)
@@ -188,14 +188,36 @@ class Interface_search(Menu):
             
         else:
             self.options()  # Retornar para buscas
-    def print_pessoas(self, result: list[dict[str, str]]):
+    
+    def print_pessoas(self,result):
         result_length = len(result)
         for i in range(result_length):
-            print("-------------------------------")
-            print(f"{i + 1}: {(result[i])['name']}")
-        self.result = result
+             print(f"{i + 1}:{result[i]['name']}")
+        self.pessoas_result=result
 
-teste = Interface_search()
-teste.init_search()
+    def menu_result_pessoa(self):
+        print('O que deseja fazer?:')
+        print("1. Ver perfil de um usuário")
+        print("2. Retornar para buscas")
+        self.options_value = int(input("Escolha uma opção: "))
+        self.result_option_pessoa()
+
+    def result_option_pessoa(self):
+         if self.options_value == 1:
+            number= int(input("Qual perfil? Digite o número:"))
+            print(len(self.pessoas_result))
+            self.id_result = ((self.pessoas_result[number-1])['_id'])
+            dicionario = {"next": "Amizades",
+                          "id_pesquisa":self.id_result }
+            self.next = dicionario
+            limpar_terminal()
+            return 0
+         else:
+             return 0
 
 
+        
+        
+
+# teste= Interface_search()
+# teste.init_search()

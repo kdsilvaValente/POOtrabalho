@@ -19,6 +19,8 @@ class User:
                 self._phone_number = data["phone_number"]
                 self._isonline = data["isonline"]
                 self._is_admin = data["is_admin"]
+                self._lista_amigos = data["friends"]
+                self._lista_pedidos = data["ask_friends"]
 
             else:
                 raise ValueError("Usuário não encontrado com o ID fornecido.")
@@ -36,13 +38,25 @@ class User:
             "phone_number": userdata["phone_number"],
             "password": userdata["password"],
             "isonline": False,
-            "is_admin": userdata.get("is_admin", False)
+            "is_admin": userdata.get("is_admin", False),
+            "friends":[], 
+            "ask_friends":[]
         }
         self.collection.insert_one(user_data)
 
     def delete(self) -> None:
         self.collection.find_one_and_delete({"_id": self.user_id})
-    
+
+    def excluir_amigo(self,id) -> None:
+        self.collection.update_one( {'_id':  self.user_id }, {'$pull': {'friends': ObjectId(id)}} )
+        self.collection.update_one( {'_id':  ObjectId(id)  }, {'$pull': {'friends': self.user_id}} )
+
+    def pedir_amizade(self, id) -> None:
+        self.collection.update_one( {'_id': ObjectId(id) }, {'$push': {'ask_friends': self.user_id}} )
+    def aceitar_pedido(self, id) -> None:
+        self.collection.update_one( {'_id': self.user_id}, {'$push': {'friends': ObjectId(id)}} )
+        self.collection.update_one( {'_id': self.user_id}, {'$pull': {'ask_friends': ObjectId(id)}} )
+        self.collection.update_one( {'_id': ObjectId(id)}, {'$push': {'friends':  self.user_id}} )
     @property
     def name(self) -> str:
         return self._name
@@ -91,3 +105,10 @@ class User:
     @property
     def is_admin(self) -> bool:
         return self._is_admin
+    @property
+    def lista_amigos(self) -> str:
+        return self._lista_amigos
+    @property
+    def lista_pedidos(self) -> str:
+        return self._lista_pedidos
+

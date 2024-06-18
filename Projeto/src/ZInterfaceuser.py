@@ -40,13 +40,12 @@ class User_interface(Menu):
         re
         while self.next == "0":
             try:
-                limpar_terminal()
                 self.render()
                 self.display_main_menu()
                 option = int(input("Escolha uma opção: "))
                 print("-------------------------------")
-                if 1 <= option <= 5:
-                    if option != 5:
+                if 1 <= option <= 6:
+                    if option != 6:
                         self.display_main_menu_option(option)
                     else:
                         self.next = "Sair"
@@ -66,7 +65,8 @@ class User_interface(Menu):
         print("2. Editar informação do perfil")
         print("3. Deletar perfil")
         print("4. Navegação")
-        print("5. Sair")
+        print("5. Gerenciar amizades")
+        print("6. Sair")
         print("-------------------------------")
 
     def display_main_menu_option(self, option: int) -> None:
@@ -87,6 +87,8 @@ class User_interface(Menu):
             self.delete_profile()
         elif option == 4:
             self.next = "Navegação"
+        elif option == 5:
+            self.next = "Amizades"
 
     def display_user_profile(self) -> None:
         """
@@ -237,7 +239,7 @@ class User_interface(Menu):
         }
         user = User(None)
         user.newuser(user_data)
-        limpar_terminal()
+        # limpar_terminal()
         print("Perfil Criado")
 
     def chose_password(self) -> str:
@@ -289,5 +291,4 @@ class User_interface(Menu):
             except ValueError:
                 print("Senha incompatível")
     
-
 
