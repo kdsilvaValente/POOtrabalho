@@ -2,10 +2,11 @@ from User import User
 import emoji
 import sys  # para usar o sys.exit()
 from Auxiliares_uteis import limpar_terminal
+from AbstractMenu import *
 import re
 
 
-class User_interface:
+class User_interface(Menu):
     def init_user(self, user: dict) -> str:
         """
         Inicia a interface do usuário com base nos dados fornecidos.
@@ -16,6 +17,7 @@ class User_interface:
         Returns:
             str: Retorna a próxima ação a ser realizada após a interação com o usuário.
         """
+        self.title = "PERFIL"
         self.next = "0"
         if user is not None:
             self.user = User(user)
@@ -24,12 +26,22 @@ class User_interface:
         else:
             self.new_profile_interface()
 
+    def render(self):
+        margem = '=' * (len(self.title) + 5)
+        print(margem)
+        print(f"|| {self.title} ||")
+        print(margem + "\n")
+
     def options(self) -> None:
         """
         Mostra as opções disponíveis no menu principal e lida com a escolha do usuário.
+    
         """
+        re
         while self.next == "0":
             try:
+                limpar_terminal()
+                self.render()
                 self.display_main_menu()
                 option = int(input("Escolha uma opção: "))
                 print("-------------------------------")

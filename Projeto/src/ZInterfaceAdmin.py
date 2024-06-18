@@ -1,7 +1,7 @@
 from AbstractMenu import *
 from User import *
-from Admin import * 
-from ZInterfaceAlbum import *
+from Admin import *
+from ZInterfaceALbum import *
 from ZInterfaceMusica import *
 from Auxiliares_uteis import *
 from Excel import *
@@ -13,84 +13,81 @@ excel = Excel()
 
 class menuAdmin(Menu):
     def __init__(self):
-
         '''
-        metodo para inicializar a interface
+        Metodo para inicializar a interface
         '''
-
         self.title = "Menu de administrador :p"
         self.options = [
             "1 - Realizar alterações no banco de dados de musicas",
             "2 - Realizar alterações no banco de dados de albuns",
             "3 - Criar usuário administrador"
-
         ]
+        self.render()
 
     def render(self) -> None:
-
         '''
-        método para renderizar a interface
+        Método para renderizar a interface
         '''
-
         margem = '=' * (len(self.title) + 5)
         print(margem)
         print(f"|| {self.title} ||")
         print(margem + "\n")
-
         for option in self.options:
             print(option)
             
         print("\n>> Digite sua opção")
+        try:
+            opcao = int(input())
+        except ValueError:
+            print("Por favor, insira um número válido.")
+            return self.render()
+        self.next(opcao)
 
     def next(self, option):
-        
         '''
         @param option: inteiro responsável por representar a ação desejada do usuário
-        metodo next: capaz de seguir o que o usuario deseja realizar
+        Metodo next: capaz de seguir o que o usuário deseja realizar
         '''
-        
         clear_screen()  
         if option == 1:
-            self.render()
-    
             while True:
-
                 menua.render()
-                
                 try:
                     option = int(input())
                 except ValueError:
                     print("Por favor, insira um número válido.")
                     continue
-                
                 menua.next(option)
+                break
 
         elif option == 2:
-            self.render()
-
             while True:
-
                 menum.render()
-                    
                 try:
                     option = int(input())
                 except ValueError:
                     print("Por favor, insira um número válido.")
                     continue
-                    
                 menum.next(option)
-            
-        elif option == 3:
-            self.render()
-            
+                break
 
+        elif option == 3:
+            self.create_admin_user()
         else:
             print("Opção inválida! Tente novamente.")
-            return None
+            self.render()
 
-        return self  
-    
-menu = menuAdmin()
-menu.render()
-opcao = int(input())
-menu.next(opcao)
+    def create_admin_user(self):
+        '''
+        Método para criar um novo usuário administrador
+        '''
+        print("Digite o nome do novo administrador:")
+        nome = input()
+        print("Digite a senha do novo administrador:")
+        senha = input()
+        
+        # Adiciona a lógica de criação de um novo usuário administrador
+        new_admin = Admin(nome, senha)
+        print(f"Usuário administrador '{nome}' criado com sucesso!")
+
+# menu = menuAdmin()

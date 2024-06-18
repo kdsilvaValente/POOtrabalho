@@ -18,12 +18,15 @@ class User:
                 self._gender = data["gender"]
                 self._phone_number = data["phone_number"]
                 self._isonline = data["isonline"]
-                self.is_admin = data.get("is_admin", False)
+                self._is_admin = data["is_admin"]
 
             else:
                 raise ValueError("Usuário não encontrado com o ID fornecido.")
+
+    def sharefavorites(self):
+        pass
     
-    def newuser(self, userdata: Dict[str, str]) -> None:
+    def newuser(self, userdata: dict[str, str]) -> None:
         if not isinstance(userdata, dict):
             raise TypeError("O parâmetro 'userdata' deve ser um dicionário.")
         user_data = {
@@ -34,7 +37,6 @@ class User:
             "password": userdata["password"],
             "isonline": False,
             "is_admin": userdata.get("is_admin", False)
-
         }
         self.collection.insert_one(user_data)
 
@@ -87,5 +89,5 @@ class User:
         self._phone_number = value
 
     @property
-    def is_admin(self) -> str:
-        return self.is_admin
+    def is_admin(self) -> bool:
+        return self._is_admin

@@ -2,8 +2,10 @@ import sys  # para usar o sys.exit()
 from Auxiliares_uteis import *
 from bson import ObjectId  # biblioteca para poder usar o ObjectId e converter no formato bson
 from Search import Search  
+from AbstractMenu import *
 
-class Interface_search:
+
+class Interface_search(Menu):
     def init_search(self):
         self.data = []
         self.result = []
@@ -11,16 +13,21 @@ class Interface_search:
         self.options_value = 0
         self.next = "0"
         self.musicas_album = []
+        self.title = "NAVEGAÇÃO"
         self.options()
         return self.next
-        
-        
-
+    
+    def render(self):
+        margem = '=' * (len(self.title) + 5)
+        print(margem)
+        print(f"|| {self.title} ||")
+        print(margem + "\n")
 
     def options(self) -> str:
         while True:
             try:
                 limpar_terminal()
+                self.render()
                 self.display_main_menu()
                 option = int(input("Escolha uma opção: "))
                 self.options_value = option
