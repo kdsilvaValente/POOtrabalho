@@ -62,7 +62,7 @@ class Interface_search(Menu):
         print("-------------------------------")
         print('O que deseja pesquisar?')
         print("1. Música")
-        print("2. Produtor")
+        print("2. artista")
         print("3. Album")
         print("4. Pessoas")
         print(emoji.emojize("5. Voltar :BACK_arrow: "))
@@ -80,7 +80,7 @@ class Interface_search(Menu):
         elif option == 2:
             data = {
                 "collection": "Musica",
-                "type": "produtores"
+                "type": "artista"
             }
         elif option == 3:
             data = {
@@ -102,7 +102,7 @@ class Interface_search(Menu):
         search = Search(data["collection"])
         if option == 1 or option == 2:
             if option == 2:
-                name = input("Qual o nome do produtor?: ")
+                name = input("Qual o nome do Artista?: ")
             else:
                 name = input("Qual o nome da música?: ")
             result = search.get_by_type(data["type"], name)
@@ -131,11 +131,7 @@ class Interface_search(Menu):
             print("-------------------------------")
             print(f"{i + 1}:")
             print(f"Título: {(result[i])['titulo']}")
-            print(f"Álbum: {(result[i])['album']}")
             print(f"Artista: {(result[i])['artista']}")
-            print(f"Gênero: {(result[i])['genero']}")
-            print(f"Compositores: {(result[i])['compositores']}")
-            print(f"Produtores: {(result[i])['produtores']}")
             print("-------------------------------")
         self.result = result
 
