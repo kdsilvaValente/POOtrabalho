@@ -21,6 +21,4 @@ class InterfaceAvaliacao(ABC):
     @abstractmethod
     def next1(self):
         pass
-    @abstractmethod
-    def finalacao(self):
-        pass
+    
