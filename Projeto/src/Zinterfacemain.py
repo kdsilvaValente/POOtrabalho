@@ -28,7 +28,7 @@ class Interface_main:
                 print("Bem-vindo ao albumatic, o que deseja fazer?")
                 print("1. Login")
                 print("2. Criar perfil")
-                print("3. Login como Administrador")
+                print("3. Realizar ação como Administrador")
 
                 option = int(input())
                 if option == 1:
