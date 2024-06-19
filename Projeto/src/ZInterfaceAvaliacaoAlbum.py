@@ -9,9 +9,9 @@ avaliacao = Avaliacao(getconnection)
 search = Interface_search()
 
 class AvaliacaoInterfaceAlb(Menu):
-    def __init__(self, idUser, idmusica, idalbum):
+    def __init__(self, idUser, idalbum):
+        self.teste()
         self.user = idUser
-        self.musica = idmusica
         self.album = idalbum
         self.title = "Vamos avaliar!"
         self.options = [
@@ -20,7 +20,10 @@ class AvaliacaoInterfaceAlb(Menu):
             "4 - Tenho mt a dizer!!!! Quero comentar essa música",
             "5 - Me mostre os comentários que as pessoas estão fazendo sobre esse álbum"
         ]
-        
+    def teste(self):
+        print("teste")
+
+""""
     def finalAcao(self):
         print("O que você deseja fazer agora?")
         print("1 - Voltar ao menu principal")
@@ -119,3 +122,4 @@ class AvaliacaoInterfaceAlb(Menu):
             self.finalAcao()
 
         return self  
+"""

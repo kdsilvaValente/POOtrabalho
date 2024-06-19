@@ -11,6 +11,7 @@ class AvaliacaoInterMsc(Menu):
         self.user = idUser
         self.musica = idmusica
         self.album = idalbum
+        self.next = None
         self.conexao = getconnection
         self.title = "Vamos avaliar!"
         self.optionsmusic = [
@@ -93,7 +94,7 @@ class AvaliacaoInterMsc(Menu):
             if bool_str == '1':
                 self.render()
                 opcao = int(input("Digite a opção desejada: "))
-                self.next(opcao)
+                self.next1(opcao)
                 break  # Sai do loop enquanto a opção for válida
             elif bool_str == '0':
                 print("Beleza! Voltando ao menu!")
@@ -136,7 +137,7 @@ class AvaliacaoInterMsc(Menu):
         elif next_option == 2:
             self.render()
             opcao = int(input("Digite a opção desejada: "))
-            self.next(opcao)
+            self.next1(opcao)
 
         elif next_option == 3:
             print("Beleza! Voltando ao menu!")
@@ -152,7 +153,7 @@ class AvaliacaoInterMsc(Menu):
             print("Opção inválida.")
             self.finalAcao()
 
-    def next(self, option: int):
+    def next1(self, option: int):
         clear_screen()  # limpa a tela ao iniciar um novo menu
         
         if option == 1:
@@ -195,9 +196,9 @@ class AvaliacaoInterMsc(Menu):
             self.finalAcao()
         else:
             op = int(input("Opção inválida! Tente novamente."))
-            self.next(op)
+            self.next1(op)
 
         return self
 
-teste = AvaliacaoInterMsc("6670f0ca89c9d0cd1ce88f77", "666f314eba8d12c50e7b33c6", "666f314eba8d12c50e7b33c5")
-teste.iniciotela()
+#teste = AvaliacaoInterMsc("6670f0ca89c9d0cd1ce88f77", "666f314eba8d12c50e7b33c6", "666f314eba8d12c50e7b33c5")
+#teste.iniciotela()

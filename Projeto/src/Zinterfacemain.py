@@ -3,6 +3,8 @@ from ZInterfaceuser import *   # Importando interface de usuário
 from Zinterfacesearch import *  # Importando interface de busca
 from ZInterfaceAdmin import *
 from Zinterfaceinteração import*
+from ZInterfaceAvaliacaoMusica import * 
+from ZInterfaceAvaliacaoAlbum import *
 from connection_options.connection import DBconnectionHandler # import run para testa conexão 
 
 
@@ -17,9 +19,11 @@ class Interface_main:
         self.sair = "Sair"
         self.admin = "Admin"
         self.amizades = "Amizades"
+        self.avaliacaomsc = "Musica"
+        self.avaliacaoalbum = "Album"
         self.db_handle= DBconnectionHandler()
         self.db_handle.connect_to_db()
-
+        
 
     def initial_menu(self)  -> None:  # Menu principal
         while True:
@@ -104,9 +108,8 @@ class Interface_main:
 
     def search_menu(self) -> None:
         while self.next == self.navegação:
-            limpar_terminal()
             self.next= Interface_search() #pelo metodo de super não estava dando certo
-            self.next=self.next.next
+            self.next=self.next.next 
             if self.next == self.perfil:
                 self.user_menu()
             elif isinstance(self.next, dict):
@@ -114,8 +117,14 @@ class Interface_main:
                     self.user_pesquisa =  str(self.next["id_pesquisa"] )
                     self.next = self.amizades
                     self.interações_usuários()
-   
-            
+                elif self.next["next"] == self.avaliacaoalbum:
+                    print("entrou na avaliação album")
+                    self.user_pesquisa =  str(self.next["id_pesquisa"] )
+                    self.next = self.navegação
+                    
+    def avaliacaoAlbum_menu(self) -> None:
+        self.next = AvaliacaoInterfaceAlb(self.user, self.user_pesquisa)
+        
 
     def verificar_conexão(self):
         if  self.db_handle.connect_to_db() == True:

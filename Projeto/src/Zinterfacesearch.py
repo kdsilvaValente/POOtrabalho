@@ -17,6 +17,7 @@ class Interface_search(Menu):
         self.musicas_album = []
         self.pessoas_result = []
         self.title = "NAVEGAÇÃO"
+        self.dicionario = {}
         self.options()
     
     def render(self):
@@ -28,7 +29,6 @@ class Interface_search(Menu):
     def options(self) -> str:
         while True:
             try:
-                limpar_terminal()
                 self.render()
                 self.display_main_menu()
                 option = int(input("Escolha uma opção: "))
@@ -77,7 +77,7 @@ class Interface_search(Menu):
                 "collection": "User",
                 "type": "name"
             }
-        limpar_terminal()
+        
         self.searching(data, option)
 
     def searching(self, data: dict, option: int) -> None:
@@ -161,7 +161,9 @@ class Interface_search(Menu):
         if self.options_value == 1:
             number= int(input("Qual album? Digite o número:"))
             self.id_result = (self.result[number-1])['_id']
-            limpar_terminal()
+            self.dicionario = {"next": "Album","id_pesquisa": self.id_result}
+            self.next = self.dicionario
+            print("entrou na search album")
             return 0
             
         elif self.options_value == 2:
@@ -208,9 +210,9 @@ class Interface_search(Menu):
             number= int(input("Qual perfil? Digite o número:"))
             print(len(self.pessoas_result))
             self.id_result = ((self.pessoas_result[number-1])['_id'])
-            dicionario = {"next": "Amizades",
+            self.dicionario = {"next": "Amizades",
                           "id_pesquisa":self.id_result }
-            self.next = dicionario
+            self.next = self.dicionario
             limpar_terminal()
             return 0
          else:
