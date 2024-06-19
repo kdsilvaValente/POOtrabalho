@@ -4,9 +4,15 @@ from Auxiliares_uteis import*
 from AbstractMenu import *
 
 
-
-class Interface_login(Menu):          
+class Interface_login(Menu):
+    """
+    Classe responsável pela interface de login do usuário.
+    """
+    
     def login(self):
+        """
+        Método para controle de login do usuário comum.
+        """
         self.login_instance = Login()
         print("Vamos fazer seu login?")
         while True:
@@ -19,9 +25,9 @@ class Interface_login(Menu):
                 senha = str(input("Digite sua senha: "))
                 result = self.login_instance.login(email, senha)
               
-                if result == 4: # caso o retorno seja 4, o usuário foi encontrado 
+                if result == 4:  # Caso o retorno seja 4, o usuário foi encontrado
                     return self.login_instance.id
-                #encontra o motivo do erro, qual informação está errada
+                # Encontra o motivo do erro, qual informação está errada
                 elif result == 1:
                     print("Email incorreto ou usuário inexistente") 
                     raise Exception
@@ -36,19 +42,24 @@ class Interface_login(Menu):
                 print("Deseja tentar novamente?")
                 print("1. Sim")
                 print("2. Não")
-                option=int(input())
+                option = int(input())
                 if option == 2:
-                  limpar_terminal
-                  return 0
+                    limpar_terminal()
+                    return 0
+
     def render(self):
-            self.title = "Login"
-            margem = '=' * (len(self.title) + 5)
-            print(margem)
-            print(f"|| {self.title} ||")
-            print(margem + "\n")
+        """
+        Método para renderizar a interface de login.
+        """
+        self.title = "Login"
+        margem = '=' * (len(self.title) + 5)
+        print(margem)
+        print(f"|| {self.title} ||")
+        print(margem + "\n")
+    
     def logout(self):
+        """
+        Método para logout do usuário.
+        """
         self.login_instance.State_update()
         return self.login_instance.state
-    
-
-

@@ -7,9 +7,8 @@ from bson.objectid import ObjectId
 import emoji
 
 
-class Interface_interação(Menu,Search):
+class Interface_interação(Menu):
     def __init__(self, user: str, user_pesquisa: str = None) -> str:
-        super().__init__() 
         self.search = Search("User")
         self.next = "0" #definição do next que será acessado posteriomente pela class main
         self.user = User(user)
@@ -97,8 +96,12 @@ class Interface_interação(Menu,Search):
         else:
             length = len(self.user.lista_amigos)
             for i in range(length):
-                result = self.search.get_by_id(ObjectId(self.user.lista_amigos[i]))
-                print(f"{i+1}: {result['name']}")
+                result = self.search.get_by_id((self.user.lista_amigos[i]))
+                if result== None:
+                    print("você não tem um amigo ainda, continue navegando e faça novas amizades!")
+                    return 0
+                else:
+                    print(f"{i+1}: {result['name']}")
             self.amigos(self.user.lista_amigos)
 
     def amigos(self, friends: list) -> None: #redenriza opções após ver lista de amigos disponíveis
@@ -137,8 +140,12 @@ class Interface_interação(Menu,Search):
         length = len(self.user.lista_pedidos)
         for i in range(length):
             result = self.search.get_by_id(ObjectId(self.user.lista_pedidos[i]))
-            print(f"{i+1}: {result['name']}")
-        
+            if result== None:
+                    print("você não tem um amigo ainda, continue navegando e faça novas amizades!")
+                    return 0
+            else:
+                    print(f"{i+1}: {result['name']}")
+                
         while True:
             try:
                 if not self.user.lista_pedidos:
