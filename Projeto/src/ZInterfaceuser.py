@@ -14,7 +14,6 @@ class User_interface(Menu):
         if user is not None: #verifica se o user é none, se for o caso, entra para criar um perfil novo
             self.user = User(user) #inicializando classe usuário que manipulará o banco de dados
             self.options()
-          
         else:
             self.new_profile_interface()
 
@@ -34,7 +33,7 @@ class User_interface(Menu):
                 if 1 <= option <= 6:
                     if option != 6:
                         self.display_main_menu_option(option)
-                    elif option == 6:
+                    else:
                         self.next = "Sair"
                         return
                 else:

@@ -161,6 +161,7 @@ class Interface_search(Menu):
             self.id_result = (self.result[number-1])['_id']
             limpar_terminal()
             return 0
+        
             
         elif self.options_value == 2:
            number= int(input("Qual o album? Digite o número: "))
