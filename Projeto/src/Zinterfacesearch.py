@@ -165,7 +165,6 @@ class Interface_search(Menu):
             self.next = self.dicionario
             print("entrou na search album")
             return 0
-            
         elif self.options_value == 2:
            number= int(input("Qual o album? Digite o número: "))
            self.musicas_album = self.result[number-1]['musicas']
@@ -186,7 +185,10 @@ class Interface_search(Menu):
         if self.options_value == 1:
             number= int(input("Qual música? Digite o número:"))
             self.id_result = (self.result[number-1])['_id']
+            self.dicionario = {"next": "Musica","id_pesquisa": self.id_result}
+            self.next = self.dicionario
             limpar_terminal()
+            print("Entrou na search musica")
             return 0
             
         else:

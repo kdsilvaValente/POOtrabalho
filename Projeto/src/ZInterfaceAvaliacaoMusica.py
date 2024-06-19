@@ -1,16 +1,13 @@
 from Avaliacao import *
 from AbstractMenu import *
-from Zinterfacesearch import Interface_search
-from ZInterfaceuser import User_interface
 from Auxiliares_uteis import *
 
 
-class AvaliacaoInterMsc(Menu):
-    def __init__(self, idUser, idmusica, idalbum):
+class AvaliacaoInterMsc(InterfaceAvaliacao):
+    def __init__(self, idUser, idmusica):
         self.avaliacao = Avaliacao()
         self.user = idUser
         self.musica = idmusica
-        self.album = idalbum
         self.next = None
         self.conexao = getconnection
         self.title = "Vamos avaliar!"
@@ -21,8 +18,7 @@ class AvaliacaoInterMsc(Menu):
             "4 - Tenho mt a dizer!!!! Quero comentar essa música",
             "5 - Me mostre os comentários que as pessoas estão fazendo sobre essa música"
         ]
-        self.mainint = User_interface(self.user)
-        self.search = Interface_search()
+        
 
     def iniciotela(self):
         print("Abrindo a música!! Aqui estão as informações dela:")
@@ -101,10 +97,7 @@ class AvaliacaoInterMsc(Menu):
                 print("...")
                 print("...")
                 print("...")
-                
-                self.mainint.display_main_menu()
-                op = int(input("O que você deseja fazer agora?"))
-                self.mainint.display_main_menu_option(op)
+                self.next = "Navegação"
 
                 break  # Sai do loop enquanto a opção for válida
             else:
@@ -124,31 +117,17 @@ class AvaliacaoInterMsc(Menu):
         print("O que você deseja fazer agora?")
         print("1 - Fazer outra pesquisa")
         print("2 - Avaliar essa mesma música novamente")
-        print("3 - Voltar ao menu!")
 
         next_option = int(input("Escolha uma opção: "))
 
         if next_option == 1:
-            self.search.display_main_menu()
-            op = int(input("Digite aqui: "))
-            self.search.display_main_menu_option(op)
-            self.search.menu_result_musica()
+            self.next = "Navegação"
 
         elif next_option == 2:
+            self.next = "Musica"
             self.render()
             opcao = int(input("Digite a opção desejada: "))
             self.next1(opcao)
-
-        elif next_option == 3:
-            print("Beleza! Voltando ao menu!")
-            print("...")
-            print("...")
-            print("...")
-                
-            self.mainint.display_main_menu()
-            op = int(input("O que você deseja fazer agora?"))
-            self.mainint.display_main_menu_option(op)
-
         else:
             print("Opção inválida.")
             self.finalAcao()
@@ -169,7 +148,7 @@ class AvaliacaoInterMsc(Menu):
             self.finalAcao()
 
         elif option == 3:
-            nota = input("De uma a 5 estrelas, qual nota você quer dar pra essa música?")
+            nota = int(input("De uma a 5 estrelas, qual nota você quer dar pra essa música?"))
             darnota = self.avaliacao.darNota(self.musica, self.user, nota)
             print(darnota)
             print("==========================================================")
@@ -177,28 +156,19 @@ class AvaliacaoInterMsc(Menu):
 
         elif option == 4:
             comentario = input("Sou todo ouvidos! Me conta o que você tem a dizer:")
-            comt = self.avaliacao.comentarAlbum(self.album, self.user, comentario)
+            comt = self.avaliacao.comentar(self.musica, self.user, comentario)
             print(comt)
             print("==========================================================")
             self.finalAcao()
 
         elif option == 5:
-            comentariocollection = self.conexao.get_collection("Comentarios")
-            comments = list(comentariocollection.find({"musica": ObjectId(self.musica)}))
-
-            if len(comments) == 0:
-                print("Nenhum comentário encontrado para esta música.")
-            else:
-                print(f"Foram encontrados {len(comments)} comentário(s) para esta música:")
-                for comment in comments:
-                    print(f"Usuário: {comment['user']} - Comentário: {comment['comentario']}")
-            print("==========================================================")
+            comments = self.avaliacao.exibirComentarios()
+            print(comments)
             self.finalAcao()
+
         else:
             op = int(input("Opção inválida! Tente novamente."))
             self.next1(op)
 
         return self
 
-#teste = AvaliacaoInterMsc("6670f0ca89c9d0cd1ce88f77", "666f314eba8d12c50e7b33c6", "666f314eba8d12c50e7b33c5")
-#teste.iniciotela()

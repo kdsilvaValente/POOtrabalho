@@ -118,14 +118,40 @@ class Interface_main:
                     self.next = self.amizades
                     self.interações_usuários()
                 elif self.next["next"] == self.avaliacaoalbum:
-                    print("entrou na avaliação album")
                     self.user_pesquisa =  str(self.next["id_pesquisa"] )
                     self.next = self.navegação
-                    
-    def avaliacaoAlbum_menu(self) -> None:
-        self.next = AvaliacaoInterfaceAlb(self.user, self.user_pesquisa)
-        
+                    self.avaliacaoAlbum_menu()
+                elif self.next["next"] == self.avaliacaomsc:
+                    self.user_pesquisa =  str(self.next["id_pesquisa"] )
+                    self.next = self.navegação
+                    self.avaliacaoMusica_menu()
 
+    def avaliacaoMusica_menu(self) -> None:
+        interfacemusica = AvaliacaoInterMsc(self.user, self.user_pesquisa)
+        while interfacemusica.next is None or interfacemusica.next == self.avaliacaomsc:
+            interfacemusica.iniciotela()
+
+            if interfacemusica.next == "Navegação":
+                self.next = self.navegação
+                self.search_menu()
+
+            elif interfacemusica.next == "Perfil":
+                self.next = self.perfil
+                self.user_menu()
+
+    def avaliacaoAlbum_menu(self) -> None:
+        interfacealbum = AvaliacaoInterfaceAlb(self.user, self.user_pesquisa)
+        while interfacealbum.next is None or interfacealbum.next == self.avaliacaoalbum:
+            interfacealbum.iniciotela()
+
+            if interfacealbum.next == "Navegação":
+                self.next = self.navegação
+                self.search_menu()
+                
+            elif interfacealbum.next == "Perfil":
+                self.next = self.perfil
+                self.user_menu()
+        
     def verificar_conexão(self):
         if  self.db_handle.connect_to_db() == True:
             return 0
@@ -140,8 +166,7 @@ class Interface_main:
             if self.next == self.perfil:
                 self.user_menu()
     
-          
-        
+
 
 
 
