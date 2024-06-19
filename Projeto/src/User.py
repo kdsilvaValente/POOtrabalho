@@ -163,3 +163,8 @@ class User:
     def status(self, value: str) -> None:
         self.collection.find_one_and_update({"_id": self.user_id}, {"$set": {"status": value}})
         self._status = value  # Corrigido para atualizar corretamente _status
+
+    @property
+    def isadmin(self) -> str:
+        return self._is_admin
+    

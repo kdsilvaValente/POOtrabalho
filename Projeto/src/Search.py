@@ -25,7 +25,7 @@ class Search:
                     results.append((document))
             
         return results
-    def get_by_id(self,id)-> list[dict[str, str]]:
+    def get_by_id(self,id)-> list[dict[str, str]]: #pesquisa um objeto com base no id
         results=[]
         results=self.music_collection.find_one({"_id": id})
         return results

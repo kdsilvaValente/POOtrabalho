@@ -9,21 +9,22 @@ import re
 class User_interface(Menu):
     def   __init__(self, user: dict) -> str:
         super().__init__()
-        self.title = "PERFIL"
-        self.next = "0"
-        if user is not None:
-            self.user = User(user)
+        self.title = "PERFIL" 
+        self.next = "0" #definição do next que será acessado posteriomente pela class main
+        if user is not None: #verifica se o user é none, se for o caso, entra para criar um perfil novo
+            self.user = User(user) #inicializando classe usuário que manipulará o banco de dados
             self.options()
+          
         else:
             self.new_profile_interface()
 
-    def render(self):
+    def render(self): #render padrão 
         margem = '=' * (len(self.title) + 5)
         print(margem)
         print(f"|| {self.title} ||")
         print(margem + "\n")
 
-    def options(self) -> None:
+    def options(self) -> None: # menu de opções inicial do perfil, controla a entrada da seleção de opção e chama o menu com as opções
         while self.next == "0":
             try:
                 self.render()
@@ -33,7 +34,7 @@ class User_interface(Menu):
                 if 1 <= option <= 6:
                     if option != 6:
                         self.display_main_menu_option(option)
-                    else:
+                    elif option == 6:
                         self.next = "Sair"
                         return
                 else:
@@ -41,10 +42,7 @@ class User_interface(Menu):
             except ValueError:
                 print("Digite um número válido.")
 
-    def display_main_menu(self) -> None:
-        """
-        Mostra o menu principal na tela.
-        """
+    def display_main_menu(self) -> None: #printa o menu principal na tela
         print("-------------------------------")
         print(emoji.emojize("Bem vindo ao Menu Principal :grinning_face:"))
         print("1. Ver perfil")
@@ -55,13 +53,7 @@ class User_interface(Menu):
         print("6. Sair")
         print("-------------------------------")
 
-    def display_main_menu_option(self, option: int) -> None:
-        """
-        Mostra a opção escolhida pelo usuário do menu principal.
-
-        Args:
-            option (int): Opção escolhida pelo usuário.
-        """
+    def display_main_menu_option(self, option: int) -> None: #direciona a função de acordo com a opção inicial escolhida
         if option == 1:
             limpar_terminal()
             self.display_user_profile()
@@ -72,14 +64,11 @@ class User_interface(Menu):
             limpar_terminal()
             self.delete_profile()
         elif option == 4:
-            self.next = "Navegação"
+            self.next = "Navegação" #definindo próximo menu como navegação
         elif option == 5:
-            self.next = "Amizades"
+            self.next = "Amizades" #definindo próximo menu como amizades, qe seria o gerenciamento de amizades
 
-    def display_user_profile(self) -> None:
-        """
-        Mostra o perfil atual do usuário na tela.
-        """
+    def display_user_profile(self) -> None: #renderizando as informações do usuário 
         limpar_terminal()
         print("Suas informações:")
         print(f"Nome: {self.user.name}")
@@ -87,11 +76,9 @@ class User_interface(Menu):
         print(f"Gênero: {self.user.gender}")
         print(f"Telefone: {self.user.phone_number}")
         print(f"Status: \"{self.user.status}\"")   
-    def update_profile(self) -> None:
-        """
-        Permite ao usuário editar as informações do perfil.
-        """
-        while True:
+    def update_profile(self) -> None:  #Permite ao usuário editar as informações do perfil.
+
+        while True: #controle de entrada para a atualização do perfil
             try:
                 print("-------------------------------")
                 print("O que deseja editar?")
@@ -107,21 +94,21 @@ class User_interface(Menu):
                 choice = int(input("Escolha a opção de 1 a 7: "))
                 print("-------------------------------")
                 
-                if choice == 1:
+                if choice == 1: #atualizando nome
                     new_name = input("Digite o novo nome: ")
                     self.user.name = new_name
                     print("Nome atualizado com sucesso!")
-                
-                elif choice == 2:
+            
+                elif choice == 2: #atualizando email (editar)
                     new_email = input("Digite o novo email: ")
                     self.user.email = new_email
                     print("Email atualizado com sucesso!")
                 
-                elif choice == 3:
+                elif choice == 3: #atualizando senha
                     while True:
                         try:
                             current_password = input("Digite sua senha atual para confirmar: ")
-                            if current_password == self.user.password:
+                            if current_password == self.user.password: #verifica se o usuário lembra da senha atual antes de mudar
                                 new_password = input("Digite sua nova senha: ")
                                 self.user.password = new_password
                                 print("Senha atualizada com sucesso!")
@@ -131,22 +118,22 @@ class User_interface(Menu):
                         except ValueError:
                             print("Erro ao atualizar senha. Tente novamente.")
                 
-                elif choice == 4:
+                elif choice == 4: #atualizando genêro
                     new_gender = self.chose_gender()  # Implemente a função chose_gender() para obter o novo gênero
                     self.user.gender = new_gender
                     print("Gênero atualizado com sucesso!")
                 
-                elif choice == 5:
+                elif choice == 5: #atualizando telefone
                     new_phone = input("Digite o novo número de telefone: ")
                     self.user.phone_number = new_phone
                     print("Número de telefone atualizado com sucesso!")
                 
-                elif choice == 6:
+                elif choice == 6: #atualizando status
                     new_status = input("Digite o seu novo status: ")
                     self.user.status = new_status
                     print("Status atualizado com sucesso!")
                 
-                elif choice == 7:
+                elif choice == 7:#finaliza a função para retornar ao perfil
                     print("Retornando ao menu anterior...")
                     break
                 
@@ -160,14 +147,8 @@ class User_interface(Menu):
                 print(f"Ocorreu um erro: {str(e)}")
 
 
-    def chose_gender(self) -> str:
-        """
-        Permite ao usuário escolher seu gênero.
-
-        Returns:
-            str: Gênero escolhido pelo usuário.
-        """
-        while True:
+    def chose_gender(self) -> str: #menu para escolher o gênero conforme opções idponíveis
+        while True:#loop para controle de entrada
             print("-------------------------------")
             print("Qual seu gênero?\n")
             print("1. Mulher trans")
@@ -208,10 +189,8 @@ class User_interface(Menu):
                 print(emoji.emojize("Opção inválida. Por favor, escolha uma opção de 1 a 8:prohibited: "))
 
 
-    def new_profile_interface(self) -> None:
-        """
-        Cria um novo perfil para o usuário.
-        """
+    def new_profile_interface(self) -> None: #Cria um novo perfil para o usuário.
+
         print("-------------------------------")
         name = str(input("Qual seu nome?: "))
         print("-------------------------------")
@@ -230,7 +209,7 @@ class User_interface(Menu):
             "isonline": False,
         }
         user = User(None)
-        user.newuser(user_data)
+        user.newuser(user_data) #chama a função na classe de usuário para criar o perfil
         # limpar_terminal()
         print("Perfil Criado")
 
