@@ -3,7 +3,9 @@ from ZInterfaceuser import *   # Importando interface de usuário
 from Zinterfacesearch import *  # Importando interface de busca
 from ZInterfaceAdmin import *
 from Zinterfaceinteração import*
-from connection_options.connection import DBconnectionHandler # Import run para testar conexão 
+from ZInterfaceAvaliacaoMusica import * 
+from ZInterfaceAvaliacaoAlbum import *
+from connection_options.connection import DBconnectionHandler # import run para testa conexão 
 
 
 class Interface_main:
@@ -23,14 +25,13 @@ class Interface_main:
         self.sair = "Sair"
         self.admin = "Admin"
         self.amizades = "Amizades"
-        self.login_menu = "login"
-        self.db_handle = DBconnectionHandler()
+        self.avaliacaomsc = "Musica"
+        self.avaliacaoalbum = "Album"
+        self.db_handle= DBconnectionHandler()
         self.db_handle.connect_to_db()
+        
 
-    def initial_menu(self) -> None:
-        """
-        Método que exibe o menu principal do sistema.
-        """
+    def initial_menu(self)  -> None:  # Menu principal
         while True:
             try:
                 self.verificar_conexão()
@@ -132,9 +133,8 @@ class Interface_main:
         Controla a abertura da interface de busca e direciona o próximo menu a ser aberto após a busca.
         """
         while self.next == self.navegação:
-            limpar_terminal()
-            self.next = Interface_search()  # Pelo método de super não estava dando certo
-            self.next = self.next.next
+            self.next= Interface_search() #pelo metodo de super não estava dando certo
+            self.next=self.next.next 
             if self.next == self.perfil:
                 self.user_menu()
             elif isinstance(self.next, dict):
@@ -142,12 +142,43 @@ class Interface_main:
                     self.user_pesquisa = str(self.next["id_pesquisa"])
                     self.next = self.amizades
                     self.interações_usuários()
-   
-    def verificar_conexão(self) -> None:
-        """
-        Testa se a conexão com o banco de dados existe antes de iniciar o programa.
-        """
-        if self.db_handle.connect_to_db():
+                elif self.next["next"] == self.avaliacaoalbum:
+                    self.user_pesquisa =  str(self.next["id_pesquisa"] )
+                    self.next = self.navegação
+                    self.avaliacaoAlbum_menu()
+                elif self.next["next"] == self.avaliacaomsc:
+                    self.user_pesquisa =  str(self.next["id_pesquisa"] )
+                    self.next = self.navegação
+                    self.avaliacaoMusica_menu()
+
+    def avaliacaoMusica_menu(self) -> None:
+        interfacemusica = AvaliacaoInterMsc(self.user, self.user_pesquisa)
+        while interfacemusica.next is None or interfacemusica.next == self.avaliacaomsc:
+            interfacemusica.iniciotela()
+
+            if interfacemusica.next == "Navegação":
+                self.next = self.navegação
+                self.search_menu()
+
+            elif interfacemusica.next == "Perfil":
+                self.next = self.perfil
+                self.user_menu()
+
+    def avaliacaoAlbum_menu(self) -> None:
+        interfacealbum = AvaliacaoInterfaceAlb(self.user, self.user_pesquisa)
+        while interfacealbum.next is None or interfacealbum.next == self.avaliacaoalbum:
+            interfacealbum.iniciotela()
+
+            if interfacealbum.next == "Navegação":
+                self.next = self.navegação
+                self.search_menu()
+                
+            elif interfacealbum.next == "Perfil":
+                self.next = self.perfil
+                self.user_menu()
+        
+    def verificar_conexão(self):
+        if  self.db_handle.connect_to_db() == True:
             return 0
         else:
             print("Falha na conexão, tente novamente mais tarde ou verifique sua conexão com a internet")
@@ -163,6 +194,10 @@ class Interface_main:
             self.user_pesquisa = None
             if self.next == self.perfil:
                 self.user_menu()
+    
+
+
+
 
 main_interface = Interface_main()
 main_interface.initial_menu()
