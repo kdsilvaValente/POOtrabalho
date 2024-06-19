@@ -7,7 +7,7 @@ from bson.objectid import ObjectId
 import emoji
 
 
-class Interface_interação(Menu):
+class Interface_interação(Menu,Search):
     def __init__(self, user: str, user_pesquisa: str = None) -> str:
         super().__init__() 
         self.search = Search("User")
@@ -57,7 +57,7 @@ class Interface_interação(Menu):
         print(f"Nome: {result['name']}")
         print(f"Gênero: {result['gender']}")
         status = "online" if result['isonline'] else "offline"
-        print(f"Status: {status}")
+        print(emoji.emojize(f"Status: {status}"))
         
         while True:#loop para controle de entrada
             try:
@@ -112,12 +112,17 @@ class Interface_interação(Menu):
                 option = int(input("Escolha uma opção: ")) #editar para controle entrada maior ou menor
                 if 1 <= option <= 3:
                     if option == 1:
-                        perfil = int(input("Qual perfil deseja ver? Digite o número: "))
-                        self.ver_perfil(friends[perfil-1])
-                        return
+                            while True:
+                                escolha = int(input("Qual perfil deseja ver? Digite o número:  "))
+                                if escolha > len(friends) or escolha < len(friends):
+                                    print("Escolha um número de usuário existente!")
+                                else:
+                                    self.ver_perfil(friends[escolha-1])
+                                    self.next="Amizades"
+                                    print("Amizade desfeita!")
+                                    return 0 
                     elif option == 2:
-                        amizade = int(input("Qual amizade deseja desfazer? Digite o número: "))
-                        self.excluir_amigo(friends[amizade-1])
+                        self.excluir_amigo(friends)
                         return
                     else:
                         limpar_terminal()
@@ -153,9 +158,17 @@ class Interface_interação(Menu):
             except ValueError:
                 print("Digite um número válido.")
 
-    def excluir_amigo(self, id: ObjectId) -> None:
-        self.user.excluir_amigo(id)
-        print("Amizade desfeita!")
+    def excluir_amigo(self, amizades :list) -> None: #seleciona e exlui uma amizade
+
+         while True:
+            escolha = int(input("Qual amizade você deseja desfazer?: "))
+            if escolha > len(amizades) or escolha < len(amizades):
+                 print("Escolha um número de usuário existente!")
+            else:
+                 self.user.excluir_amigo(amizades[escolha-1])
+                 self.next="Amizades"
+                 print("Amizade desfeita!")
+                 return 0 
     
     def render(self) -> None: #render padrão 
         margem = '=' * (len(self.title) + 5)

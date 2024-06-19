@@ -9,6 +9,7 @@ import re
 class User_interface(Menu):
     def   __init__(self, user: dict) -> str:
         super().__init__()
+        self.user = User(None)
         self.title = "PERFIL" 
         self.next = "0" #definição do next que será acessado posteriomente pela class main
         if user is not None: #verifica se o user é none, se for o caso, entra para criar um perfil novo
@@ -74,7 +75,7 @@ class User_interface(Menu):
         print(f"Email: {self.user.email}")
         print(f"Gênero: {self.user.gender}")
         print(f"Telefone: {self.user.phone_number}")
-        print(f"Status: \"{self.user.status}\"")   
+        print(emoji.emojize(f"Status:\"{self.user.status}\"") )  
     def update_profile(self) -> None:  #Permite ao usuário editar as informações do perfil.
 
         while True: #controle de entrada para a atualização do perfil
@@ -94,10 +95,16 @@ class User_interface(Menu):
                 print("-------------------------------")
                 
                 if choice == 1: #atualizando nome
-                    new_name = input("Digite o novo nome: ")
-                    self.user.name = new_name
-                    print("Nome atualizado com sucesso!")
-            
+                    while True:
+                        new_name = input("Digite o novo nome: ")
+                        if self.user.is_valid_username(new_name) == True:
+                                self.user.name = new_name
+                                print("Nome atualizado com sucesso!")
+                                return 0
+                        else:
+                            print("Digite um nome válido!")
+                    
+                    
                 elif choice == 2: #atualizando email (editar)
                     new_email = input("Digite o novo email: ")
                     self.user.email = new_email
@@ -128,7 +135,7 @@ class User_interface(Menu):
                     print("Número de telefone atualizado com sucesso!")
                 
                 elif choice == 6: #atualizando status
-                    new_status = input("Digite o seu novo status: ")
+                    new_status = input("Digite o seu novo status, consulto o dicionário de emojins caso queira!: ")
                     self.user.status = new_status
                     print("Status atualizado com sucesso!")
                 
@@ -191,7 +198,7 @@ class User_interface(Menu):
     def new_profile_interface(self) -> None: #Cria um novo perfil para o usuário.
 
         print("-------------------------------")
-        name = str(input("Qual seu nome?: "))
+        name = self.name_create()
         print("-------------------------------")
         email=self.chose_email()
         print("-------------------------------")
@@ -211,6 +218,14 @@ class User_interface(Menu):
         user.newuser(user_data) #chama a função na classe de usuário para criar o perfil
         # limpar_terminal()
         print("Perfil Criado")
+    def name_create(self):
+           while True:
+             name = input("Digite o seu nome: ")
+             if self.user.is_valid_username(name) == True:
+                    return name
+                     
+             else:
+                print("Digite um nome válido!")
 
     def chose_password(self) -> str:
         """
@@ -253,9 +268,11 @@ class User_interface(Menu):
         while True:
             try:
                 password = str(input("Confirme sua senha atual antes de deletar o perfil:"))
-                if password == self.user.get_password():
+                if password == self.user.password:
                     self.user.delete()
                     print("Perfil deletado")
+                    self.next = "login"
+                    return 0
                 else:
                     return KeyError
             except ValueError:

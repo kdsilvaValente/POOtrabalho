@@ -17,6 +17,7 @@ class Interface_main:
         self.sair = "Sair"
         self.admin = "Admin"
         self.amizades = "Amizades"
+        self.login_menu="login"
         self.db_handle= DBconnectionHandler()
         self.db_handle.connect_to_db()
 
@@ -77,7 +78,7 @@ class Interface_main:
     def create_profile(self) -> None: # controla a abertura da interface de criar perfil e difereciona o próximo menu a ser aberto
         limpar_terminal()
         self.interface_user = User_interface(None)
-        self.interface_user.init_user()
+
 
     def user_menu(self):  # controla a abertura da interface de user e difereciona o próximo menu a ser aberto
         limpar_terminal()
@@ -90,6 +91,8 @@ class Interface_main:
             self.logout()
         if self.next == self.amizades:
             self.interações_usuários()
+        if self.next == self.login_menu:
+            self.login()
 
     def admin_menu(self):  # controla a abertura da interface de admin e difereciona o próximo menu a ser aberto
         limpar_terminal()

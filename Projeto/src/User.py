@@ -4,6 +4,7 @@ from typing import Optional, Dict
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from typing import Optional
+import re
 
 class User:
     
@@ -49,8 +50,13 @@ class User:
             "favoritos": [],
             "status": "Adicione seu status"  # Adicionando status ao criar um novo usuário
         }
-        self.collection.insert_one(user_data)
-    
+        self.collection.insert_one(user_data) 
+    def is_valid_username(self,username): #verifica se o nome é válido
+        # Verifica se o nome de usuário contém apenas letras (maiúsculas ou minúsculas)
+        if re.fullmatch(r'[A-Za-z]+', username):
+            return True
+        else:
+            return False
     def teste_parametros(self):
         # Verifica se favoritos não está presente e adiciona se necessário
         if "favoritos" not in self.data:
