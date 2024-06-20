@@ -88,14 +88,14 @@ class Avaliacao():
         musicname = music["titulo"]
 
         usuario_curtiu = self.__usercollection.find_one(
-            {"_id": ObjectId(idUser), "musicas curtidas": ObjectId(idmusica)}
+            {"_id": ObjectId(idUser), "musicas_curtidas": ObjectId(idmusica)}
         )
         if usuario_curtiu:
             return f"Usuário {username} já curtiu a música {musicname}."
 
         self.__usercollection.update_one(
             {"_id": ObjectId(idUser)},
-            {"$addToSet": {"musicas curtidas": idmusica}}
+            {"$addToSet": {"musicas_curtidas": idmusica}}
         )
 
         self.__musicacollection.update_one(
@@ -129,14 +129,14 @@ class Avaliacao():
         musicname = music["titulo"]
 
         usuario_curtiu = self.__usercollection.find_one(
-            {"_id": ObjectId(idUser), "musicas curtidas": ObjectId(idmusica)}
+            {"_id": ObjectId(idUser), "musicas_curtidas": ObjectId(idmusica)}
         )
         if not usuario_curtiu:
             return f"Usuário {username} não curtiu a música {musicname}."
 
         self.__usercollection.update_one(
             {"_id": ObjectId(idUser)},
-            {"$pull": {"musicas curtidas": idmusica}}
+            {"$pull": {"musicas_curtidas": idmusica}}
         )
 
         self.__musicacollection.update_one(
@@ -325,14 +325,14 @@ class Avaliacao():
         albumname = alb["album"]
         
         usuario_curtiu = self.__usercollection.find_one(
-            {"_id": ObjectId(idUser), "albuns favoritados": ObjectId(idalbum)}
+            {"_id": ObjectId(idUser), "albuns_favoritados": ObjectId(idalbum)}
         )
         if usuario_curtiu:
             return f"Usuário {username} já curtiu o álbum {albumname}."
 
         self.__usercollection.update_one(
             {"_id": ObjectId(idUser)},
-            {"$addToSet": {"albuns favoritados": idalbum}}
+            {"$addToSet": {"albuns_favoritados": idalbum}}
         )
 
         self.__albumcollection.update_one(
@@ -366,14 +366,14 @@ class Avaliacao():
         albumname = alb["album"]
 
         usuario_curtiu = self.__usercollection.find_one(
-            {"_id": ObjectId(idUser), "albuns favoritados": ObjectId(idalbum)}
+            {"_id": ObjectId(idUser), "albuns_favoritados": ObjectId(idalbum)}
         )
         if not usuario_curtiu:
             return f"Usuário {username} não favoritou o álbum {albumname}."
 
         self.__usercollection.update_one(
             {"_id": ObjectId(idUser)},
-            {"$pull": {"musicas curtidas": idalbum}}
+            {"$pull": {"albuns_favoritados": idalbum}}
         )
 
         self.__albumcollection.update_one(
