@@ -80,17 +80,21 @@ class Interface_main:
         """
         Controla a abertura da interface de login de administrador e direciona o próximo menu a ser aberto após o login.
         """
-        self.verificar_conexão()
         limpar_terminal()
         self.verificar_conexão()
         self.interface_login = Interface_login()
-        admin = Admin(self.interface_login.login())
-        if admin:
-            print("Login administrativo bem-sucedido.")
-            self.admin_menu()
+        user_id = self.interface_login.login()
+        if user_id:
+            admin = Admin(user_id)
+            if admin.can_modify_admin_status():
+                print("Login administrativo bem-sucedido.")
+                self.user = admin
+                self.admin_menu()
+            else:
+                print("Acesso negado. Você não possui permissão de administrador.")
         else:
-            print("Acesso negado. Você não possui permissão de administrador.")
-            
+            print("Acesso negado. Usuário não encontrado.")
+                
     def create_profile(self) -> None:
         """
         Controla a abertura da interface de criação de perfil e direciona o próximo menu a ser aberto após a criação.
@@ -121,7 +125,6 @@ class Interface_main:
         Controla a abertura da interface de administrador e direciona o próximo menu a ser aberto.
         """
         limpar_terminal()
-        self.verificar_conexão()
         menu = menuAdmin()
         while True:
             menu.render()
@@ -130,6 +133,7 @@ class Interface_main:
                 menu.next(option)
             except ValueError:
                 print("Por favor, insira um número válido.")      
+
 
     def search_menu(self) -> None:
         """
@@ -206,7 +210,11 @@ class Interface_main:
             if self.next == self.perfil:
                 self.user_menu()
     
-
+def musica_menu(self):
+        musica_menu = menuMusica()
+        while musica_menu.next != "Voltar":
+            musica_menu.options1()
+        self.admin_menu()
 
 
 

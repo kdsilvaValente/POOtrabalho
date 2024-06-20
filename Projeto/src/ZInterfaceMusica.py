@@ -4,21 +4,23 @@ from Excel import *
 from Auxiliares_uteis import *
 
 class menuMusica(Menu):
-    def __init__(self)->None:
-
         '''
         metodo para inicializar a interface
         '''
-
+        self.next = None
         self.title = "Menu Musica :p"
         self.options = [
             "1 - Adicionar uma música",
             "2 - Editar música",
             "3 - Apagar música",
-            "4 - Exibir musicas do banco",
-            "5 - Ler Excel novamente"
+            "4 - Voltar ao menu anterior"
         ]
+        self.options1()
 
+        '''
+        metodo para inicializar a interface
+        '''
+        
     def render(self) -> None:
 
         '''

@@ -19,7 +19,8 @@ class AvaliacaoInterfaceAlb(InterfaceAvaliacao):
             "1 - Favoritar esse álbum!!! Gosto muuIIiito dele:",
             "2 - Remover like, não gosto mais dele (emoji nojo)",
             "3 - Tenho mt a dizer!!!! Quero comentar esse álbum",
-            "4 - Me mostre os comentários que as pessoas estão fazendo sobre esse álbum"
+            "4 - Me mostre os comentários que as pessoas estão fazendo sobre esse álbum",
+            "5 - Abra as informações do álbum novamente"
         ]
 
     def finalAcao(self)->None:
@@ -28,7 +29,7 @@ class AvaliacaoInterfaceAlb(InterfaceAvaliacao):
         """
         print("O que você deseja fazer agora?")
         print("1 - Fazer outra pesquisa")
-        print("2 - Mais ações com esse álbum!")
+        print("2 - Avaliar essa álbum novamente")
 
         next_option = int(input("Escolha uma opção: "))
 
@@ -55,12 +56,15 @@ class AvaliacaoInterfaceAlb(InterfaceAvaliacao):
             print(f"O album {album['album']} não foi favoritado ainda... Mude isso!!")
         print(f"De {album['artista']}, ele possui as seguintes faixas:")
         if "musicas" in album:
-            for i, musica in enumerate(album["musicas"]):
+            for i, musica_id in enumerate(album["musicas"]):
+                # Validando e buscando a música pelo ID
+                musica = self.avaliacao.validar_musica(musica_id)
+                # Formatando a saída dependendo da posição da música na lista
                 if i == len(album["musicas"]) - 1:
-                    print(f"e {musica}.")
+                    print(f"e {musica['titulo']}.")
                     print("==========================================================")
                 else:
-                    print(f"{musica},")
+                    print(f"{musica['titulo']},")
 
         while True:
             bool_str = input("Deseja avaliar esse álbum? Responda com 1 para sim e 0 para não:\n")
@@ -111,15 +115,17 @@ class AvaliacaoInterfaceAlb(InterfaceAvaliacao):
             self.finalAcao()
         elif option == 3:
             comentario = input("Sou todo ouvidos! Me conta o que você tem a dizer:")
-            comt = self.avaliacao.comentar(self.album, self.user, comentario)
+            comt = self.avaliacao.comentarAlbum(self.album, self.user, comentario)
             print(comt)
             print("==========================================================")
             self.finalAcao()
         elif option == 4:
-            comments = self.avaliacao.exibirComentariosAlbum()
-            print(comments)
+            comments = self.avaliacao.exibirComentariosAlbum(self.album)
+            for comment in comments:
+                print(comment)
             print("==========================================================")
             self.finalAcao()
+
         else:
             print("Opção inválida! Tente novamente.")
             op = int(input("Escolha uma opção válida: "))

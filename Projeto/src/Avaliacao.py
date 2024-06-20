@@ -231,15 +231,21 @@ class Avaliacao():
         
         comentarios_formatados = []
         
-        # Itera sobre cada comentário encontrado
-        for comentario in comentarios:
-            usuario = self.__usercollection.find_one({
-                "_id": ObjectId(comentario["user"])
-            })
-            comentario_formatado = f"{usuario['nome']}: {comentario['comentario']}\n"
-            
-            comentarios_formatados.append(comentario_formatado)
+        comentarios_count = self.__comentariocollection.count_documents({"musica": ObjectId(idmusica)})
         
+        if comentarios_count == 0:
+            comentarios_formatados.append("Nenhum comentário disponível.\n")
+
+        # Itera sobre cada comentário encontrado
+        else:
+            for comentario in comentarios:
+                usuario = self.__usercollection.find_one({
+                    "_id": ObjectId(comentario["usuario"])
+                })
+                comentario_formatado = f"{usuario['name']}: {comentario['comentario']}"
+                
+                comentarios_formatados.append(comentario_formatado)
+            
         return comentarios_formatados
 
     # função que favorita um album 
@@ -332,7 +338,7 @@ class Avaliacao():
         #adicionar comentario e relacionar com a musica e o usuario 
         self.__comentariocollection.insert_one({
             "usuario": ObjectId(idUser),
-            "musica": ObjectId(idAlbum),
+            "album": ObjectId(idAlbum),
             "comentario": comentario.strip()
         })
 
@@ -343,18 +349,21 @@ class Avaliacao():
 
     def exibirComentariosAlbum(self, idAlbum: ObjectId) -> list[str]:
         comentarios = self.__comentariocollection.find({
-            "musica": ObjectId(idAlbum),
+            "album": ObjectId(idAlbum),
         })
-        
+
+        comentarios_count = self.__comentariocollection.count_documents({"album": ObjectId(idAlbum)})
         comentarios_formatados = []
-        
+
+        if comentarios_count == 0:
+            comentarios_formatados.append("Nenhum comentário disponível.\n")
         # Itera sobre cada comentário encontrado
-        for comentario in comentarios:
-            usuario = self.__usercollection.find_one({
-                "_id": ObjectId(comentario["user"])
-            })
-            comentario_formatado = f"{usuario['nome']}: {comentario['comentario']}\n"
+        else:
+            for comentario in comentarios:
+                usuario = self.__usercollection.find_one({
+                    "_id": ObjectId(comentario["usuario"])
+                })
+                comentario_formatado = f"{usuario['name']}: {comentario['comentario']}\n"
+                comentarios_formatados.append(comentario_formatado)
             
-            comentarios_formatados.append(comentario_formatado)
-        
         return comentarios_formatados
