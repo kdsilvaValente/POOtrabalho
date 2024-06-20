@@ -20,7 +20,7 @@ class AvaliacaoInterfaceAlb(InterfaceAvaliacao):
     def finalAcao(self):
         print("O que você deseja fazer agora?")
         print("1 - Fazer outra pesquisa")
-        print("2 - Mais ações com esse álbum!")
+        print("2 - Avaliar essa álbum novamente")
 
         next_option = int(input("Escolha uma opção: "))
 
@@ -97,14 +97,15 @@ class AvaliacaoInterfaceAlb(InterfaceAvaliacao):
 
         elif option == 3:
             comentario = input("Sou todo ouvidos! Me conta o que você tem a dizer:")
-            comt = self.avaliacao.comentar(self.album, self.user, comentario)
+            comt = self.avaliacao.comentarAlbum(self.album, self.user, comentario)
             print(comt)
             print("==========================================================")
             self.finalAcao()
         
         elif option == 4:
-            comments = self.avaliacao.exibirComentariosAlbum()
-            print(comments)
+            comments = self.avaliacao.exibirComentariosAlbum(self.album)
+            for comment in comments:
+                print(comment)
             print("==========================================================")
             self.finalAcao()
 

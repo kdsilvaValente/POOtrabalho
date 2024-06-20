@@ -162,8 +162,10 @@ class AvaliacaoInterMsc(InterfaceAvaliacao):
             self.finalAcao()
 
         elif option == 5:
-            comments = self.avaliacao.exibirComentarios()
-            print(comments)
+            comments = self.avaliacao.exibirComentarios(self.musica)
+            for comment in comments:
+                print(comment)
+            print("==========================================================")
             self.finalAcao()
 
         else:
