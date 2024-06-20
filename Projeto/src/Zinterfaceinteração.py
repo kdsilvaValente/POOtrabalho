@@ -114,8 +114,8 @@ class Interface_interação(Menu):
         """
         while True:
             escolha = int(input("Qual amizade você deseja aceitar?: "))
-            if escolha > len(amizades) or escolha < len(amizades):
-                print("Escolha um número de usuário existente!")
+            if not testar_tamanho_vetor(len(amizades), escolha):
+               pass
             else:
                 self.user.aceitar_pedido(amizades[escolha-1])
                 self.next = "Amizades"
@@ -158,8 +158,8 @@ class Interface_interação(Menu):
                     if option == 1:
                         while True:
                             escolha = int(input("Qual perfil deseja ver? Digite o número:  "))
-                            if escolha > len(friends) or escolha < len(friends):
-                                print("Escolha um número de usuário existente!")
+                            if not testar_tamanho_vetor(len(friends), escolha):
+                                pass
                             else:
                                 self.ver_perfil(friends[escolha-1])
                                 self.next = "Amizades"
@@ -185,7 +185,7 @@ class Interface_interação(Menu):
         for i in range(length):
             result = self.search.get_by_id(ObjectId(self.user.lista_pedidos[i]))
             if result == None:
-                print("você não tem um amigo ainda, continue navegando e faça novas amizades!")
+                print("você não tem um pedidos ainda, continue navegando e faça novas amizades!")
                 return 0
             else:
                 print(f"{i+1}: {result['name']}")
@@ -217,8 +217,8 @@ class Interface_interação(Menu):
         """
         while True:
             escolha = int(input("Qual amizade você deseja desfazer?: "))
-            if escolha > len(amizades) or escolha < len(amizades):
-                print("Escolha um número de usuário existente!")
+            if not testar_tamanho_vetor(len(amizades), escolha):
+               pass
             else:
                 self.user.excluir_amigo(amizades[escolha-1])
                 self.next = "Amizades"

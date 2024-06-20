@@ -4,9 +4,7 @@ from Excel import *
 from Auxiliares_uteis import *
 
 class menuMusica(Menu):
-        '''
-        metodo para inicializar a interface
-        '''
+    def _init_(self):
         self.next = None
         self.title = "Menu Musica :p"
         self.options = [
@@ -20,7 +18,6 @@ class menuMusica(Menu):
         '''
         metodo para inicializar a interface
         '''
-        
     def render(self) -> None:
 
         '''

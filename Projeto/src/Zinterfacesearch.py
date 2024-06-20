@@ -14,6 +14,7 @@ class Interface_search(Menu):
         """
         Inicializa os atributos da classe e exibe as opções de busca.
         """
+        self.vetor_musicas =0
         self.result = []  # armazena os resultados de pesquisa
         self.id_result = None  # armazena o id escolhido a partir do resultado
         self.options_value = 0  # usado para salvar a opção escolhida no menu
@@ -154,18 +155,6 @@ class Interface_search(Menu):
             print(f"Álbum: {(result[i])['album']}")
             print(f"Artista: {(result[i])['artista']}")
             print(f"Gênero: {(result[i])['gênero']}")
-            vetor_musicas = result[i]['musicas']
-            tamanho = len(vetor_musicas)
-            #Kau, tirei o print dos álbuns antes, já que exibe na minha interface bj Lu
-            #print("Músicas do Álbum:")
-            for j in range(tamanho):  
-                data = {
-                    "collection": "Musica",
-                    "type": "_id"
-                }
-                search = Search(data["collection"])
-                music = search.get_by_id(ObjectId(vetor_musicas[j]))
-            #    print(f"{j + 1}° {music['titulo']}")
         self.result = result
 
     def menu_result_musica(self) -> None:
@@ -197,25 +186,53 @@ class Interface_search(Menu):
         Realiza a ação nos álbuns pesquisados conforme a opção escolhida.
         """
         if self.options_value == 1:
-            number= int(input("Qual album? Digite o número:"))
-            self.id_result = (self.result[number-1])['_id']
-            self.dicionario = {"next": "Album","id_pesquisa": self.id_result}
-            self.next = self.dicionario
-            print("entrou na search album")
-            return 0
+            while True:
+                number= int(input("Qual album? Digite o número:"))
+                if not testar_tamanho_vetor(len(self.result), number):
+                    pass
+                else:
+                    self.id_result = (self.result[number-1])['_id']
+                    self.dicionario = {"next": "Album","id_pesquisa": self.id_result}
+                    self.next = self.dicionario
+                    print("entrou na search album")
+                    return 0
         elif self.options_value == 2:
-            number = int(input("Qual o álbum? Digite o número: "))
-            self.musicas_album = self.result[number - 1]['musicas']
-            music = int(input("Qual música deseja abrir?: "))
-            self.id_result = self.musicas_album[music - 1]
-            limpar_terminal()
-            return 0
+            while True:
+                number = int(input("Qual o álbum? Digite o número: "))
+                if not testar_tamanho_vetor(len(self.result), number):
+                    pass
+                else:
+                    self.musicas_album = self.result[number - 1]['musicas']
+                    tamanho = len( self.musicas_album )
+                    for j in range(tamanho):  
+                        data = {
+                            "collection": "Musica",
+                            "type": "_id"
+                        }
+                        search = Search(data["collection"])
+                        music = search.get_by_id(ObjectId( self.musicas_album [j]))
+                        print(f"{j + 1}° {music['titulo']}")
+                    while True:
+                        music = int(input("Qual música deseja abrir?: "))
+                        if not testar_tamanho_vetor(len(self.musicas_album), music):
+                            pass
+                        else:
+                            self.id_result = self.musicas_album[music-1]
+                            self.dicionario = {"next": "Musica","id_pesquisa": self.id_result}
+                            self.next = self.dicionario
+                            self.id_result = self.musicas_album[music - 1]
+                            limpar_terminal()
+                            return 0
         elif self.options_value == 3:
-            number = int(input("Qual perfil? Digite o número: "))
-            self.id_result = self.result[number - 1]['_id']
-            print(self.id_result)
-            limpar_terminal()
-            return 0
+            while True:
+                number = int(input("Qual perfil? Digite o número: "))
+                if not testar_tamanho_vetor(len(self.result), number):
+                    pass
+                else:
+                    self.id_result = self.result[number - 1]['_id']
+                    print(self.id_result)
+                    limpar_terminal()
+                    return 0
         else:
             self.options()  # Retornar para buscas
 
@@ -258,16 +275,20 @@ class Interface_search(Menu):
         escolhendo qual perfil deve sofrer a ação
         """
         if self.options_value == 1:
-            number= int(input("Qual perfil? Digite o número:"))
-            print(len(self.pessoas_result))
-            self.id_result = ((self.pessoas_result[number-1])['_id'])
-            self.dicionario = {"next": "Amizades",
-                          "id_pesquisa":self.id_result }
-            self.next = self.dicionario
-            limpar_terminal()
-            return 0
-        else:
-             self.next = "Navegação" #definindo próximo menu como navegação
+            while True:
+                number= int(input("Qual perfil? Digite o número:"))
+                if not testar_tamanho_vetor(len(self.pessoas_result), number):
+                    pass
+                else:
+                    self.id_result = ((self.pessoas_result[number-1])['_id'])
+                    self.dicionario = {"next": "Amizades",
+                                    "id_pesquisa":self.id_result }
+                    self.next = self.dicionario
+                    limpar_terminal()
+                    return 0
+
+                
+       
 
 
         

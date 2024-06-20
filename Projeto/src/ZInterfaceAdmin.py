@@ -14,6 +14,8 @@ menum = menuMusica()
 excel = Excel()
 
 class menuAdmin(Menu):
+  
+    def __init__(self, admin_id: str):
         '''
         Metodo para inicializar a interface
         '''
@@ -28,6 +30,7 @@ class menuAdmin(Menu):
             "4 - Sair"
         ]
         self.options1()
+
 
     def options1(self) -> str:
         while True:

@@ -5,6 +5,9 @@ from Auxiliares_uteis import calcMedia
 
 class Avaliacao():
     def __init__(self):
+        """
+        Inicializa a classe Avaliacao, estabelecendo conexões com as coleções necessárias no banco de dados.
+        """
         self.getconnection = getconnection
         self.__musicacollection = self.getconnection.get_collection('Musica')
         self.__usercollection = self.getconnection.get_collection("User")
@@ -14,53 +17,92 @@ class Avaliacao():
         
 
     def validar_album(self, idalbum: ObjectId) -> dict:
+        """
+        Valida a existência de um álbum no banco de dados.
+
+        Args:
+            idalbum (ObjectId): ID do álbum a ser validado.
+
+        Returns:
+            dict: Documento do álbum se encontrado.
+
+        Raises:
+            ValueError: Se o álbum não for encontrado.
+        """
         album = self.__albumcollection.find_one({"_id": ObjectId(idalbum)})
         if not album:
             raise ValueError(f"Album não foi encontrado.")
         return album
     
     def validar_musica(self, idmusica: ObjectId) -> dict:
+        """
+        Valida a existência de uma música no banco de dados.
+
+        Args:
+            idmusica (ObjectId): ID da música a ser validada.
+
+        Returns:
+            dict: Documento da música se encontrada.
+
+        Raises:
+            ValueError: Se a música não for encontrada.
+        """
         musica = self.__musicacollection.find_one({"_id": ObjectId(idmusica)})
         if not musica:
             raise ValueError(f"Música não foi encontrada.")
         return musica
 
     def validar_usuario(self, idUser: ObjectId) -> dict:
+        """
+        Valida a existência de um usuário no banco de dados.
+
+        Args:
+            idUser (ObjectId): ID do usuário a ser validado.
+
+        Returns:
+            dict: Documento do usuário se encontrado.
+
+        Raises:
+            ValueError: Se o usuário não for encontrado.
+        """
         user = self.__usercollection.find_one({"_id": ObjectId(idUser)})
         if not user:
             raise ValueError("Usuário não foi encontrado.")
         return user
     
-    # função que favorita uma musica 
     def darLike(self, idmusica: ObjectId, idUser: ObjectId) -> str:
-        
-        # acha a musica ou retorna se ela nao for encontrada e confere se usuario existe
+        """
+        Adiciona um like a uma música.
+
+        Args:
+            idmusica (ObjectId): ID da música a ser curtida.
+            idUser (ObjectId): ID do usuário que está curtindo a música.
+
+        Returns:
+            str: Mensagem confirmando a ação.
+        """
         music = self.validar_musica(ObjectId(idmusica))
         user = self.validar_usuario(ObjectId(idUser))
         
         username = user["name"]
         musicname = music["titulo"]
 
-        # verificar se o user ja deu like nessa musica
         usuario_curtiu = self.__usercollection.find_one(
             {"_id": ObjectId(idUser), "musicas curtidas": ObjectId(idmusica)}
         )
         if usuario_curtiu:
             return f"Usuário {username} já curtiu a música {musicname}."
 
-        # adicionar o like na coleção de usuários
         self.__usercollection.update_one(
             {"_id": ObjectId(idUser)},
             {"$addToSet": {"musicas curtidas": idmusica}}
         )
 
-        # adicionar o like na coleção de músicas
         self.__musicacollection.update_one(
             {"_id": ObjectId(idmusica)},
-            {"$inc": {"likes": 1}}  # Incrementar o contador de likes
+            {"$inc": {"likes": 1}}
         )
         
-        # registrar like em avaliação
         self.__avaliacaocollection.insert_one({
             "usuario": ObjectId(idUser),
             "musica": ObjectId(idmusica),
@@ -69,66 +111,74 @@ class Avaliacao():
 
         return f"Usuário {username} deu like na música {musicname}."
 
-    # função que desfaz um like
     def desfazerLike(self, idmusica: ObjectId, idUser: ObjectId) -> str:
-        
-        # acha a musica ou retorna se ela nao for encontrada e confere se usuario existe
+        """
+        Remove um like de uma música.
+
+        Args:
+            idmusica (ObjectId): ID da música da qual o like será removido.
+            idUser (ObjectId): ID do usuário que está removendo o like.
+
+        Returns:
+            str: Mensagem confirmando a ação.
+        """
         music = self.validar_musica(ObjectId(idmusica))
         user = self.validar_usuario(ObjectId(idUser))
 
         username = user["name"]
         musicname = music["titulo"]
 
-        # verificar se o user deu like nessa musica
         usuario_curtiu = self.__usercollection.find_one(
             {"_id": ObjectId(idUser), "musicas curtidas": ObjectId(idmusica)}
         )
         if not usuario_curtiu:
             return f"Usuário {username} não curtiu a música {musicname}."
 
-        # tirar o like na coleção de usuários
         self.__usercollection.update_one(
             {"_id": ObjectId(idUser)},
             {"$pull": {"musicas curtidas": idmusica}}
         )
 
-        # remover o like da coleção de músicas
         self.__musicacollection.update_one(
             {"_id": ObjectId(idmusica)},
-            {"$inc": {"likes": -1}}  # Diminui o contador de likes
+            {"$inc": {"likes": -1}}
         )
         
-        # registrar deslike em avaliação
         self.__avaliacaocollection.insert_one({
             "usuario": ObjectId(idUser),
             "musica": ObjectId(idmusica),
             "acao": "desfazer curtida"
         })
 
-        username = user["name"]
-        musicname = music["titulo"]
-
         return f"Usuário {username} desfez like na música {musicname}."
 
-# função de avaliação na música (0 a 5 estrelas) e atualiza avaliacao final(NAO ESTA PRONTA)
     def darNota(self, idmusica: ObjectId, idUser: ObjectId, nota: int) -> str:
-    
-        #pegando o id do album pela musica 
+        """
+        Avalia uma música com uma nota de 1 a 5 estrelas.
+
+        Args:
+            idmusica (ObjectId): ID da música a ser avaliada.
+            idUser (ObjectId): ID do usuário que está avaliando a música.
+            nota (int): Nota de 1 a 5 estrelas.
+
+        Returns:
+            str: Mensagem confirmando a ação.
+
+        Raises:
+            ValueError: Se a nota for inválida (menor que 1 ou maior que 5).
+        """
         musica = self.__musicacollection.find_one({"_id": ObjectId(idmusica)})
         idAlbum = musica["album_id"]
 
-        # nota menor que 1 ou maior que 5
         if nota < 1 or nota > 5:
             raise ValueError(f"Nota inválida.")
 
-        # acha a musica ou retorna se ela nao for encontrada e confere se usuario existe
         music = self.validar_musica(ObjectId(idmusica))
         user = self.validar_usuario(ObjectId(idUser))
         
         username = user["name"]
         musicname = music["titulo"]
 
-        # verificar se o user deu nota nessa musica
         usuario_avaliou = self.__avaliacaocollection.find_one({
             "usuario": ObjectId(idUser), 
             "musica": ObjectId(idmusica), 
@@ -138,41 +188,36 @@ class Avaliacao():
         if usuario_avaliou:
             return f"Usuário {username} já avaliou a música {musicname}."
 
-        # dar nota de musica
         self.__musicacollection.update_one(
             {"_id": ObjectId(idmusica)},
-            {"$inc": {"avaliacao geral": nota}}  # avalia uma música
+            {"$inc": {"avaliacao geral": nota}}
         )
         self.__musicacollection.update_one(
             {"_id": ObjectId(idmusica)},
-            {"$inc": {"n de avaliacoes": 1}}  # conta quantas pessoas fizeram uma avaliacao
+            {"$inc": {"n de avaliacoes": 1}}
         )
         
-        #calcular nota da avaliação geral
-        #pegar valores
         msc = self.__musicacollection.find_one({"_id": ObjectId(idmusica)})
         usu = self.__musicacollection.find_one({"_id": ObjectId(idmusica)})
         somatorio = msc["avaliacao geral"]
         usuarios = usu["n de avaliacoes"]
 
-        #instancir classe media e calcular media
         media = calcMedia(somatorio, usuarios)
         notafinal = media.notaGeral()
         self.__musicacollection.update_one(
             {"_id": ObjectId(idmusica)},
-            {"$set": {"avaliacao final": notafinal}}  # avalia uma música
+            {"$set": {"avaliacao final": notafinal}}
         )
 
         album = self.__albumcollection.find_one({"_id": ObjectId(idAlbum)})
         musicas_do_album = album["musicas"]
 
-        somatorio_album = 0  # Inicializa o somatório das notas do álbum
-        contador_musicas = 0  # Contador de músicas com avaliação final
+        somatorio_album = 0
+        contador_musicas = 0
 
         for musics_id in musicas_do_album:
             musica = self.__musicacollection.find_one({"_id": ObjectId(musics_id)})
             if "avaliacao final" not in musica:
-                # Adiciona campo avaliacao final com valor 0
                 self.__musicacollection.update_one(
                     {"_id": ObjectId(musics_id)},
                     {"$set": {"avaliacao final": 0}}
@@ -192,27 +237,35 @@ class Avaliacao():
             {"$set": {"nota album": notaalbum}}
         )
         
-        # registrar avaliação de música
         self.__avaliacaocollection.insert_one({
             "usuario": ObjectId(idUser),
             "musica": ObjectId(idmusica),
             "acao": "dar nota em musica"
         })
 
-
         return f"Usuário {username} deu {nota} estrelas na música {musicname}."
 
     def comentar(self, idmusica: ObjectId, idUser: ObjectId, comentario: str) -> str:
-        
-        # acha a musica ou retorna se ela nao for encontrada e confere se usuario existe
+        """
+        Adiciona um comentário a uma música.
+
+        Args:
+            idmusica (ObjectId): ID da música a ser comentada.
+            idUser (ObjectId): ID do usuário que está comentando.
+            comentario (str): Texto do comentário.
+
+        Returns:
+            str: Mensagem confirmando a ação.
+
+        Raises:
+            ValueError: Se o comentário for vazio.
+        """
         music = self.validar_musica(ObjectId(idmusica))
         user = self.validar_usuario(ObjectId(idUser))
 
-        #teste comentario vazio
         if not comentario.strip():
-                return "O comentário não pode ser vazio."
+            return "O comentário não pode ser vazio."
         
-        #adicionar comentario e relacionar com a musica e o usuario 
         self.__comentariocollection.insert_one({
             "usuario": ObjectId(idUser),
             "musica": ObjectId(idmusica),
@@ -223,8 +276,17 @@ class Avaliacao():
         musicname = music["titulo"]
 
         return f"Usuário {username} fez um comentário na música {musicname}."
-    
+
     def exibirComentarios(self, idmusica: ObjectId) -> list[str]:
+        """
+        Exibe todos os comentários de uma música.
+
+        Args:
+            idmusica (ObjectId): ID da música da qual os comentários serão exibidos.
+
+        Returns:
+            list[str]: Lista de comentários formatados como strings.
+        """
         comentarios = self.__comentariocollection.find({
             "musica": ObjectId(idmusica),
         })
@@ -235,87 +297,90 @@ class Avaliacao():
         
         if comentarios_count == 0:
             comentarios_formatados.append("Nenhum comentário disponível.\n")
-
-        # Itera sobre cada comentário encontrado
         else:
             for comentario in comentarios:
                 usuario = self.__usercollection.find_one({
                     "_id": ObjectId(comentario["usuario"])
                 })
                 comentario_formatado = f"{usuario['name']}: {comentario['comentario']}"
-                
                 comentarios_formatados.append(comentario_formatado)
             
         return comentarios_formatados
 
-    # função que favorita um album 
     def favoritarAlbum(self, idalbum: ObjectId, idUser: ObjectId) -> str:
-        
-        # acha a musica ou retorna se ela nao for encontrada e confere se usuario existe
+        """
+        Favorita um álbum para um usuário.
+
+        Args:
+            idalbum (ObjectId): ID do álbum a ser favoritado.
+            idUser (ObjectId): ID do usuário que está favoritando o álbum.
+
+        Returns:
+            str: Mensagem confirmando a ação.
+        """
         alb = self.validar_album(ObjectId(idalbum))
         user = self.validar_usuario(ObjectId(idUser))
 
         username = user["name"]
         albumname = alb["album"]
         
-        # verificar se o user ja deu like nessa musica
         usuario_curtiu = self.__usercollection.find_one(
             {"_id": ObjectId(idUser), "albuns favoritados": ObjectId(idalbum)}
         )
         if usuario_curtiu:
             return f"Usuário {username} já curtiu o álbum {albumname}."
 
-        # adicionar o like na coleção de usuários
         self.__usercollection.update_one(
             {"_id": ObjectId(idUser)},
             {"$addToSet": {"albuns favoritados": idalbum}}
         )
 
-        # adicionar o like na coleção de músicas
         self.__albumcollection.update_one(
             {"_id": ObjectId(idalbum)},
-            {"$inc": {"favoritados": 1}}  # Incrementar o contador de likes
+            {"$inc": {"favoritados": 1}}
         )
         
-        # registrar like em avaliação
         self.__avaliacaocollection.insert_one({
             "usuario": ObjectId(idUser),
             "album": ObjectId(idalbum),
             "acao": "musica curtida"
         })
 
-        return f"Usuário {username} deu like no album {albumname}."
+        return f"Usuário {username} deu like no álbum {albumname}."
 
-    # função que desfaz um like
     def desfavoritarAlbum(self, idalbum: ObjectId, idUser: ObjectId) -> str:
-        
-        # acha a musica ou retorna se ela nao for encontrada e confere se usuario existe
+        """
+        Remove a favoritação de um álbum para um usuário.
+
+        Args:
+            idalbum (ObjectId): ID do álbum a ser desfavoritado.
+            idUser (ObjectId): ID do usuário que está desfavoritando o álbum.
+
+        Returns:
+            str: Mensagem confirmando a ação.
+        """
         alb = self.validar_album(ObjectId(idalbum))
         user = self.validar_usuario(ObjectId(idUser))
         
         username = user["name"]
         albumname = alb["album"]
 
-        # verificar se o user deu like nessa musica
         usuario_curtiu = self.__usercollection.find_one(
             {"_id": ObjectId(idUser), "albuns favoritados": ObjectId(idalbum)}
         )
         if not usuario_curtiu:
-            return f"Usuário {username} não favoritou o album {albumname}."
+            return f"Usuário {username} não favoritou o álbum {albumname}."
 
-        # tirar o like na coleção de usuários
         self.__usercollection.update_one(
             {"_id": ObjectId(idUser)},
             {"$pull": {"musicas curtidas": idalbum}}
         )
 
-        # remover o like da coleção de músicas
         self.__albumcollection.update_one(
             {"_id": ObjectId(idalbum)},
-            {"$inc": {"likes": -1}}  # Diminui o contador de likes
+            {"$inc": {"likes": -1}}
         )
         
-        # registrar deslike em avaliação
         self.__avaliacaocollection.insert_one({
             "usuario": ObjectId(idUser),
             "album": ObjectId(idalbum),
@@ -323,19 +388,29 @@ class Avaliacao():
         })
         
 
-        return f"Usuário {username} desfavoritou o album {albumname}."
-    
+        return f"Usuário {username} desfavoritou o álbum {albumname}."
+
     def comentarAlbum(self, idAlbum: ObjectId, idUser: ObjectId, comentario: str) -> str:
-        
-        # acha a musica ou retorna se ela nao for encontrada e confere se usuario existe
+        """
+        Adiciona um comentário a um álbum.
+
+        Args:
+            idAlbum (ObjectId): ID do álbum a ser comentado.
+            idUser (ObjectId): ID do usuário que está comentando.
+            comentario (str): Texto do comentário.
+
+        Returns:
+            str: Mensagem confirmando a ação.
+
+        Raises:
+            ValueError: Se o comentário for vazio.
+        """
         alb = self.validar_album(ObjectId(idAlbum))
         user = self.validar_usuario(ObjectId(idUser))
 
-        #teste comentario vazio
         if not comentario.strip():
                 return "O comentário não pode ser vazio."
         
-        #adicionar comentario e relacionar com a musica e o usuario 
         self.__comentariocollection.insert_one({
             "usuario": ObjectId(idUser),
             "album": ObjectId(idAlbum),
@@ -345,9 +420,18 @@ class Avaliacao():
         username = user["name"]
         albumname = alb["album"]
 
-        return f"Usuário {username} fez um comentário na música {albumname}."
+        return f"Usuário {username} fez um comentário no álbum {albumname}."
 
     def exibirComentariosAlbum(self, idAlbum: ObjectId) -> list[str]:
+        """
+        Exibe todos os comentários de um álbum.
+
+        Args:
+            idAlbum (ObjectId): ID do álbum do qual os comentários serão exibidos.
+
+        Returns:
+            list[str]: Lista de comentários formatados como strings.
+        """
         comentarios = self.__comentariocollection.find({
             "album": ObjectId(idAlbum),
         })
@@ -357,7 +441,6 @@ class Avaliacao():
 
         if comentarios_count == 0:
             comentarios_formatados.append("Nenhum comentário disponível.\n")
-        # Itera sobre cada comentário encontrado
         else:
             for comentario in comentarios:
                 usuario = self.__usercollection.find_one({

@@ -77,3 +77,10 @@ def limpar_terminal():
         os.system("cls")
     else:
         os.system("clear")
+
+def testar_tamanho_vetor(tamanho, escolha)->bool:
+    if escolha > tamanho:
+        print("Escolha um número existente!")
+        return False
+    else:
+        return True
