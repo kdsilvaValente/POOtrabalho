@@ -60,16 +60,6 @@ class Auxiliar:
             
             return idalbum
 
-class calcMedia():
-    def __init__(self, sum, numUsers):
-        self.sum = sum
-        self.numUsers = numUsers
-
-    def notaGeral(self):
-        if self.numUsers == 0:
-            raise ValueError("Número de usuários não pode ser zero.")
-        return self.sum / self.numUsers
-
 
 def limpar_terminal():
     sistema = platform.system()

@@ -1,6 +1,5 @@
 from bson.objectid import ObjectId
 from run import getconnection
-from Auxiliares_uteis import calcMedia 
 
 
 class Avaliacao():
@@ -14,7 +13,8 @@ class Avaliacao():
         self.__avaliacaocollection = self.getconnection.get_collection("Avaliacao")
         self.__comentariocollection = self.getconnection.get_collection("Comentarios")
         self.__albumcollection = self.getconnection.get_collection("Albuns")
-        
+        self.sum = None
+        self.numUsers = None
 
     def validar_album(self, idalbum: ObjectId) -> dict:
         """
@@ -69,6 +69,11 @@ class Avaliacao():
         if not user:
             raise ValueError("Usuário não foi encontrado.")
         return user
+    
+    def notaGeral(self):
+        if self.numUsers == 0:
+            raise ValueError("Número de usuários não pode ser zero.")
+        return self.sum / self.numUsers
     
     def darLike(self, idmusica: ObjectId, idUser: ObjectId) -> str:
         """
@@ -202,8 +207,10 @@ class Avaliacao():
         somatorio = msc["avaliacao geral"]
         usuarios = usu["n de avaliacoes"]
 
-        media = calcMedia(somatorio, usuarios)
-        notafinal = media.notaGeral()
+        self.sum = somatorio
+        self.numUsers = usuarios
+
+        notafinal = self.notaGeral()
         self.__musicacollection.update_one(
             {"_id": ObjectId(idmusica)},
             {"$set": {"avaliacao final": notafinal}}
