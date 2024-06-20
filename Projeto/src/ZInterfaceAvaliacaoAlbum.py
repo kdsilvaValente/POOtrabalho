@@ -14,7 +14,8 @@ class AvaliacaoInterfaceAlb(InterfaceAvaliacao):
             "1 - Favoritar esse álbum!!! Gosto muuIIiito dele:",
             "2 - Remover like, não gosto mais dele (emoji nojo)",
             "3 - Tenho mt a dizer!!!! Quero comentar esse álbum",
-            "4 - Me mostre os comentários que as pessoas estão fazendo sobre esse álbum"
+            "4 - Me mostre os comentários que as pessoas estão fazendo sobre esse álbum",
+            "5 - Abra as informações do álbum novamente"
         ]
 
     def finalAcao(self):
@@ -110,6 +111,9 @@ class AvaliacaoInterfaceAlb(InterfaceAvaliacao):
                 print(comment)
             print("==========================================================")
             self.finalAcao()
+
+        elif option == 5:
+            self.iniciotela()
 
         else:
             print("Opção inválida! Tente novamente.")

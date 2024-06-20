@@ -16,7 +16,8 @@ class AvaliacaoInterMsc(InterfaceAvaliacao):
             "2 - Remover like, não gosto mais dela (emoji nojo)",
             "3 - Me sentindo crítico, quero dar nota pra essa música",
             "4 - Tenho mt a dizer!!!! Quero comentar essa música",
-            "5 - Me mostre os comentários que as pessoas estão fazendo sobre essa música"
+            "5 - Me mostre os comentários que as pessoas estão fazendo sobre essa música",
+            "6 - Exibir novamente as informações da música"
         ]
         
 
@@ -167,6 +168,9 @@ class AvaliacaoInterMsc(InterfaceAvaliacao):
                 print(comment)
             print("==========================================================")
             self.finalAcao()
+        
+        elif option == 6:
+            self.iniciotela()
 
         else:
             op = int(input("Opção inválida! Tente novamente."))

@@ -231,7 +231,7 @@ class Avaliacao():
         
         comentarios_formatados = []
         
-        comentarios_count = self.__comentariocollection.count_documents({"album": ObjectId(idmusica)})
+        comentarios_count = self.__comentariocollection.count_documents({"musica": ObjectId(idmusica)})
         
         if comentarios_count == 0:
             comentarios_formatados.append("Nenhum comentário disponível.\n")
