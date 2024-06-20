@@ -8,7 +8,7 @@ auxiliar = Auxiliar()
 excel = Excel()
 
 class menuAlbum(Menu):
-    def __init__(self):
+    def __init__(self)->None:
 
         '''
         metodo para inicializar a interface

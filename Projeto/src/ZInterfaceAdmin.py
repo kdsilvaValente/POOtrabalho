@@ -14,7 +14,7 @@ menum = menuMusica()
 excel = Excel()
 
 class menuAdmin(Menu):
-    def __init__(self):
+    def __init__(self)->None:
         '''
         Metodo para inicializar a interface
         '''
@@ -45,7 +45,7 @@ class menuAdmin(Menu):
             return self.render()
         self.next(opcao)
 
-    def next(self, option):
+    def next(self, option)->None:
         '''
         @param option: inteiro responsável por representar a ação desejada do usuário
         Metodo next: capaz de seguir o que o usuário deseja realizar
@@ -79,7 +79,7 @@ class menuAdmin(Menu):
             print(emoji.emojize("Opção inválida. tente novamente:prohibited: "))
             self.render()
 
-    def create_admin_user(self):
+    def create_admin_user(self)->None:
         
         '''
         Método para criar um novo usuário administrador

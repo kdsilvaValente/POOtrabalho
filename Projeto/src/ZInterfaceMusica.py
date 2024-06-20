@@ -4,7 +4,7 @@ from Excel import *
 from Auxiliares_uteis import *
 
 class menuMusica(Menu):
-    def __init__(self):
+    def __init__(self)->None:
 
         '''
         metodo para inicializar a interface
@@ -152,7 +152,7 @@ class menuMusica(Menu):
 
 
 
-    def next(self, option):
+    def next(self, option: int)->None:
         
         '''
         @param option: inteiro responsável por representar a ação desejada do usuário

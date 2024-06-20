@@ -3,7 +3,7 @@ from AbstractMenu import *
 from Auxiliares_uteis import *
 
 class AvaliacaoInterfaceAlb(InterfaceAvaliacao):
-    def __init__(self, idUser, idalbum):
+    def __init__(self, idUser:str , idalbum: str)->None:
         """
         Inicializa a interface de avaliação de álbuns.
         
@@ -22,7 +22,7 @@ class AvaliacaoInterfaceAlb(InterfaceAvaliacao):
             "4 - Me mostre os comentários que as pessoas estão fazendo sobre esse álbum"
         ]
 
-    def finalAcao(self):
+    def finalAcao(self)->None:
         """
         Exibe as opções finais após uma ação e processa a escolha do usuário.
         """
@@ -43,7 +43,7 @@ class AvaliacaoInterfaceAlb(InterfaceAvaliacao):
             print("Opção inválida.")
             self.finalAcao()
 
-    def iniciotela(self):
+    def iniciotela(self)->None:
         """
         Exibe as informações do álbum e pergunta se o usuário deseja avaliá-lo.
         """
@@ -79,7 +79,7 @@ class AvaliacaoInterfaceAlb(InterfaceAvaliacao):
             else:
                 print("Opção inválida, tente novamente.")
 
-    def render(self):
+    def render(self)->None:
         """
         Renderiza o menu de opções para avaliação do álbum.
         """
@@ -91,7 +91,7 @@ class AvaliacaoInterfaceAlb(InterfaceAvaliacao):
         for option in self.options:
             print(option)
 
-    def next1(self, option: int):
+    def next1(self, option: int)->None:
         """
         Processa a opção escolhida pelo usuário no menu de avaliação.
 

@@ -3,7 +3,7 @@ from AbstractMenu import *
 from Auxiliares_uteis import *
 
 class AvaliacaoInterMsc(InterfaceAvaliacao):
-    def __init__(self, idUser, idmusica):
+    def __init__(self, idUser: str, idmusica: str)->None:
         """
         Inicializa a interface de avaliação de músicas.
 
@@ -24,7 +24,7 @@ class AvaliacaoInterMsc(InterfaceAvaliacao):
             "5 - Me mostre os comentários que as pessoas estão fazendo sobre essa música"
         ]
         
-    def iniciotela(self):
+    def iniciotela(self)->None:
         """
         Exibe as informações da música e pergunta se o usuário deseja avaliá-la.
         """
@@ -107,7 +107,7 @@ class AvaliacaoInterMsc(InterfaceAvaliacao):
             else:
                 print("Opção inválida, tente novamente.")
         
-    def render(self):
+    def render(self)->None:
         """
         Renderiza o menu de opções para avaliação da música.
         """
@@ -119,7 +119,7 @@ class AvaliacaoInterMsc(InterfaceAvaliacao):
         for option in self.optionsmusic:
             print(option)
     
-    def finalAcao(self):
+    def finalAcao(self)->None:
         """
         Exibe as opções finais após uma ação e processa a escolha do usuário.
         """
@@ -141,7 +141,7 @@ class AvaliacaoInterMsc(InterfaceAvaliacao):
             print("Opção inválida.")
             self.finalAcao()
 
-    def next1(self, option: int):
+    def next1(self, option: int)->None:
         """
         Processa a opção escolhida pelo usuário no menu de avaliação.
 

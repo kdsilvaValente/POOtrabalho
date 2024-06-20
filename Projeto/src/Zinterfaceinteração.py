@@ -9,17 +9,26 @@ import emoji
 
 class Interface_interação(Menu):
     def __init__(self, user: str, user_pesquisa: str = None) -> str:
+        """
+        Inicializa a interface de interação.
+
+        :param user: ID do usuário atual.
+        :param user_pesquisa: ID do usuário a ser pesquisado (opcional).
+        """
         self.search = Search("User")
-        self.next = "0" #definição do next que será acessado posteriomente pela class main
+        self.next = "0"  # definição do next que será acessado posteriomente pela class main
         self.user = User(user)
         self.title = "INTERAÇÃO"
-        if user_pesquisa is None: #verifica se o user_pesquisa é none, pois se for, o usuário não quer ver um perfil específico 
+        if user_pesquisa is None:  # verifica se o user_pesquisa é None, pois se for, o usuário não quer ver um perfil específico 
             self.options()
         else:
             self.ver_perfil(user_pesquisa)
 
-    def options(self) -> None:  # menu de opções inicial do perfil, controla a entrada da seleção de opção e chama o menu com as opções
-        while self.next == "0": #loop para controle de entrada
+    def options(self) -> None:
+        """
+        Menu de opções inicial do perfil, controla a entrada da seleção de opção e chama o menu com as opções.
+        """
+        while self.next == "0":  # loop para controle de entrada
             try:
                 self.render()
                 self.display_main_menu()
@@ -33,17 +42,25 @@ class Interface_interação(Menu):
                         print("Voltando ao perfil...")
                         return 
                 else:
-                   print(emoji.emojize("Opção inválida. Por favor, escolha uma opção de 1 a 3:prohibited: "))
+                    print(emoji.emojize("Opção inválida. Por favor, escolha uma opção de 1 a 3:prohibited: "))
             except ValueError:
                 print("Digite um número válido.")
     
-    def display_main_menu(self) -> None:   #printa o menu principal na tela
+    def display_main_menu(self) -> None:
+        """
+        Printa o menu principal na tela.
+        """
         print(emoji.emojize("1. Ver lista de amigos :people_hugging:"))
         print(emoji.emojize("2. Ver lista de pedidos de amizade :envelope:"))
         print(emoji.emojize("3. Voltar :BACK_arrow: "))
         print("-------------------------------")
     
-    def display_main_menu_option(self, option: int) -> None:  #direciona a função de acordo com a opção inicial escolhida
+    def display_main_menu_option(self, option: int) -> None:
+        """
+        Direciona a função de acordo com a opção inicial escolhida.
+
+        :param option: Opção escolhida pelo usuário.
+        """
         if option == 1:
             self.ver_amigos()
         elif option == 2:
@@ -51,14 +68,19 @@ class Interface_interação(Menu):
         elif option == 3:
             self.next = "Perfil"
      
-    def ver_perfil(self, id: str) -> None: #abre o perfil de algum usuário específico
+    def ver_perfil(self, id: str) -> None:
+        """
+        Abre o perfil de um usuário específico.
+
+        :param id: ID do usuário a ser visualizado.
+        """
         result = self.search.get_by_id(ObjectId(id))
         print(f"Nome: {result['name']}")
         print(f"Gênero: {result['gender']}")
         status = "online" if result['isonline'] else "offline"
         print(emoji.emojize(f"Status: {status}"))
         
-        while True:#loop para controle de entrada
+        while True:  # loop para controle de entrada
             try:
                 option = int(input("Deseja pedir amizade?\n1. Sim\n2. Não, retornar\nEscolha uma opção: "))
                 if 1 <= option <= 2:
@@ -67,46 +89,63 @@ class Interface_interação(Menu):
                         return 0
                     else:
                         limpar_terminal()
-                        self.next = "Amizades" #define amizades como próximo menu
+                        self.next = "Amizades"  # define amizades como próximo menu
                         return
                 else:
                     print("Opção inválida. Por favor, escolha uma opção de 1 a 2.")
             except ValueError:
                 print("Digite um número válido.")
 
-    def pedir_amizade(self, id: ObjectId) -> None: #realiza o pedido de amizade a um usuário
-        self.user.pedir_amizade(id) # faz a mudança no banco
+    def pedir_amizade(self, id: ObjectId) -> None:
+        """
+        Realiza o pedido de amizade a um usuário.
+
+        :param id: ID do usuário para quem enviar o pedido de amizade.
+        """
+        self.user.pedir_amizade(id)  # faz a mudança no banco
         print(emoji.emojize("Pedido realizado com sucesso:rocket:!"))
         self.next = "Amizades"
     
-    def aceitar_amizade(self, amizades: list) -> None: #aceita o pedido de uma amizade
+    def aceitar_amizade(self, amizades: list) -> None:
+        """
+        Aceita o pedido de amizade de um usuário.
+
+        :param amizades: Lista de IDs de usuários que enviaram pedidos de amizade.
+        """
         while True:
             escolha = int(input("Qual amizade você deseja aceitar?: "))
             if escolha > len(amizades) or escolha < len(amizades):
-                 print("Escolha um número de usuário existente!")
+                print("Escolha um número de usuário existente!")
             else:
-                 self.user.aceitar_pedido(amizades[escolha-1])
-                 self.next="Amizades"
-                 result = self.search.get_by_id(ObjectId(self.user.lista_pedidos[escolha-1]))
-                 print(f"Agora você e {result['name']} são amigos!")
-                 return 0 
+                self.user.aceitar_pedido(amizades[escolha-1])
+                self.next = "Amizades"
+                result = self.search.get_by_id(ObjectId(self.user.lista_pedidos[escolha-1]))
+                print(f"Agora você e {result['name']} são amigos!")
+                return 0 
 
-    
-    def ver_amigos(self) -> None: #redenriza a lista de amigos do usuário
-        if not  self.user.lista_amigos:
+    def ver_amigos(self) -> None:
+        """
+        Renderiza a lista de amigos do usuário.
+        """
+        if not self.user.lista_amigos:
             print("você não tem um amigo ainda, continue navegando e faça novas amizades!")
         else:
             length = len(self.user.lista_amigos)
             for i in range(length):
                 result = self.search.get_by_id((self.user.lista_amigos[i]))
-                if result== None:
+                if result == None:
                     print("você não tem um amigo ainda, continue navegando e faça novas amizades!")
                     return 0
                 else:
                     print(f"{i+1}: {result['name']}")
             self.amigos(self.user.lista_amigos)
 
-    def amigos(self, friends: list) -> None: #redenriza opções após ver lista de amigos disponíveis
+    def amigos(self, friends: list) -> None:
+        """
+        Renderiza opções após ver a lista de amigos disponíveis.
+
+        :param friends: Lista de IDs dos amigos do usuário.
+        """
         print("-------------------------------")
         print(emoji.emojize("1. Ver perfil de algum amigo :people_hugging: "))
         print(emoji.emojize("2. Desfazer amizade com algum amigo :cross_mark: "))
@@ -114,18 +153,18 @@ class Interface_interação(Menu):
         print("-------------------------------")
         while True:
             try:
-                option = int(input("Escolha uma opção: ")) #editar para controle entrada maior ou menor
+                option = int(input("Escolha uma opção: "))
                 if 1 <= option <= 3:
                     if option == 1:
-                            while True:
-                                escolha = int(input("Qual perfil deseja ver? Digite o número:  "))
-                                if escolha > len(friends) or escolha < len(friends):
-                                    print("Escolha um número de usuário existente!")
-                                else:
-                                    self.ver_perfil(friends[escolha-1])
-                                    self.next="Amizades"
-                                    print("Amizade desfeita!")
-                                    return 0 
+                        while True:
+                            escolha = int(input("Qual perfil deseja ver? Digite o número:  "))
+                            if escolha > len(friends) or escolha < len(friends):
+                                print("Escolha um número de usuário existente!")
+                            else:
+                                self.ver_perfil(friends[escolha-1])
+                                self.next = "Amizades"
+                                print("Amizade desfeita!")
+                                return 0 
                     elif option == 2:
                         self.excluir_amigo(friends)
                         return
@@ -138,15 +177,18 @@ class Interface_interação(Menu):
             except ValueError:
                 print("Digite um número válido.")
 
-    def ver_pedidos(self) -> None: #renderiza os pedidos de amizade
+    def ver_pedidos(self) -> None:
+        """
+        Renderiza os pedidos de amizade recebidos.
+        """
         length = len(self.user.lista_pedidos)
         for i in range(length):
             result = self.search.get_by_id(ObjectId(self.user.lista_pedidos[i]))
-            if result== None:
-                    print("você não tem um amigo ainda, continue navegando e faça novas amizades!")
-                    return 0
+            if result == None:
+                print("você não tem um amigo ainda, continue navegando e faça novas amizades!")
+                return 0
             else:
-                    print(f"{i+1}: {result['name']}")
+                print(f"{i+1}: {result['name']}")
                 
         while True:
             try:
@@ -163,23 +205,30 @@ class Interface_interação(Menu):
                         self.next = "Amizades"
                         return
                 else:
-                   print(emoji.emojize("Opção inválida. Por favor, escolha uma opção de 1 a 2:prohibited: "))
+                    print(emoji.emojize("Opção inválida. Por favor, escolha uma opção de 1 a 2:prohibited: "))
             except ValueError:
                 print("Digite um número válido.")
 
-    def excluir_amigo(self, amizades :list) -> None: #seleciona e exlui uma amizade
+    def excluir_amigo(self, amizades: list) -> None:
+        """
+        Seleciona e exclui uma amizade.
 
-         while True:
+        :param amizades: Lista de IDs dos amigos do usuário.
+        """
+        while True:
             escolha = int(input("Qual amizade você deseja desfazer?: "))
             if escolha > len(amizades) or escolha < len(amizades):
-                 print("Escolha um número de usuário existente!")
+                print("Escolha um número de usuário existente!")
             else:
-                 self.user.excluir_amigo(amizades[escolha-1])
-                 self.next="Amizades"
-                 print("Amizade desfeita!")
-                 return 0 
+                self.user.excluir_amigo(amizades[escolha-1])
+                self.next = "Amizades"
+                print("Amizade desfeita!")
+                return 0 
     
-    def render(self) -> None: #render padrão 
+    def render(self) -> None:
+        """
+        Render padrão da interface.
+        """
         margem = '=' * (len(self.title) + 5)
         print(margem)
         print(f"|| {self.title} ||")
