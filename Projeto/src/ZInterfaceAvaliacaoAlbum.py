@@ -46,13 +46,15 @@ class AvaliacaoInterfaceAlb(InterfaceAvaliacao):
             print(f"O album {album['album']} não foi favoritado ainda... Mude isso!!")
         print(f"De {album['artista']}, ele possui as seguintes faixas:")
         if "musicas" in album:
-            for i, musica in enumerate(album["musicas"]):
+            for i, musica_id in enumerate(album["musicas"]):
+                # Validando e buscando a música pelo ID
+                musica = self.avaliacao.validar_musica(musica_id)
+                # Formatando a saída dependendo da posição da música na lista
                 if i == len(album["musicas"]) - 1:
-                    print(f"e {musica}.")
+                    print(f"e {musica['titulo']}.")
                     print("==========================================================")
                 else:
-                    print(f"{musica},")
-        
+                    print(f"{musica['titulo']},")
 
         while True:
             bool_str = input("Deseja avaliar esse álbum? Responda com 1 para sim e 0 para não:\n")

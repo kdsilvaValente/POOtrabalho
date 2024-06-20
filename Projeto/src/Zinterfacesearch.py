@@ -62,7 +62,7 @@ class Interface_search(Menu):
         print("-------------------------------")
         print('O que deseja pesquisar?')
         print("1. Música")
-        print("2. artista")
+        print("2. Artista")
         print("3. Album")
         print("4. Pessoas")
         print(emoji.emojize("5. Voltar :BACK_arrow: "))
@@ -147,7 +147,8 @@ class Interface_search(Menu):
             print(f"Gênero: {(result[i])['gênero']}")
             vetor_musicas = result[i]['musicas']
             tamanho = len(vetor_musicas)
-            print("Músicas do Álbum:")
+            #Kau, tirei o print dos álbuns antes, já que exibe na minha interface bj Lu
+            #print("Músicas do Álbum:")
             for j in range(tamanho):  
                 data = {
                     "collection": "Musica",
@@ -155,7 +156,7 @@ class Interface_search(Menu):
                 }
                 search = Search(data["collection"])
                 music = search.get_by_id(ObjectId(vetor_musicas[j]))
-                print(f"{j + 1}° {music['titulo']}")
+            #    print(f"{j + 1}° {music['titulo']}")
         self.result = result
 
     def menu_result_musica(self) -> None:
