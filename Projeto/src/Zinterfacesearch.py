@@ -17,7 +17,7 @@ class Interface_search(Menu):
         self.result = []  # armazena os resultados de pesquisa
         self.id_result = None  # armazena o id escolhido a partir do resultado
         self.options_value = 0  # usado para salvar a opção escolhida no menu
-        self.next = "0"  # definição do next que será acessado posteriormente pela classe main
+        self.next = "Navegação"  # definição do next que será acessado posteriormente pela classe main
         self.musicas_album = []  # armazena os ids da música de um álbum 
         self.pessoas_result = []  # armazena os ids das pessoas resultantes em uma pesquisa
         self.title = "NAVEGAÇÃO"
@@ -106,21 +106,30 @@ class Interface_search(Menu):
             else:
                 name = input("Qual o nome da música?: ")
             result = search.get_by_type(data["type"], name)
-            print("Abaixo segue os resultados correspondentes:")
-            self.print_musica(result) 
-            self.menu_result_musica()
+            if not result:
+                print("Não foi encontrado resultados, tente novamente")
+            else:
+                print("Abaixo segue os resultados correspondentes:")
+                self.print_musica(result) 
+                self.menu_result_musica()
         elif option == 3:
             name = input("Qual o nome do álbum?: ")
             result = search.get_by_type(data["type"], name)
-            print("Abaixo segue os resultados correspondentes:")
-            self.print_album(result)
-            self.menu_result_album()
+            if not result:
+                print("Não foi encontrado resultados, tente novamente")
+            else:
+                print("Abaixo segue os resultados correspondentes:")
+                self.print_album(result)
+                self.menu_result_album()
         elif option == 4:
             name = input("Qual o nome da pessoa?: ")
             result = search.get_by_type(data["type"], name)
-            print("Abaixo segue os resultados correspondentes:")
-            self.print_pessoas(result)
-            self.menu_result_pessoa()
+            if not result:
+                print("Não foi encontrado resultados, tente novamente")
+            else:
+                print("Abaixo segue os resultados correspondentes:")
+                self.print_pessoas(result)
+                self.menu_result_pessoa()
 
     def print_musica(self, result: list[dict[str, str]]) -> None:
         """

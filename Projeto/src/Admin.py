@@ -3,6 +3,7 @@ from User import*
 class Admin(User):
 
     def __init__(self, _id):
+      
         super().__init__(_id)
         if not self.is_admin:
             raise PermissionError("nao eh admin")

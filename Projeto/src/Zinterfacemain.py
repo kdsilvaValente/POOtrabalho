@@ -6,7 +6,7 @@ from Zinterfaceinteração import*
 from ZInterfaceAvaliacaoMusica import * 
 from ZInterfaceAvaliacaoAlbum import *
 from connection_options.connection import DBconnectionHandler # import run para testa conexão 
-
+import sys
 
 class Interface_main:
     """
@@ -27,6 +27,7 @@ class Interface_main:
         self.amizades = "Amizades"
         self.avaliacaomsc = "Musica"
         self.avaliacaoalbum = "Album"
+        self.login_menu = "login"
         self.db_handle= DBconnectionHandler()
         self.db_handle.connect_to_db()
         
@@ -59,9 +60,8 @@ class Interface_main:
         limpar_terminal()
         self.verificar_conexão()
         self.interface_login = Interface_login()
-        user = self.interface_login.login()
-        if user:
-            self.user = user
+        self.user = self.interface_login.login()
+        if self.user:
             self.user_menu()
 
     def logout(self) -> None:
@@ -80,6 +80,7 @@ class Interface_main:
         """
         Controla a abertura da interface de login de administrador e direciona o próximo menu a ser aberto após o login.
         """
+        self.verificar_conexão()
         limpar_terminal()
         self.verificar_conexão()
         self.interface_login = Interface_login()
@@ -94,6 +95,7 @@ class Interface_main:
         """
         Controla a abertura da interface de criação de perfil e direciona o próximo menu a ser aberto após a criação.
         """
+        self.verificar_conexão()
         limpar_terminal()
         self.interface_user = User_interface(None)
 
@@ -102,9 +104,9 @@ class Interface_main:
         Controla a abertura da interface de usuário e direciona o próximo menu a ser aberto.
         """
         limpar_terminal()
+        self.verificar_conexão()
         self.next = User_interface(self.user)
         self.next = self.next.next
-        print(self.next)
         if self.next == self.navegação:
             self.search_menu()
         if self.next == self.sair:
@@ -119,6 +121,7 @@ class Interface_main:
         Controla a abertura da interface de administrador e direciona o próximo menu a ser aberto.
         """
         limpar_terminal()
+        self.verificar_conexão()
         menu = menuAdmin()
         while True:
             menu.render()
@@ -132,6 +135,8 @@ class Interface_main:
         """
         Controla a abertura da interface de busca e direciona o próximo menu a ser aberto após a busca.
         """
+        limpar_terminal()
+        self.verificar_conexão()
         while self.next == self.navegação:
             self.next= Interface_search() #pelo metodo de super não estava dando certo
             self.next=self.next.next 
@@ -152,6 +157,8 @@ class Interface_main:
                     self.avaliacaoMusica_menu()
 
     def avaliacaoMusica_menu(self) -> None:
+        limpar_terminal()
+        self.verificar_conexão()
         interfacemusica = AvaliacaoInterMsc(self.user, self.user_pesquisa)
         while interfacemusica.next is None or interfacemusica.next == self.avaliacaomsc:
             interfacemusica.iniciotela()
@@ -165,6 +172,8 @@ class Interface_main:
                 self.user_menu()
 
     def avaliacaoAlbum_menu(self) -> None:
+        limpar_terminal()
+        self.verificar_conexão()
         interfacealbum = AvaliacaoInterfaceAlb(self.user, self.user_pesquisa)
         while interfacealbum.next is None or interfacealbum.next == self.avaliacaoalbum:
             interfacealbum.iniciotela()
@@ -182,12 +191,14 @@ class Interface_main:
             return 0
         else:
             print("Falha na conexão, tente novamente mais tarde ou verifique sua conexão com a internet")
+            sys.exit()
 
     def interações_usuários(self) -> None:
         """
         Controla a abertura da interface de interações de usuários e direciona o próximo menu a ser aberto.
         """
         limpar_terminal()
+        self.verificar_conexão()
         while self.next == "Amizades" or isinstance(self.next, dict):
             self.next = Interface_interação(self.user, self.user_pesquisa)
             self.next = self.next.next

@@ -2,9 +2,14 @@ from Avaliacao import *
 from AbstractMenu import *
 from Auxiliares_uteis import *
 
-
 class AvaliacaoInterMsc(InterfaceAvaliacao):
     def __init__(self, idUser, idmusica):
+        """
+        Inicializa a interface de avaliação de músicas.
+
+        :param idUser: ID do usuário.
+        :param idmusica: ID da música.
+        """
         self.avaliacao = Avaliacao()
         self.user = idUser
         self.musica = idmusica
@@ -19,8 +24,10 @@ class AvaliacaoInterMsc(InterfaceAvaliacao):
             "5 - Me mostre os comentários que as pessoas estão fazendo sobre essa música"
         ]
         
-
     def iniciotela(self):
+        """
+        Exibe as informações da música e pergunta se o usuário deseja avaliá-la.
+        """
         print("Abrindo a música!! Aqui estão as informações dela:")
         musica = self.avaliacao.validar_musica(self.musica)
         if "likes" in musica:
@@ -42,7 +49,6 @@ class AvaliacaoInterMsc(InterfaceAvaliacao):
                 else:
                     print(f"{produtor},")
             print("==========================================================")
-        
         else:
             print("Não há produtores! :( Sabe-se lá como essa música veio ao mundo")
             print("==========================================================")
@@ -55,7 +61,6 @@ class AvaliacaoInterMsc(InterfaceAvaliacao):
                     print("==========================================================")
                 else:
                     print(f"{compositor},")
-        
         else:
             print("Não há compositores! Um caso de escritor fantasma em nossas mãos")
             print("==========================================================")
@@ -98,12 +103,14 @@ class AvaliacaoInterMsc(InterfaceAvaliacao):
                 print("...")
                 print("...")
                 self.next = "Navegação"
-
                 break  # Sai do loop enquanto a opção for válida
             else:
                 print("Opção inválida, tente novamente.")
         
     def render(self):
+        """
+        Renderiza o menu de opções para avaliação da música.
+        """
         margem = '=' * (len(self.title) + 5)
         print(margem)
         print(f"|| {self.title} ||")
@@ -113,6 +120,9 @@ class AvaliacaoInterMsc(InterfaceAvaliacao):
             print(option)
     
     def finalAcao(self):
+        """
+        Exibe as opções finais após uma ação e processa a escolha do usuário.
+        """
         print("deu certo até aqui")
         print("O que você deseja fazer agora?")
         print("1 - Fazer outra pesquisa")
@@ -122,7 +132,6 @@ class AvaliacaoInterMsc(InterfaceAvaliacao):
 
         if next_option == 1:
             self.next = "Navegação"
-
         elif next_option == 2:
             self.next = "Musica"
             self.render()
@@ -133,6 +142,11 @@ class AvaliacaoInterMsc(InterfaceAvaliacao):
             self.finalAcao()
 
     def next1(self, option: int):
+        """
+        Processa a opção escolhida pelo usuário no menu de avaliação.
+
+        :param option: Opção escolhida pelo usuário.
+        """
         clear_screen()  # limpa a tela ao iniciar um novo menu
         
         if option == 1:
@@ -140,35 +154,29 @@ class AvaliacaoInterMsc(InterfaceAvaliacao):
             print(like)
             print("==========================================================")
             self.finalAcao()
-        
         elif option == 2:
             deslike = self.avaliacao.desfazerLike(self.musica, self.user)
             print(deslike)
             print("==========================================================")
             self.finalAcao()
-
         elif option == 3:
             nota = int(input("De uma a 5 estrelas, qual nota você quer dar pra essa música?"))
             darnota = self.avaliacao.darNota(self.musica, self.user, nota)
             print(darnota)
             print("==========================================================")
             self.finalAcao()
-
         elif option == 4:
             comentario = input("Sou todo ouvidos! Me conta o que você tem a dizer:")
             comt = self.avaliacao.comentar(self.musica, self.user, comentario)
             print(comt)
             print("==========================================================")
             self.finalAcao()
-
         elif option == 5:
             comments = self.avaliacao.exibirComentarios()
             print(comments)
             self.finalAcao()
-
         else:
             op = int(input("Opção inválida! Tente novamente."))
             self.next1(op)
 
         return self
-

@@ -87,6 +87,8 @@ class Interface_interação(Menu):
             else:
                  self.user.aceitar_pedido(amizades[escolha-1])
                  self.next="Amizades"
+                 result = self.search.get_by_id(ObjectId(self.user.lista_pedidos[escolha-1]))
+                 print(f"Agora você e {result['name']} são amigos!")
                  return 0 
 
     

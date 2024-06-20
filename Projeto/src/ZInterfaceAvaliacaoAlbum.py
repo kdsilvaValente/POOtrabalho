@@ -1,10 +1,15 @@
 from Avaliacao import *
 from AbstractMenu import *
 from Auxiliares_uteis import *
-            
 
 class AvaliacaoInterfaceAlb(InterfaceAvaliacao):
     def __init__(self, idUser, idalbum):
+        """
+        Inicializa a interface de avaliação de álbuns.
+        
+        :param idUser: ID do usuário.
+        :param idalbum: ID do álbum.
+        """
         self.avaliacao = Avaliacao()
         self.user = idUser
         self.album = idalbum
@@ -18,6 +23,9 @@ class AvaliacaoInterfaceAlb(InterfaceAvaliacao):
         ]
 
     def finalAcao(self):
+        """
+        Exibe as opções finais após uma ação e processa a escolha do usuário.
+        """
         print("O que você deseja fazer agora?")
         print("1 - Fazer outra pesquisa")
         print("2 - Mais ações com esse álbum!")
@@ -26,7 +34,6 @@ class AvaliacaoInterfaceAlb(InterfaceAvaliacao):
 
         if next_option == 1:
             self.next = "Navegação"
-
         elif next_option == 2:
             self.next = "Album"
             self.render()
@@ -36,8 +43,10 @@ class AvaliacaoInterfaceAlb(InterfaceAvaliacao):
             print("Opção inválida.")
             self.finalAcao()
 
-
     def iniciotela(self):
+        """
+        Exibe as informações do álbum e pergunta se o usuário deseja avaliá-lo.
+        """
         print("Abrindo o álbum!! Aqui estão as informações dele:")
         album = self.avaliacao.validar_album(self.album)
         if "favoritados" in album:
@@ -52,7 +61,6 @@ class AvaliacaoInterfaceAlb(InterfaceAvaliacao):
                     print("==========================================================")
                 else:
                     print(f"{musica},")
-        
 
         while True:
             bool_str = input("Deseja avaliar esse álbum? Responda com 1 para sim e 0 para não:\n")
@@ -70,8 +78,11 @@ class AvaliacaoInterfaceAlb(InterfaceAvaliacao):
                 break  # Sai do loop enquanto a opção for válida
             else:
                 print("Opção inválida, tente novamente.")
-    
+
     def render(self):
+        """
+        Renderiza o menu de opções para avaliação do álbum.
+        """
         margem = '=' * (len(self.title) + 5)
         print(margem)
         print(f"|| {self.title} ||")
@@ -79,8 +90,13 @@ class AvaliacaoInterfaceAlb(InterfaceAvaliacao):
 
         for option in self.options:
             print(option)
-    
+
     def next1(self, option: int):
+        """
+        Processa a opção escolhida pelo usuário no menu de avaliação.
+
+        :param option: Opção escolhida pelo usuário.
+        """
         clear_screen()  # limpa a tela ao iniciar um novo menu
         
         if option == 1:
@@ -88,29 +104,23 @@ class AvaliacaoInterfaceAlb(InterfaceAvaliacao):
             print(like)
             print("==========================================================")
             self.finalAcao()
-
         elif option == 2:
             deslike = self.avaliacao.desfavoritarAlbum(self.album, self.user)
             print(deslike)
             print("==========================================================")
             self.finalAcao()
-
         elif option == 3:
             comentario = input("Sou todo ouvidos! Me conta o que você tem a dizer:")
             comt = self.avaliacao.comentar(self.album, self.user, comentario)
             print(comt)
             print("==========================================================")
             self.finalAcao()
-        
         elif option == 4:
             comments = self.avaliacao.exibirComentariosAlbum()
             print(comments)
             print("==========================================================")
             self.finalAcao()
-
         else:
             print("Opção inválida! Tente novamente.")
             op = int(input("Escolha uma opção válida: "))
             self.next1(op)
-
-        return self

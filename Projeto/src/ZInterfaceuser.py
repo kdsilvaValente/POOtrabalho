@@ -106,7 +106,7 @@ class User_interface(Menu):
                     
                     
                 elif choice == 2: #atualizando email (editar)
-                    new_email = input("Digite o novo email: ")
+                    new_email =  self.chose_email()
                     self.user.email = new_email
                     print("Email atualizado com sucesso!")
                 
@@ -267,11 +267,13 @@ class User_interface(Menu):
         """
         while True:
             try:
-                password = str(input("Confirme sua senha atual antes de deletar o perfil:"))
+                password = str(input("Confirme sua senha atual antes de deletar o perfil, ou digite 'CANCELAR' para desisitir da ação, até porque esse aplicativo é muito bom!:"))
                 if password == self.user.password:
                     self.user.delete()
                     print("Perfil deletado")
                     self.next = "login"
+                    return 0
+                elif password == "CANCELAR":
                     return 0
                 else:
                     return KeyError

@@ -4,8 +4,17 @@ from bson.objectid import ObjectId
 
 class Login:
     def __init__(self) -> None:
-        self._iduser=0
+        self._iduser=0 #criado para armazenar o id do usuário após obte-lo
     def login(self, email: str, password: str)-> str:
+
+        """"
+        :param email: email do usuário 
+        :param password: senha do usuário 
+
+        realiza o login no banco de dados
+
+
+        """
         self.collection = getconnection.get_collection("User")        
         # Verifica se o usuário já existe no banco de dados com base na senha e e-mail
         search = {
@@ -26,11 +35,20 @@ class Login:
       
 
     def State_update(self)->None:
-          self.collection.find_one_and_update(
+        """
+        realiza a altreação de estado do usuário de logado para não logado
+        """
+        self.collection.find_one_and_update(
                 {"_id": self.isthere_user["_id"]}, 
                 {"$set": {"isonline": False}}
             )
     def ist_here_user(self, email: str, password: str)-> int:
+        """
+        :param email: email do usuário 
+        :param password: senha do usuário 
+
+        testagem de senha e email
+        """
         search_password = {
             "password": password,
         }
@@ -50,9 +68,15 @@ class Login:
     
     @property
     def id(self)-> str:
+        """
+        retorna o id do usuário
+        """
         return self._iduser
     @property
     def state(self)-> str:
+        """
+        retorna o status do usuário, se está logado ou não
+        """
         result=self.collection.find_one(
                 {"_id": ObjectId(self.id)})
         return  result["isonline"] 
