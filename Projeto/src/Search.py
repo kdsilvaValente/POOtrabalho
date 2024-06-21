@@ -42,7 +42,7 @@ class Search:
         """
         
          #pesquisa um objeto com base no id
-        results=[]
+        # results=[]
         results=self.music_collection.find_one({"_id": id})
         return results
 

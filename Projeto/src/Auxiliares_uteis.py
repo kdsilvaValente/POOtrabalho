@@ -69,8 +69,22 @@ def limpar_terminal():
         os.system("clear")
 
 def testar_tamanho_vetor(tamanho, escolha)->bool:
+    """
+    :param tamanho: tamanho do vetor
+    :param escolha: número escolhido
+
+    garante que a escolha não ultrapasse o limite do vetor
+    """
     if escolha > tamanho:
         print("Escolha um número existente!")
         return False
     else:
         return True
+    
+def printando_divisão()->None:
+    print("-"*40)
+
+
+def printando_divisão_2()->None:
+        print("="*40)
+

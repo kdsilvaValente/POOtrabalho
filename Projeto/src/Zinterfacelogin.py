@@ -19,9 +19,9 @@ class Interface_login(Menu):
             limpar_terminal()
             self.render()
             try:
-                print("-------------------------------")
+                printando_divisão()
                 email = str(input("Digite seu email: "))
-                print("-------------------------------")
+                printando_divisão()
                 senha = str(input("Digite sua senha: "))
                 result = self.login_instance.login(email, senha)
               
@@ -39,11 +39,12 @@ class Interface_login(Menu):
                     raise Exception
             except Exception as e:
                 print("Erro:", e)
-                print("Deseja tentar novamente?")
-                print("1. Sim")
-                print("2. Não")
+                print("Deseja tentar novamente querido(a)?")
+                print("Digite 1 para sim e qualquer número para não")
                 option = int(input())
-                if option == 2:
+                if option == 1:
+                    limpar_terminal()
+                else:
                     limpar_terminal()
                     return 0
 

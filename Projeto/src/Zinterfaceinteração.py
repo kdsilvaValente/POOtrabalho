@@ -33,7 +33,7 @@ class Interface_interação(Menu):
                 self.render()
                 self.display_main_menu()
                 option = int(input("Escolha uma opção: "))
-                print("-------------------------------")
+                printando_divisão()
                 if 1 <= option <= 3:
                     if option != 3:
                         self.display_main_menu_option(option)
@@ -53,7 +53,7 @@ class Interface_interação(Menu):
         print(emoji.emojize("1. Ver lista de amigos :people_hugging:"))
         print(emoji.emojize("2. Ver lista de pedidos de amizade :envelope:"))
         print(emoji.emojize("3. Voltar :BACK_arrow: "))
-        print("-------------------------------")
+        printando_divisão()
     
     def display_main_menu_option(self, option: int) -> None:
         """
@@ -95,7 +95,47 @@ class Interface_interação(Menu):
                     print("Opção inválida. Por favor, escolha uma opção de 1 a 2.")
             except ValueError:
                 print("Digite um número válido.")
+    def ver_perfil_2(self, id: str) -> None:
+        """
+        Abre o perfil de um usuário específico.
 
+        :param id: ID do usuário a ser visualizado.
+        """
+        result = self.search.get_by_id(ObjectId(id))
+        print(f"Nome: {result['name']}")
+        print(f"Gênero: {result['gender']}")
+        status = "online" if result['isonline'] else "offline"
+        print(emoji.emojize(f"Status: {status}"))
+        user_amigo = id
+        user_amigo_abrir = User(id)
+        dados = user_amigo_abrir.musicas 
+        if dados ==[]:
+            print(f"{result['name']} não tem músicas favoritos ainda")
+        else:
+            print("Musicas favoritas:")
+            for i in range(len(dados)):
+                search = Search("Musica")
+                result = search.get_by_id(ObjectId(dados[i]))
+                if result is not None:
+                   print(f"{i+1}. {result['titulo']}")
+        user_amigo = id
+        user_amigo_abrir = User(id)
+        dados = user_amigo_abrir.album 
+        
+        if dados ==[]:
+            print(f"{result['name']} não tem albuns favoritos ainda")
+        else:
+            print("Albuns favoritos:")
+            for i in range(len(dados)):
+                search = Search("Albuns")
+                result = search.get_by_id(ObjectId(dados[i]))
+                if result is not None:
+                     print(f"{i+1}. {result['album']}")
+        option = int(input("Clique qualquer tecla para voltar: "))
+        limpar_terminal()
+        self.next = "Amizades"  # define amizades como próximo menu
+        return 0
+              
     def pedir_amizade(self, id: ObjectId) -> None:
         """
         Realiza o pedido de amizade a um usuário.
@@ -146,11 +186,11 @@ class Interface_interação(Menu):
 
         :param friends: Lista de IDs dos amigos do usuário.
         """
-        print("-------------------------------")
+        printando_divisão()
         print(emoji.emojize("1. Ver perfil de algum amigo :people_hugging: "))
         print(emoji.emojize("2. Desfazer amizade com algum amigo :cross_mark: "))
         print(emoji.emojize("3. Voltar :BACK_arrow: "))
-        print("-------------------------------")
+        printando_divisão()
         while True:
             try:
                 option = int(input("Escolha uma opção: "))
@@ -161,9 +201,8 @@ class Interface_interação(Menu):
                             if not testar_tamanho_vetor(len(friends), escolha):
                                 pass
                             else:
-                                self.ver_perfil(friends[escolha-1])
+                                self.ver_perfil_2(friends[escolha-1])
                                 self.next = "Amizades"
-                                print("Amizade desfeita!")
                                 return 0 
                     elif option == 2:
                         self.excluir_amigo(friends)

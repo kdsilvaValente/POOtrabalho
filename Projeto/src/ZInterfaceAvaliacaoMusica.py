@@ -33,14 +33,14 @@ class AvaliacaoInterMsc(InterfaceAvaliacao):
         musica = self.avaliacao.validar_musica(self.musica)
         if "likes" in musica:
             print(f"A música {musica['titulo']} tem {musica['likes']} likes!")
-            print("==========================================================")
+            printando_divisão_2()
         else:
             print(f"A música {musica['titulo']} não foi favoritada ainda... Mude isso!!")
-            print("==========================================================")
+            printando_divisão_2()
 
         print("Outras informações sobre ela!! Veja:")
         print(f"Ela é a faixa {musica['numero']} do álbum {musica['album']}.")
-        print("==========================================================")
+        printando_divisão_2()
         
         if "produtores" in musica:
             print("Foi produzida por:")
@@ -49,22 +49,22 @@ class AvaliacaoInterMsc(InterfaceAvaliacao):
                     print(f"e {produtor}.")
                 else:
                     print(f"{produtor},")
-            print("==========================================================")
+            printando_divisão_2()
         else:
             print("Não há produtores! :( Sabe-se lá como essa música veio ao mundo")
-            print("==========================================================")
+            printando_divisão_2()
         
         if "compositores" in musica:
             print("Foi composta por:")
             for i, compositor in enumerate(musica["compositores"]):
                 if i == len(musica["compositores"]) - 1:
                     print(f"e {compositor}.")
-                    print("==========================================================")
+                    printando_divisão_2()
                 else:
                     print(f"{compositor},")
         else:
             print("Não há compositores! Um caso de escritor fantasma em nossas mãos")
-            print("==========================================================")
+            printando_divisão_2()
         
         if "genero" in musica: 
             i = len(musica["genero"])
@@ -77,22 +77,22 @@ class AvaliacaoInterMsc(InterfaceAvaliacao):
                         print(f"e {gen}.")
                     else:
                         print(f"{gen},")
-                print("==========================================================")
+                printando_divisão_2()
             else:
                 print("Essa música é tão diferente que não consigo pensar em um gênero pra ela...")
-                print("==========================================================")
+                printando_divisão_2()
                 
         print(f"Duração de {musica['duracao']}")
-        print("==========================================================")
+        printando_divisão_2()
         if "avaliacao final" in musica:
             print(f"A média da avaliação dos usuários dessa música é de {musica['avaliacao final']} estrelas!")
-            print("==========================================================")
+            printando_divisão_2()
         else:
             print(f"A música {musica['titulo']} não foi avaliada ainda... Mude isso!!")
-            print("==========================================================")
+            printando_divisão_2()
 
         while True:
-            bool_str = input("Deseja avaliar a música? Responda com 1 para sim e 0 para não:\n")
+            bool_str = input("Deseja realizar alguma ação nessa música? Responda com 1 para sim e 0 para não:\n")
             if bool_str == '1':
                 self.render()
                 opcao = int(input("Digite a opção desejada: "))
@@ -153,30 +153,30 @@ class AvaliacaoInterMsc(InterfaceAvaliacao):
         if option == 1:
             like = self.avaliacao.darLike(self.musica, self.user)
             print(like)
-            print("==========================================================")
+            printando_divisão_2()
             self.finalAcao()
         elif option == 2:
             deslike = self.avaliacao.desfazerLike(self.musica, self.user)
             print(deslike)
-            print("==========================================================")
+            printando_divisão_2()
             self.finalAcao()
         elif option == 3:
             nota = int(input("De uma a 5 estrelas, qual nota você quer dar pra essa música?"))
             darnota = self.avaliacao.darNota(self.musica, self.user, nota)
             print(darnota)
-            print("==========================================================")
+            printando_divisão_2()
             self.finalAcao()
         elif option == 4:
             comentario = input("Sou todo ouvidos! Me conta o que você tem a dizer:")
             comt = self.avaliacao.comentar(self.musica, self.user, comentario)
             print(comt)
-            print("==========================================================")
+            printando_divisão_2()
             self.finalAcao()
         elif option == 5:
             comments = self.avaliacao.exibirComentarios(self.musica)
             for comment in comments:
                 print(comment)
-            print("==========================================================")
+            printando_divisão_2()
             self.finalAcao()
         elif option == 6:
             self.iniciotela()

@@ -1,9 +1,11 @@
 from User import User
 import emoji
 import sys  # para usar o sys.exit()
-from Auxiliares_uteis import limpar_terminal
+from Auxiliares_uteis import limpar_terminal, printando_divisão
 from AbstractMenu import *
 import re
+from bson.objectid import ObjectId
+from Search import*
 
 
 class User_interface(Menu):
@@ -30,7 +32,7 @@ class User_interface(Menu):
                 self.render()
                 self.display_main_menu()
                 option = int(input("Escolha uma opção: "))
-                print("-------------------------------")
+                printando_divisão()
                 if 1 <= option <= 6:
                     if option != 6:
                         self.display_main_menu_option(option)
@@ -43,15 +45,15 @@ class User_interface(Menu):
                 print("Digite um número válido.")
 
     def display_main_menu(self) -> None: #printa o menu principal na tela
-        print("-------------------------------")
-        print(emoji.emojize("Bem vindo ao Menu Principal :grinning_face:"))
-        print("1. Ver perfil")
-        print("2. Editar informação do perfil")
-        print("3. Deletar perfil")
-        print("4. Navegação")
-        print("5. Gerenciar amizades")
-        print("6. Sair")
-        print("-------------------------------")
+        printando_divisão()
+        print(emoji.emojize("Bem vindo ao Menu Principal:grinning_face:"))
+        print(emoji.emojize("1. Ver perfil:grinning_face_with_smiling_eyes:"))
+        print(emoji.emojize("2. Editar informação do perfil:face_with_monocle:"))
+        print(emoji.emojize("3. Deletar perfil:confused_face:"))
+        print(emoji.emojize("4. Navegação:rocket:"))
+        print(emoji.emojize("5. Gerenciar amizades:people_hugging:"))
+        print(emoji.emojize("6. Sair:pirate_flag:"))
+        printando_divisão()
 
     def display_main_menu_option(self, option: int) -> None: #direciona a função de acordo com a opção inicial escolhida
         if option == 1:
@@ -76,11 +78,32 @@ class User_interface(Menu):
         print(f"Gênero: {self.user.gender}")
         print(f"Telefone: {self.user.phone_number}")
         print(emoji.emojize(f"Status:\"{self.user.status}\"") ) 
-        print("-------------------------------")
-    #     self.favoritos()
-    # def favoritos(self):
-    #     pass
+        printando_divisão()
+        self.exibir_favoritos()
+    def exibir_favoritos(self):
+        dados = self.user.musicas 
+        if dados ==[]:
+            print("você não tem músicas favoritos ainda")
+        else:
+            print("Musicas favoritas:")
+            for i in range(len(dados)):
+                search = Search("Musica")
+                result = search.get_by_id(ObjectId(dados[i]))
+                if result is not None:
+                   print(f"{i+1}. {result['titulo']}")
+        dados = self.user.album 
+        
+        if dados ==[]:
+            print("você não tem albuns favoritos ainda")
+        else:
+            print("Albuns favoritos:")
+            for i in range(len(dados)):
+                search = Search("Albuns")
+                result = search.get_by_id(ObjectId(dados[i]))
+                if result is not None:
+                     print(f"{i+1}. {result['album']}")
 
+        
 
         
      
@@ -88,7 +111,7 @@ class User_interface(Menu):
 
         while True: #controle de entrada para a atualização do perfil
             try:
-                print("-------------------------------")
+                printando_divisão()
                 print("O que deseja editar?")
                 print("1. Nome")
                 print("2. Email")
@@ -97,10 +120,12 @@ class User_interface(Menu):
                 print("5. Phone Number")
                 print("6. Status")
                 print(emoji.emojize("7. Voltar :BACK_arrow: "))
-                print("-------------------------------")
+                printando_divisão()
+
                 
                 choice = int(input("Escolha a opção de 1 a 7: "))
-                print("-------------------------------")
+                printando_divisão()
+
                 
                 if choice == 1: #atualizando nome
                     while True:
@@ -163,7 +188,7 @@ class User_interface(Menu):
 
     def chose_gender(self) -> str: #menu para escolher o gênero conforme opções idponíveis
         while True:#loop para controle de entrada
-            print("-------------------------------")
+            printando_divisão()
             print("Qual seu gênero?\n")
             print("1. Mulher trans")
             print("2. Homem trans")
@@ -173,9 +198,9 @@ class User_interface(Menu):
             print("6. Dois espíritos/Bigênero")
             print("7. Gênero neutro")
             print("8. Gênero fluído")
-            print("-------------------------------")
+            printando_divisão()
             print("Escolha um número  ou aperte 9 para cancelar:\n")
-            print("-------------------------------")
+            printando_divisão()
 
 
             escolha = int(input())
@@ -204,15 +229,14 @@ class User_interface(Menu):
 
 
     def new_profile_interface(self) -> None: #Cria um novo perfil para o usuário.
-
-        print("-------------------------------")
+        printando_divisão()
         name = self.name_create()
-        print("-------------------------------")
+        printando_divisão()
         email=self.chose_email()
-        print("-------------------------------")
+        printando_divisão()
         gender = self.chose_gender()
         phone = str(input("Digite seu número com ddd: "))
-        print("-------------------------------")
+        printando_divisão()
         password = self.chose_password()
         user_data = {
             "name": name,
@@ -224,8 +248,8 @@ class User_interface(Menu):
         }
         user = User(None)
         user.newuser(user_data) #chama a função na classe de usuário para criar o perfil
-        # limpar_terminal()
-        print("Perfil Criado")
+        limpar_terminal()
+        print("Perfil Criado, faça seu primeiro login!")
     def name_create(self):
            while True:
              name = input("Digite o seu nome: ")
@@ -244,13 +268,20 @@ class User_interface(Menu):
         """
         password = "0"
         confirm_password = ""
-        while password != confirm_password:
-            password = str(input("Escolha uma senha: "))
+        while True:
+            while True:
+                password = str(input("Escolha uma senha de pelo menos 6 dígitos e no máximo 8: "))
+                if len(password) < 6 or len(password) > 8:
+                    print("Mona, segue as instruções! Sua senha não condiz com o que pedimos!")
+                else:
+                    break
+
             confirm_password = str(input("Confirme sua senha: "))
             if password != confirm_password:
                 print("Sua confirmação de senha não condiz com a senha escolhida, tente novamente!")
             else:
                 return password
+
 
     def chose_email(self) -> str:
         """

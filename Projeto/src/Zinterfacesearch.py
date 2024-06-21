@@ -60,13 +60,13 @@ class Interface_search(Menu):
         """
         Exibe o menu principal na tela.
         """
-        print("-------------------------------")
-        print('O que deseja pesquisar?')
-        print("1. Música")
-        print("2. Artista")
-        print("3. Album")
-        print("4. Pessoas")
-        print(emoji.emojize("5. Voltar :BACK_arrow: "))
+        printando_divisão()
+        print(emoji.emojize('O que deseja pesquisar?:star-struck:'))
+        print(emoji.emojize("1. Música:musical_keyboard:"))
+        print(emoji.emojize("2. Artista:performing_arts:"))
+        print(emoji.emojize("3. Album:headphone:"))
+        print(emoji.emojize("4. Pessoas:rainbow_flag:"))
+        print((emoji.emojize("5. Voltar :BACK_arrow: ")))
 
     def display_main_menu_option(self, option: int) -> None:
         """
@@ -138,11 +138,11 @@ class Interface_search(Menu):
         """
         result_length = len(result)
         for i in range(result_length):
-            print("-------------------------------")
+            printando_divisão()
             print(f"{i + 1}:")
             print(f"Título: {(result[i])['titulo']}")
             print(f"Artista: {(result[i])['artista']}")
-            print("-------------------------------")
+            printando_divisão()
         self.result = result
 
     def print_album(self, result: list[dict[str, str]]) -> None:
@@ -164,9 +164,15 @@ class Interface_search(Menu):
         print('O que deseja fazer?:')
         print("1. Abrir música")
         print(emoji.emojize("2. Voltar :BACK_arrow: "))
-        options = int(input("Escolha uma opção: "))
-        self.options_value = options
-        self.result_option_musica()
+        while True:
+            options = int(input("Escolha uma opção: "))
+            if options <1 or options>2:
+                print("escolha uma opção válida")
+            else:
+                self.options_value = options
+                self.result_option_musica()
+                return 0
+        
 
     def menu_result_album(self) -> None:
         """
@@ -175,11 +181,16 @@ class Interface_search(Menu):
         print('O que deseja fazer?:')
         print("1. Abrir álbum")
         print("2. Abrir música do álbum")
-        print("3. Visitar perfil")
-        print(emoji.emojize("4. Voltar :BACK_arrow: "))
-        options = int(input("Escolha uma opção: "))
-        self.options_value = options
-        self.result_option_album()
+        print(emoji.emojize("3. Voltar :BACK_arrow: "))
+        while True:
+            options = int(input("Escolha uma opção: "))
+            if options <1 or options>3:
+                print("escolha uma opção válida")
+            else:
+                self.options_value = options
+                self.result_option_album()
+                return 0      
+        
 
     def result_option_album(self) -> int:
         """
@@ -224,15 +235,9 @@ class Interface_search(Menu):
                             limpar_terminal()
                             return 0
         elif self.options_value == 3:
-            while True:
-                number = int(input("Qual perfil? Digite o número: "))
-                if not testar_tamanho_vetor(len(self.result), number):
-                    pass
-                else:
-                    self.id_result = self.result[number - 1]['_id']
-                    print(self.id_result)
-                    limpar_terminal()
-                    return 0
+            return 0
+            
+            
         else:
             self.options()  # Retornar para buscas
 
@@ -241,15 +246,18 @@ class Interface_search(Menu):
         Realiza a ação nos resultados de músicas conforme a opção escolhida.
         """
         if self.options_value == 1:
-            number= int(input("Qual música? Digite o número:"))
-            self.id_result = (self.result[number-1])['_id']
-            self.dicionario = {"next": "Musica","id_pesquisa": self.id_result}
-            self.next = self.dicionario
-            limpar_terminal()
-            print("Entrou na search musica")
-            return 0
-        else:
-            self.options()  # Retornar para buscas
+            while True:
+                number= int(input("Qual música? Digite o número:"))
+                if not testar_tamanho_vetor(len(self.result) ,number):
+                    pass
+                else:
+                    self.id_result = (self.result[number-1])['_id']
+                    self.dicionario = {"next": "Musica","id_pesquisa": self.id_result}
+                    self.next = self.dicionario
+                    limpar_terminal()
+                    return 0
+            else:
+                self.options()  # Retornar para buscas
 
     def print_pessoas(self, result: list[dict[str, str]]) -> None:
         """
@@ -267,8 +275,13 @@ class Interface_search(Menu):
         print('O que deseja fazer?:')
         print("1. Ver perfil de um usuário")
         print(emoji.emojize("2. Voltar :BACK_arrow: "))
-        self.options_value = int(input("Escolha uma opção: "))
-        self.result_option_pessoa()
+        while True:
+                self.options_value = int(input("Escolha uma opção: "))
+                if self.options_value <1 or self.options_value>2:
+                    print("escolha uma opção válida")
+                else:
+                     self.result_option_pessoa()
+                     return 0
 
     def result_option_pessoa(self): 
         """

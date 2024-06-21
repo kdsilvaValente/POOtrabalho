@@ -36,7 +36,7 @@ class menuAlbum(Menu):
             try:
 
                 clear_screen()
-                print("-------------------------------")
+                printando_divisão()
                 print("Digite as informações do album que deseja adicionar")
                 
                 album_titulo = str(input("Nome: "))
@@ -84,7 +84,6 @@ class menuAlbum(Menu):
             try:
 
                 clear_screen()
-                print('aaaaaaaaaaaaaaaaaaaa')
                 print("Editar album")
                 album = str(input("Qual o nome do álbum que você deseja alterar: "))
                 id = auxiliar.buscar_album(album)

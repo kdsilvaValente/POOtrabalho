@@ -7,6 +7,7 @@ from ZInterfaceAvaliacaoMusica import *
 from ZInterfaceAvaliacaoAlbum import *
 from connection_options.connection import DBconnectionHandler # import run para testa conexão 
 import sys
+import emoji
 
 class Interface_main:
     """
@@ -37,9 +38,11 @@ class Interface_main:
             try:
                 self.verificar_conexão()
                 print("Bem-vindo ao albumatic, o que deseja fazer?")
-                print("1. Login")
-                print("2. Criar perfil")
-                print("3. Realizar ação como Administrador")
+                print(emoji.emojize("1. Login:partying_face:"))
+                print(emoji.emojize("2. Criar perfil:exploding_head: "))
+                print(emoji.emojize("3. Realizar ação como Administrador:nerd_face:"))
+                print(emoji.emojize("4. Encerrar programa:loudly_crying_face:"))
+
 
                 option = int(input())
                 if option == 1:
@@ -48,6 +51,10 @@ class Interface_main:
                     self.create_profile()
                 elif option == 3:
                     self.admin_login()
+                elif option == 4:
+                    limpar_terminal()
+                    print("encerrando Albumagic...")
+                    sys.exit()
                 else:
                     print(emoji.emojize("Opção inválida. Por favor, escolha uma opção de 1 a 2:prohibited: "))
             except ValueError:

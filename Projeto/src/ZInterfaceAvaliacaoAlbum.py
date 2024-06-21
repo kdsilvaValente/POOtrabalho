@@ -62,12 +62,12 @@ class AvaliacaoInterfaceAlb(InterfaceAvaliacao):
                 # Formatando a saída dependendo da posição da música na lista
                 if i == len(album["musicas"]) - 1:
                     print(f"e {musica['titulo']}.")
-                    print("==========================================================")
+                    printando_divisão_2()
                 else:
                     print(f"{musica['titulo']},")
 
         while True:
-            bool_str = input("Deseja avaliar esse álbum? Responda com 1 para sim e 0 para não:\n")
+            bool_str = input("Deseja realizar alguma ação nesse álbum? Responda com 1 para sim e 0 para não:\n")
             if bool_str == '1':
                 self.render()
                 opcao = int(input("Digite a opção desejada:"))
@@ -106,24 +106,24 @@ class AvaliacaoInterfaceAlb(InterfaceAvaliacao):
         if option == 1:
             like = self.avaliacao.favoritarAlbum(self.album, self.user)
             print(like)
-            print("==========================================================")
+            printando_divisão_2()
             self.finalAcao()
         elif option == 2:
             deslike = self.avaliacao.desfavoritarAlbum(self.album, self.user)
             print(deslike)
-            print("==========================================================")
+            printando_divisão_2()
             self.finalAcao()
         elif option == 3:
             comentario = input("Sou todo ouvidos! Me conta o que você tem a dizer:")
             comt = self.avaliacao.comentarAlbum(self.album, self.user, comentario)
             print(comt)
-            print("==========================================================")
+            printando_divisão_2()
             self.finalAcao()
         elif option == 4:
             comments = self.avaliacao.exibirComentariosAlbum(self.album)
             for comment in comments:
                 print(comment)
-            print("==========================================================")
+            printando_divisão_2()
             self.finalAcao()
 
         else:
