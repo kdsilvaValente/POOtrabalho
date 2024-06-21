@@ -90,7 +90,7 @@ class User_interface(Menu):
                 search = Search("Musica")
                 result = search.get_by_id(ObjectId(dados[i]))
                 if result is not None:
-                   print(f"{i+1}. {result['titulo']}")
+                   print(f"{i}. {result['titulo']}")
         dados = self.user.album 
         
         if dados ==[]:
@@ -101,7 +101,7 @@ class User_interface(Menu):
                 search = Search("Albuns")
                 result = search.get_by_id(ObjectId(dados[i]))
                 if result is not None:
-                     print(f"{i+1}. {result['album']}")
+                     print(f"{i}. {result['album']}")
 
         
 
