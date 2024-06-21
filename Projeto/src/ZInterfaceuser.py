@@ -75,7 +75,15 @@ class User_interface(Menu):
         print(f"Email: {self.user.email}")
         print(f"Gênero: {self.user.gender}")
         print(f"Telefone: {self.user.phone_number}")
-        print(emoji.emojize(f"Status:\"{self.user.status}\"") )  
+        print(emoji.emojize(f"Status:\"{self.user.status}\"") ) 
+        print("-------------------------------")
+    #     self.favoritos()
+    # def favoritos(self):
+    #     pass
+
+
+        
+     
     def update_profile(self) -> None:  #Permite ao usuário editar as informações do perfil.
 
         while True: #controle de entrada para a atualização do perfil

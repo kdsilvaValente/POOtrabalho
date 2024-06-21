@@ -30,6 +30,8 @@ class User:
                 self._lista_pedidos = self.data["ask_friends"]
                 self._lista_favoritos = self.data.get("favoritos", [])
                 self._status = self.data.get("status", "")
+                self._musicas = self.data.get("musicas_curtidas", [])
+                self._album = self.data.get("albuns_favoritados", [])
                 self.teste_parametros()
             else:
                 raise ValueError("Usuário não encontrado com o ID fornecido.")
@@ -87,6 +89,17 @@ class User:
                 {"$set": {"status": ""}}
             )
 
+        if "musicas_curtidas" not in self.data:
+            self.collection.update_one(
+                {"_id": self.user_id},
+                {"$set": {"musicas_curtidas": []}}
+            )
+        
+        if "albuns_favoritados" not in self.data:
+            self.collection.update_one(
+                {"_id": self.user_id},
+                {"$set": {"albuns_favoritados": []}}
+            )
     def delete(self) -> None:
         """
         deleta usuário do banco de dados
@@ -255,5 +268,20 @@ class User:
         self.collection.find_one_and_update({"_id": self.user_id}, {"$set": {"status": value}})
         self._status = value
 
+    @property
+    def musicas(self) -> str:
+        """
+        Retorna as musicas favoritas usuário.
+        """
+        return self._musicas
+    
+    @property
+    def album(self) -> str:
+        """
+        Retorna as musicas favoritas usuário.
+        """
+        return self._album
+
+    
 
     
