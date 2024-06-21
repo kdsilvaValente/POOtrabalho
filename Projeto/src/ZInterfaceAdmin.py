@@ -71,7 +71,7 @@ class menuAdmin(Menu):
         metodo next: capaz de seguir o que o usuario deseja realizar
         '''
 
-        clear_screen()
+        limpar_terminal()
         if option == 1:
             self.next = "Musica_edição"
 

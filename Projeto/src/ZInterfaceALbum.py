@@ -54,7 +54,7 @@ class menuAlbum(Menu):
             
             try:
 
-                clear_screen()
+                limpar_terminal()
                 print("=" * 30)
                 print("{:^30}".format("Adicionar Álbum"))
                 print("=" * 30) 
@@ -91,7 +91,7 @@ class menuAlbum(Menu):
                 
                 adicionar_mais_albuns = input("> Deseja adicionar outro album? (s/n): ").strip().lower()
                 if adicionar_mais_albuns != 's':
-                    clear_screen()
+                    limpar_terminal()
                     break
 
             except ValueError:
@@ -109,14 +109,14 @@ class menuAlbum(Menu):
 
             try:
 
-                clear_screen()
+                limpar_terminal()
                 print("Editar album")
                 album = str(input("Qual o nome do álbum que você deseja alterar: "))
                 id = auxiliar.buscar_album(album)
                 album_data = getconnection.get_collection("Albuns").find_one({'_id': id})
                 print("")
 
-                print(" 1. TItulo do album\n"
+                print(" 1 Título do album\n"
                     "2. Artista\n",
                     "3. Gênero\n", 
                     "4. Ano\n", 
@@ -147,7 +147,7 @@ class menuAlbum(Menu):
                     
                 editar_mais = input("> Deseja realizar mais alterações? (s/n): ").strip().lower()
                 if editar_mais != 's':
-                    clear_screen()
+                    limpar_terminal()
                     break
             
             except ValueError:
@@ -171,7 +171,11 @@ class menuAlbum(Menu):
 
                 titulo = str(input("> Qual o nome do álbum que você deseja apagar: "))
                 id = auxiliar.buscar_album(titulo)
-                album_data = getconnection.get_collection("Albuns").find_one({'_id': id})
+                result_musicas = getconnection.get_collection("Albuns").find_one({'_id': id})
+                for i in range(len(result_musicas["musicas"])):
+                    getconnection.get_collection("Musica").find_one_and_delete({'_id':ObjectId(result_musicas["musicas"][i])})
+
+                album_data = getconnection.get_collection("Albuns").find_one_and_delete({'_id': id})
                 print("")
                 
                 if album_data:
@@ -188,7 +192,7 @@ class menuAlbum(Menu):
 
                 apagar_mais = input("> Deseja apagar outro álbum? (s/n): ").strip().lower()
                 if apagar_mais != 's':
-                    clear_screen()
+                    limpar_terminal()
                     break
 
             except ValueError:
@@ -217,7 +221,7 @@ class menuAlbum(Menu):
         metodo next: capaz de seguir o que o usuario deseja realizar
         '''
 
-        clear_screen()  
+        limpar_terminal()  
         if option == 1:
             self.render()
             self.adicionar_album()

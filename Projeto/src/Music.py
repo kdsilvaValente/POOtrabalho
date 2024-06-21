@@ -183,7 +183,6 @@ class Musica:
         print(f"Musica '{titulo}' atualizada com sucesso.")
 
         musica_atualizada = colecao_musicas.find_one({'_id': musica['_id']})
-        print(musica_atualizada)
 
     def apagar_musica(self):
 

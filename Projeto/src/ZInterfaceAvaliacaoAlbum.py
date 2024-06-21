@@ -101,7 +101,7 @@ class AvaliacaoInterfaceAlb(InterfaceAvaliacao):
 
         :param option: Opção escolhida pelo usuário.
         """
-        clear_screen()  # limpa a tela ao iniciar um novo menu
+        limpar_terminal()  # limpa a tela ao iniciar um novo menu
         
         if option == 1:
             like = self.avaliacao.favoritarAlbum(self.album, self.user)

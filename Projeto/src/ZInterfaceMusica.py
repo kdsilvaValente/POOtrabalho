@@ -4,6 +4,7 @@ from Excel import *
 from Auxiliares_uteis import *
 import emoji
 
+
 func_aux = Auxiliar()
 
 class menuMusica(Menu):
@@ -73,7 +74,7 @@ class menuMusica(Menu):
 
             try:
             
-                clear_screen()
+                limpar_terminal()
                 print("=" * 30)
                 print("{:^30}".format("Adicionar Música"))
                 print("=" * 30)     
@@ -97,13 +98,13 @@ class menuMusica(Menu):
 
                 adicionar_mais = input("> Deseja adicionar outra música? (s/n): ").strip().lower()
                 if adicionar_mais != 's':
-                    clear_screen()
+                    limpar_terminal()
                     break
 
             except ValueError:
                 print("Entrada inválida! Certifique-se de inserir os tipos de dados corretos.")
 
-            clear_screen()
+            limpar_terminal()
 
 
     def mudar_musica(self) -> None:
@@ -116,7 +117,7 @@ class menuMusica(Menu):
 
             try:
 
-                clear_screen()
+                limpar_terminal()
                 print("=" * 30)
                 print("{:^30}".format("Editar Música"))
                 print("=" * 30)    
@@ -157,7 +158,7 @@ class menuMusica(Menu):
                     
                 editar_mais = input("> Deseja adicionar outra música? (s/n): ").strip().lower()
                 if editar_mais != 's':
-                    clear_screen()
+                    limpar_terminal()
                     break
 
             except ValueError:
@@ -218,7 +219,7 @@ class menuMusica(Menu):
         metodo next: capaz de seguir o que o usuario deseja realizar
         '''
         
-        clear_screen()  
+        limpar_terminal()  
         if option == 1:
             self.render()
             self.adicionar_musica()

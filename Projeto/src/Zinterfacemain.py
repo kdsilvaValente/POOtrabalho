@@ -92,7 +92,7 @@ class Interface_main:
         """
         Controla a abertura da interface de login de administrador e direciona o próximo menu a ser aberto após o login.
         """
-        clear_screen()
+        limpar_terminal()
         self.verificar_conexão()
         self.interface_login = Interface_login()
         user_id = self.interface_login.login()
@@ -144,7 +144,7 @@ class Interface_main:
         Controla a abertura da interface de administrador e direciona o próximo menu a ser aberto.
         """
         
-        clear_screen()
+        limpar_terminal()
         if self.user is None or not self.user.is_admin:
             print("Acesso negado. Você não possui permissão de administrador.")
             return
@@ -240,7 +240,7 @@ class Interface_main:
         método de interface para acessar o menu musica
         '''
         
-        clear_screen()
+        limpar_terminal()
         menu_musica = menuMusica()  
 
         while menu_musica.next != "Voltar":
@@ -255,7 +255,7 @@ class Interface_main:
         método de interface para acessar o menu album
         '''
 
-        clear_screen()
+        limpar_terminal()
         menu_album = menuAlbum()  
         while menu_album.next != "Voltar":
             menu_album.options1()  
