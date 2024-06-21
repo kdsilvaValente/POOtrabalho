@@ -1,6 +1,5 @@
 from run import getconnection
 
-
 class Albuns:
     def __init__(self, nome:str, ano:int, artista:str, genero:str) -> None:
         
@@ -108,15 +107,13 @@ class Albuns:
         '''
         metodo que apaga um album do banco de dados
         '''
+        
         colecao_albuns = getconnection.get_collection("Albuns")
-            
-        # Verifica se o álbum existe
+        colecao_musicas = getconnection.get_collection("Musica")
+        
         if not colecao_albuns.find_one({'album': self.nome}):
             print(f"Álbum '{self.nome}' não encontrado no banco de dados.")
             return
-            
-        #apaga o álbum
-        colecao_albuns.delete_one({'album': self.nome})
-        print(f"Álbum '{self.nome}' apagado com sucesso.")
+        
     
     
