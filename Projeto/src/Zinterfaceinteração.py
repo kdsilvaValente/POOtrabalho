@@ -78,7 +78,9 @@ class Interface_interação(Menu):
         print(f"Nome: {result['name']}")
         print(f"Gênero: {result['gender']}")
         status = "online" if result['isonline'] else "offline"
-        print(emoji.emojize(f"Status: {status}"))
+        print(emoji.emojize(f"Situação: {status}"))
+        print(emoji.emojize(f"Status: \"{result['status']}\""))
+
         
         while True:  # loop para controle de entrada
             try:
@@ -105,7 +107,8 @@ class Interface_interação(Menu):
         print(f"Nome: {result['name']}")
         print(f"Gênero: {result['gender']}")
         status = "online" if result['isonline'] else "offline"
-        print(emoji.emojize(f"Status: {status}"))
+        print(emoji.emojize(f"Situação: {status}"))
+        print(emoji.emojize(f"Status: \"{result['status']}\""))
         user_amigo = id
         user_amigo_abrir = User(id)
         dados = user_amigo_abrir.musicas 

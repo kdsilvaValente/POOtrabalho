@@ -202,15 +202,4 @@ class Musica:
         colecao_musicas.find_one_and_delete({'titulo': self.titulo})
         print(f"Musica '{self.titulo}' apagada com sucesso.")
     
-    @staticmethod
-    def exibir_musicas():
-
-        '''
-        método estático que exibe todas as musicas do banco de dados
-        '''
-
-        colecao = getconnection.get_collection("Musica")
-        musicas = colecao.find({}, {"_id": 0, "titulo": 1, "album": 1})
-
-        for musica in musicas:
-            print(f"Álbum: {musica['album']}, Música: {musica['titulo']}")
+   
