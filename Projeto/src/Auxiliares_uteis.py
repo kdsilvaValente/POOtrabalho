@@ -59,7 +59,57 @@ class Auxiliar:
                 idalbum = resultados[0]['_id']
             
             return idalbum
+    
+    def print_info_musica(self, musica):
+        """
+        Função para imprimir informações de uma música de forma bonita no terminal.
 
+        Args:
+        - musica (Musica): Objeto Musica contendo as informações a serem exibidas.
+        """
+    
+        # Montando o quadro com as informações
+        print("=" * 70)
+        print("Informações da Música")
+        print("=" * 70)
+        print("Título:        {}".format(musica.titulo))
+        print("Artista:       {}".format(musica.artista))
+        print("Número:        {}".format(musica.numero))
+        print("Álbum:         {}".format(musica.album))
+        print("Gêneros:       {}".format(musica.genero))
+        print("Compositores:  {}".format(musica.compositores))
+        print("Produtores:    {}".format(musica.produtores))
+        print("Duração:       {}".format(musica.duracao))
+        print("=" * 70)
+
+
+    def get_musicas_by_album(self, album_nome):
+        # Método para buscar uma música pelo ID no banco de dados
+        music_collection = getconnection.get_collection("Musica")    
+        return music_collection.find({"album": album_nome})
+
+    
+    def print_info_album(self, album_doc):
+        """
+        Função para imprimir informações de um álbum de forma simples no terminal.
+
+        Args:
+        - album_doc (dict): Dicionário contendo as informações do álbum a serem exibidas.
+        """
+        print("=" * 70)
+        print("Informações do Álbum")
+        print("=" * 70)
+        print("Álbum:         {}".format(album_doc.nome))
+        print("Artista:       {}".format(album_doc.artista))
+        print("Ano:           {}".format(album_doc.ano))
+        print("Gênero:        {}".format(album_doc.genero))
+        print("Músicas:")
+
+        musicas = self.get_musicas_by_album(album_doc.nome)
+        for musica in musicas:
+            print(" - {}: {}".format(musica['numero'], musica['titulo']))
+
+        print("=" * 70)
 
 def limpar_terminal():
     sistema = platform.system()

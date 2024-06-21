@@ -27,6 +27,8 @@ class Interface_main:
         self.amizades = "Amizades"
         self.avaliacaomsc = "Musica"
         self.avaliacaoalbum = "Album"
+        self.musica_edicao = "Musica_edição"
+        self.album_edicao = "Album_edição"
         self.login_menu = "login"
         self.db_handle= DBconnectionHandler()
         self.db_handle.connect_to_db()
@@ -80,18 +82,25 @@ class Interface_main:
         """
         Controla a abertura da interface de login de administrador e direciona o próximo menu a ser aberto após o login.
         """
-        limpar_terminal()
+        """
+        Controla a abertura da interface de login de administrador e direciona o próximo menu a ser aberto após o login.
+        """
+        clear_screen()
         self.verificar_conexão()
         self.interface_login = Interface_login()
         user_id = self.interface_login.login()
+        
         if user_id:
-            admin = Admin(user_id)
-            if admin.can_modify_admin_status():
-                print("Login administrativo bem-sucedido.")
-                self.user = admin
-                self.admin_menu()
-            else:
-                print("Acesso negado. Você não possui permissão de administrador.")
+            try:
+                admin = Admin(user_id)
+                if admin.can_modify_admin_status():  # Verifica se o usuário logado é administrador
+                    print("Login administrativo bem-sucedido.")
+                    self.user = admin
+                    self.admin_menu()
+                else:
+                    print("Acesso negado. Você não possui permissão de administrador.")
+            except PermissionError as e:
+                print(e)  # Exibe a mensagem de erro de permissão
         else:
             print("Acesso negado. Usuário não encontrado.")
                 
@@ -104,21 +113,24 @@ class Interface_main:
         self.interface_user = User_interface(None)
 
     def user_menu(self) -> None:
+        
         """
-        Controla a abertura da interface de usuário e direciona o próximo menu a ser aberto.
+        Controla a abertura da interface de administrador e direciona o próximo menu a ser aberto.
         """
-        limpar_terminal()
-        self.verificar_conexão()
-        self.next = User_interface(self.user)
+        
+        clear_screen()
+        if self.user is None or not self.user.is_admin:
+            print("Acesso negado. Você não possui permissão de administrador.")
+            return
+        
+        self.next = menuAdmin(self.user.user_id)
         self.next = self.next.next
-        if self.next == self.navegação:
-            self.search_menu()
-        if self.next == self.sair:
-            self.logout()
-        if self.next == self.amizades:
-            self.interações_usuários()
-        if self.next == self.login_menu:
-            self.login()
+        if self.next == "Musica_edição":
+                self.musica_menu()
+        elif self.next == "Album_edição":
+                self.album_menu()
+        elif self.next == "Sair":
+                self.logout()
 
     def admin_menu(self) -> None:
         """
@@ -210,10 +222,32 @@ class Interface_main:
             if self.next == self.perfil:
                 self.user_menu()
     
-def musica_menu(self):
-        musica_menu = menuMusica()
-        while musica_menu.next != "Voltar":
-            musica_menu.options1()
+    def musica_menu(self) -> None:
+
+        '''
+        método de interface para acessar o menu musica
+        '''
+        
+        clear_screen()
+        menu_musica = menuMusica()  
+
+        while menu_musica.next != "Voltar":
+            menu_musica.options1()  
+        
+        self.admin_menu()
+
+
+    def album_menu(self):
+        
+        '''
+        método de interface para acessar o menu album
+        '''
+
+        clear_screen()
+        menu_album = menuAlbum()  
+        while menu_album.next != "Voltar":
+            menu_album.options1()  
+        
         self.admin_menu()
 
 

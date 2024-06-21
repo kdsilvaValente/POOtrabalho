@@ -1,4 +1,5 @@
 from run import getconnection
+from Music import *
 
 
 class Albuns:
@@ -108,15 +109,21 @@ class Albuns:
         '''
         metodo que apaga um album do banco de dados
         '''
+        
         colecao_albuns = getconnection.get_collection("Albuns")
-            
-        # Verifica se o álbum existe
+        colecao_musicas = getconnection.get_collection("Musica")
+        
         if not colecao_albuns.find_one({'album': self.nome}):
             print(f"Álbum '{self.nome}' não encontrado no banco de dados.")
             return
-            
-        #apaga o álbum
-        colecao_albuns.delete_one({'album': self.nome})
-        print(f"Álbum '{self.nome}' apagado com sucesso.")
+        
+        musicas = colecao_musicas.find({'album': self.nome})
+        for musica_data in musicas:
+            musica_obj = Musica(musica_data['numero'], musica_data['titulo'], musica_data['artista'], 
+                                            musica_data['album'], musica_data['genero'], musica_data['compositores'], 
+                                            musica_data['produtores'], musica_data['duracao'], musica_data['album_id'])
+            musica_obj.apagar_musica()
+
+        colecao_albuns.find_one_and_delete({'album': self.nome})
     
     

@@ -1,7 +1,7 @@
 from Auxiliares_uteis import Auxiliar
 from run import getconnection
 import numpy as np
-from Albuns import *
+from Albuns import Albuns
 
 class Musica:
     def __init__(self, numero:int, titulo:str, artista:str, album:str, genero:str, 
