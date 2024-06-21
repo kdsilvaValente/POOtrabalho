@@ -6,7 +6,7 @@ import platform
 
 
 class Auxiliar:
-    def __init__(self):
+    def __init__(self)->None:
         pass
     
     def verificar_existencia_musica(self, titulo, album, artista):

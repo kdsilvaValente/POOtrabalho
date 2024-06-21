@@ -3,7 +3,7 @@ from run import getconnection
 
 
 class Avaliacao():
-    def __init__(self):
+    def __init__(self)->None:
         """
         Inicializa a classe Avaliacao, estabelecendo conexões com as coleções necessárias no banco de dados.
         """

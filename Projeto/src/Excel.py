@@ -5,7 +5,7 @@ from Auxiliares_uteis import *
 from Albuns import *
 
 class Excel:
-    def __init__(self):
+    def __init__(self)->None:
         self.musicas_importadas = set() 
         
     #metodos para ler o excel
