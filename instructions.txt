@@ -31,7 +31,11 @@ Criando espaço virtual no VSCode.
     Obs: para administradores é possível também consultar o nosso banco, utilie o CompassDB e o conecte
     com o seguinte endereço : 
     "mongodb+srv://pooalbumatic:tr%40balhopoo@cluster0.lb2khsh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+    No nosso aplicativo, faça login de admin com as seguintes credenciais: 
+        Email: gabrielapoo@gmail.com
+        Senha: 12345
 
+-------------------------------
 Criando espaço virtual no Spyder
 1) Instalar Python:
     Certifique-se de que o Python esteja instalado em seu sistema.
@@ -77,3 +81,7 @@ Pronto, agora você pode criar seu usuário e explorar as funcionalidades do Alb
 Observação: Para administradores, é possível também consultar o banco de dados. Utilize o CompassDB e 
 conecte-o com o seguinte endereço:
 "mongodb+srv://pooalbumatic:tr%40balhopoo@cluster0.lb2khsh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+No nosso aplicativo, faça login de admin com as seguintes credenciais: 
+        Email: gabrielapoo@gmail.com
+        Senha: 12345
+----------------
