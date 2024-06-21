@@ -1,6 +1,5 @@
 from bson.objectid import ObjectId
 from run import getconnection
-from Auxiliares_uteis import calcMedia 
 
 
 class Avaliacao():
@@ -14,7 +13,8 @@ class Avaliacao():
         self.__avaliacaocollection = self.getconnection.get_collection("Avaliacao")
         self.__comentariocollection = self.getconnection.get_collection("Comentarios")
         self.__albumcollection = self.getconnection.get_collection("Albuns")
-        
+        self.sum = None
+        self.numUsers = None
 
     def validar_album(self, idalbum: ObjectId) -> dict:
         """
@@ -70,6 +70,11 @@ class Avaliacao():
             raise ValueError("Usuário não foi encontrado.")
         return user
     
+    def notaGeral(self):
+        if self.numUsers == 0:
+            raise ValueError("Número de usuários não pode ser zero.")
+        return self.sum / self.numUsers
+    
     def darLike(self, idmusica: ObjectId, idUser: ObjectId) -> str:
         """
         Adiciona um like a uma música.
@@ -88,14 +93,14 @@ class Avaliacao():
         musicname = music["titulo"]
 
         usuario_curtiu = self.__usercollection.find_one(
-            {"_id": ObjectId(idUser), "musicas curtidas": ObjectId(idmusica)}
+            {"_id": ObjectId(idUser), "musicas_curtidas": ObjectId(idmusica)}
         )
         if usuario_curtiu:
             return f"Usuário {username} já curtiu a música {musicname}."
 
         self.__usercollection.update_one(
             {"_id": ObjectId(idUser)},
-            {"$addToSet": {"musicas curtidas": idmusica}}
+            {"$addToSet": {"musicas_curtidas": idmusica}}
         )
 
         self.__musicacollection.update_one(
@@ -129,14 +134,14 @@ class Avaliacao():
         musicname = music["titulo"]
 
         usuario_curtiu = self.__usercollection.find_one(
-            {"_id": ObjectId(idUser), "musicas curtidas": ObjectId(idmusica)}
+            {"_id": ObjectId(idUser), "musicas_curtidas": ObjectId(idmusica)}
         )
         if not usuario_curtiu:
             return f"Usuário {username} não curtiu a música {musicname}."
 
         self.__usercollection.update_one(
             {"_id": ObjectId(idUser)},
-            {"$pull": {"musicas curtidas": idmusica}}
+            {"$pull": {"musicas_curtidas": idmusica}}
         )
 
         self.__musicacollection.update_one(
@@ -202,8 +207,10 @@ class Avaliacao():
         somatorio = msc["avaliacao geral"]
         usuarios = usu["n de avaliacoes"]
 
-        media = calcMedia(somatorio, usuarios)
-        notafinal = media.notaGeral()
+        self.sum = somatorio
+        self.numUsers = usuarios
+
+        notafinal = self.notaGeral()
         self.__musicacollection.update_one(
             {"_id": ObjectId(idmusica)},
             {"$set": {"avaliacao final": notafinal}}
@@ -325,14 +332,14 @@ class Avaliacao():
         albumname = alb["album"]
         
         usuario_curtiu = self.__usercollection.find_one(
-            {"_id": ObjectId(idUser), "albuns favoritados": ObjectId(idalbum)}
+            {"_id": ObjectId(idUser), "albuns_favoritados": ObjectId(idalbum)}
         )
         if usuario_curtiu:
             return f"Usuário {username} já curtiu o álbum {albumname}."
 
         self.__usercollection.update_one(
             {"_id": ObjectId(idUser)},
-            {"$addToSet": {"albuns favoritados": idalbum}}
+            {"$addToSet": {"albuns_favoritados": idalbum}}
         )
 
         self.__albumcollection.update_one(
@@ -366,14 +373,14 @@ class Avaliacao():
         albumname = alb["album"]
 
         usuario_curtiu = self.__usercollection.find_one(
-            {"_id": ObjectId(idUser), "albuns favoritados": ObjectId(idalbum)}
+            {"_id": ObjectId(idUser), "albuns_favoritados": ObjectId(idalbum)}
         )
         if not usuario_curtiu:
             return f"Usuário {username} não favoritou o álbum {albumname}."
 
         self.__usercollection.update_one(
             {"_id": ObjectId(idUser)},
-            {"$pull": {"musicas curtidas": idalbum}}
+            {"$pull": {"albuns_favoritados": idalbum}}
         )
 
         self.__albumcollection.update_one(
