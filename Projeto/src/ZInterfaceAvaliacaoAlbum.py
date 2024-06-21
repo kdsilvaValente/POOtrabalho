@@ -16,11 +16,11 @@ class AvaliacaoInterfaceAlb(InterfaceAvaliacao):
         self.next = None
         self.title = "Vamos avaliar!"
         self.options = [
-            "1 - Favoritar esse álbum!!! Gosto muuIIiito dele:",
-            "2 - Remover like, não gosto mais dele (emoji nojo)",
-            "3 - Tenho mt a dizer!!!! Quero comentar esse álbum",
-            "4 - Me mostre os comentários que as pessoas estão fazendo sobre esse álbum",
-            "5 - Abra as informações do álbum novamente"
+            "1. Favoritar esse álbum!!! Gosto muuIIiito dele:",
+            "2. Remover like, não gosto mais dele (emoji nojo)",
+            "3. Tenho mt a dizer!!!! Quero comentar esse álbum",
+            "4. Me mostre os comentários que as pessoas estão fazendo sobre esse álbum",
+            "5. Abra as informações do álbum novamente"
         ]
 
     def finalAcao(self)->None:
@@ -28,8 +28,8 @@ class AvaliacaoInterfaceAlb(InterfaceAvaliacao):
         Exibe as opções finais após uma ação e processa a escolha do usuário.
         """
         print("O que você deseja fazer agora?")
-        print("1 - Fazer outra pesquisa")
-        print("2 - Avaliar essa álbum novamente")
+        print("1. Fazer outra pesquisa")
+        print("2. Voltar")
 
         next_option = int(input("Escolha uma opção: "))
 
@@ -127,6 +127,6 @@ class AvaliacaoInterfaceAlb(InterfaceAvaliacao):
             self.finalAcao()
 
         else:
-            print("Opção inválida! Tente novamente.")
+            print("")
             op = int(input("Escolha uma opção válida: "))
             self.next1(op)

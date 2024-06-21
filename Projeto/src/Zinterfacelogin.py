@@ -8,6 +8,9 @@ class Interface_login(Menu):
     """
     Classe responsável pela interface de login do usuário.
     """
+    def __init__(self) -> None:
+        self.login_instance = None
+        self.title = "Login"
     
     def login(self):
         """
@@ -52,7 +55,7 @@ class Interface_login(Menu):
         """
         Método para renderizar a interface de login.
         """
-        self.title = "Login"
+       
         margem = '=' * (len(self.title) + 5)
         print(margem)
         print(f"|| {self.title} ||")

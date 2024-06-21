@@ -17,12 +17,12 @@ class AvaliacaoInterMsc(InterfaceAvaliacao):
         self.conexao = getconnection
         self.title = "Vamos avaliar!"
         self.optionsmusic = [
-            "1 - Favoritar essa musica!!! To apaixonade nela:",
-            "2 - Remover like, não gosto mais dela (emoji nojo)",
-            "3 - Me sentindo crítico, quero dar nota pra essa música",
-            "4 - Tenho mt a dizer!!!! Quero comentar essa música",
-            "5 - Me mostre os comentários que as pessoas estão fazendo sobre essa música",
-            "6 - Exibir novamente as informações da música"
+            "1. Favoritar essa musica!!! To apaixonade nela:",
+            "2. Remover like, não gosto mais dela (emoji nojo)",
+            "3. Me sentindo crítico, quero dar nota pra essa música",
+            "4. Tenho mt a dizer!!!! Quero comentar essa música",
+            "5. Me mostre os comentários que as pessoas estão fazendo sobre essa música",
+            "6. Exibir novamente as informações da música"
         ]
         
     def iniciotela(self)->None:
@@ -124,10 +124,9 @@ class AvaliacaoInterMsc(InterfaceAvaliacao):
         """
         Exibe as opções finais após uma ação e processa a escolha do usuário.
         """
-        print("deu certo até aqui")
         print("O que você deseja fazer agora?")
         print("1 - Fazer outra pesquisa")
-        print("2 - Avaliar essa mesma música novamente")
+        print("2 - Voltar")
 
         next_option = int(input("Escolha uma opção: "))
 
@@ -148,7 +147,6 @@ class AvaliacaoInterMsc(InterfaceAvaliacao):
 
         :param option: Opção escolhida pelo usuário.
         """
-        clear_screen()  # limpa a tela ao iniciar um novo menu
         
         if option == 1:
             like = self.avaliacao.darLike(self.musica, self.user)
@@ -161,11 +159,17 @@ class AvaliacaoInterMsc(InterfaceAvaliacao):
             printando_divisão_2()
             self.finalAcao()
         elif option == 3:
-            nota = int(input("De uma a 5 estrelas, qual nota você quer dar pra essa música?"))
-            darnota = self.avaliacao.darNota(self.musica, self.user, nota)
-            print(darnota)
-            printando_divisão_2()
-            self.finalAcao()
+            while True:
+                nota = int(input("De 1 a 5 estrelas, qual nota você quer dar pra essa música?"))
+                if nota >5 or nota<0:
+                    print("digite uma nota válida!")
+                    pass
+                else:
+                    darnota = self.avaliacao.darNota(self.musica, self.user, nota)
+                    print(darnota)
+                    printando_divisão_2()
+                    self.finalAcao()
+                    return 0
         elif option == 4:
             comentario = input("Sou todo ouvidos! Me conta o que você tem a dizer:")
             comt = self.avaliacao.comentar(self.musica, self.user, comentario)

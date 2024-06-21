@@ -125,7 +125,7 @@ def testar_tamanho_vetor(tamanho, escolha)->bool:
 
     garante que a escolha não ultrapasse o limite do vetor
     """
-    if escolha > tamanho:
+    if escolha > tamanho or escolha < 1:
         print("Escolha um número existente!")
         return False
     else:

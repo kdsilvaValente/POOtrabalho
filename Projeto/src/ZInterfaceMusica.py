@@ -17,10 +17,10 @@ class menuMusica(Menu):
         self.next = 0
         self.title = "Menu Musica :p"
         self.options = [
-            "1 - Adicionar uma música",
-            "2 - Editar música",
-            "3 - Apagar música",
-            "4 - Voltar ao menu anterior",
+            "1. Adicionar uma música",
+            "2. Editar música",
+            "3. Apagar música",
+            "4. Voltar ao menu anterior",
             " "
         ]
         self.options1()
@@ -138,13 +138,13 @@ class menuMusica(Menu):
                                     musica_data['album'], musica_data['genero'], musica_data['compositores'], 
                                     musica_data['produtores'], musica_data['duracao'], musica_data['album_id'])
                     
-                    print("1 - Título\n",
-                    "2 - Album\n",
-                    "3 - Artista\n"
-                    "4 - Gênero\n"
-                    "5 - Compositores\n"
-                    "6 - Produtores\n"
-                    "7 - Duração\n")
+                    print("1. Título\n",
+                    "2. Album\n",
+                    "3. Artista\n"
+                    "4. Gênero\n"
+                    "5. Compositores\n"
+                    "6. Produtores\n"
+                    "7. Duração\n")
                 
                     aux = str(input("> Digite o valor correspontente do que você deseja alterar: "))
                     auxiliar.print_info_musica(musica)

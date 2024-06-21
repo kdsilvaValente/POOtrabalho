@@ -18,11 +18,11 @@ class menuAlbum(Menu):
         self.next = 0
         self.title = "Menu Albuns :p"
         self.options = [
-            "1 - Adicionar um album",
-            "2 - Editar album",
-            "3 - Apagar album",
-            "4 - Ler Excel novamente",
-            "5 - Voltar"
+            "1. Adicionar um album",
+            "2. Editar album",
+            "3. Apagar album",
+            "4. Ler Excel novamente",
+            "5. Voltar"
         ]
         self.options1()
 
@@ -110,18 +110,17 @@ class menuAlbum(Menu):
             try:
 
                 clear_screen()
-                print('aaaaaaaaaaaaaaaaaaaa')
                 print("Editar album")
                 album = str(input("Qual o nome do álbum que você deseja alterar: "))
                 id = auxiliar.buscar_album(album)
                 album_data = getconnection.get_collection("Albuns").find_one({'_id': id})
                 print("")
 
-                print(" 1 - TItulo do album\n"
-                    "2 - Artista\n",
-                    "3 - Gênero\n", 
-                    "4 - Ano\n", 
-                    "5 - Musicas")
+                print(" 1. TItulo do album\n"
+                    "2. Artista\n",
+                    "3. Gênero\n", 
+                    "4. Ano\n", 
+                    "5. Musicas")
                 
                 aux = int(input("> Digite o valor correspontente do que você deseja alterar: "))
 

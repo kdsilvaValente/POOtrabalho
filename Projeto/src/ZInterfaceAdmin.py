@@ -22,10 +22,10 @@ class menuAdmin(Menu):
         self.admin_user = Admin(admin_id)
         self.title = "Menu de administrador :p"
         self.options = [
-            "1 - Realizar alterações no banco de dados de músicas",
-            "2 - Realizar alterações no banco de dados de álbuns",
-            "3 - Criar usuário administrador",
-            "4 - Sair"
+            "1. Realizar alterações no banco de dados de músicas",
+            "2. Realizar alterações no banco de dados de álbuns",
+            "3. Criar usuário administrador",
+            "4. Sair"
         ]
         self.options1()
 
