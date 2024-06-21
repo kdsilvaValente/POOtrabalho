@@ -115,6 +115,25 @@ class Interface_main:
     def user_menu(self) -> None:
         
         """
+        Controla a abertura da interface de usuário e direciona o próximo menu a ser aberto.
+        """
+        limpar_terminal()
+        self.verificar_conexão()
+        self.next = User_interface(self.user)
+        self.next = self.next.next
+        if self.next == self.navegação:
+            self.search_menu()
+        if self.next == self.sair:
+            self.logout()
+        if self.next == self.amizades:
+            self.interações_usuários()
+        if self.next == self.login_menu:
+            self.login()
+    
+
+    def admin_menu(self) -> None:
+        
+        """
         Controla a abertura da interface de administrador e direciona o próximo menu a ser aberto.
         """
         
@@ -130,21 +149,7 @@ class Interface_main:
         elif self.next == "Album_edição":
                 self.album_menu()
         elif self.next == "Sair":
-                self.logout()
-
-    def admin_menu(self) -> None:
-        """
-        Controla a abertura da interface de administrador e direciona o próximo menu a ser aberto.
-        """
-        limpar_terminal()
-        menu = menuAdmin()
-        while True:
-            menu.render()
-            try:
-                option = int(input())
-                menu.next(option)
-            except ValueError:
-                print("Por favor, insira um número válido.")      
+                self.logout()      
 
 
     def search_menu(self) -> None:
