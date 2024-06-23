@@ -31,6 +31,7 @@ class Interface_main:
         self.musica_edicao = "Musica_edição"
         self.album_edicao = "Album_edição"
         self.login_menu = "login"
+        self.dicti = []
         self.db_handle= DBconnectionHandler()
         self.db_handle.connect_to_db()
         
@@ -173,6 +174,7 @@ class Interface_main:
             elif isinstance(self.next, dict):
                 if self.next["next"] == self.amizades:
                     self.user_pesquisa = str(self.next["id_pesquisa"])
+                    self.dicti = self.next
                     self.next = self.amizades
                     self.interações_usuários()
                 elif self.next["next"] == self.avaliacaoalbum:
@@ -227,8 +229,8 @@ class Interface_main:
         """
         limpar_terminal()
         self.verificar_conexão()
-        while self.next == "Amizades" or isinstance(self.next, dict):
-                if self.next=="Amizades":
+        while self.next == "Amizades":
+                if self.dicti==[]:
                     self.user_pesquisa =None
                 else:
                     pass

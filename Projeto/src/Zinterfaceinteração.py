@@ -122,8 +122,10 @@ class Interface_interação(Menu):
             for i in range(len(dados)):
                 search = Search("Musica")
                 result = search.get_by_id(ObjectId(dados[i]))
-                if result is not None:
-                   print(f"{i}. {result['titulo']}")
+                number = 1
+                if result is not None and result is not "":
+                   print(f"{number}. {result['titulo']}")
+                   number+=1
         user_amigo = id
         user_amigo_abrir = User(id)
         dados = user_amigo_abrir.album 
@@ -135,8 +137,11 @@ class Interface_interação(Menu):
             for i in range(len(dados)):
                 search = Search("Albuns")
                 result = search.get_by_id(ObjectId(dados[i]))
+                number = 1
                 if result is not None:
-                     print(f"{i}. {result['album']}")
+                     print(f"{number}. {result['album']}")
+                     number+=1
+
         option = int(input("Clique qualquer tecla para voltar: "))
         limpar_terminal()
         self.next = "Amizades"  # define amizades como próximo menu

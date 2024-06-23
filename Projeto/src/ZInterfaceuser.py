@@ -89,8 +89,10 @@ class User_interface(Menu):
             for i in range(len(dados)):
                 search = Search("Musica")
                 result = search.get_by_id(ObjectId(dados[i]))
+                number=1
                 if result is not None:
-                   print(f"{i}. {result['titulo']}")
+                   print(f"{number}. {result['titulo']}")
+                   number+=1
         dados = self.user.album 
         
         if dados ==[]:
@@ -100,8 +102,11 @@ class User_interface(Menu):
             for i in range(len(dados)):
                 search = Search("Albuns")
                 result = search.get_by_id(ObjectId(dados[i]))
+                number=1
                 if result is not None:
-                     print(f"{i}. {result['album']}")
+                     print(f"{number}. {result['album']}")
+                     number+=1
+
 
         
 
