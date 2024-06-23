@@ -67,6 +67,7 @@ class Interface_search(Menu):
         print(emoji.emojize("3. Album:headphone:"))
         print(emoji.emojize("4. Pessoas:rainbow_flag:"))
         print((emoji.emojize("5. Voltar :BACK_arrow: ")))
+        self.next = "Navegação"
 
     def display_main_menu_option(self, option: int) -> None:
         """

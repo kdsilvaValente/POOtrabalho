@@ -75,11 +75,14 @@ class Interface_interação(Menu):
         :param id: ID do usuário a ser visualizado.
         """
         result = self.search.get_by_id(ObjectId(id))
-        print(f"Nome: {result['name']}")
-        print(f"Gênero: {result['gender']}")
-        status = "online" if result['isonline'] else "offline"
-        print(emoji.emojize(f"Situação: {status}"))
-        print(emoji.emojize(f"Status: \"{result['status']}\""))
+        if result is not None:
+            print(f"Nome: {result.get('name', '')}")
+            print(f"Gênero: {result['gender']}")
+            status = "online" if result['isonline'] else "offline"
+            print(emoji.emojize(f"Situação: {status}"))
+            print(emoji.emojize(f"Status: \"{result['status']}\""))
+        else:
+            pass
 
         
         while True:  # loop para controle de entrada

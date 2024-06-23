@@ -228,11 +228,15 @@ class Interface_main:
         limpar_terminal()
         self.verificar_conexão()
         while self.next == "Amizades" or isinstance(self.next, dict):
-            self.next = Interface_interação(self.user, self.user_pesquisa)
-            self.next = self.next.next
-            self.user_pesquisa = None
-            if self.next == self.perfil:
-                self.user_menu()
+                if self.next=="Amizades":
+                    self.user_pesquisa =None
+                else:
+                    pass
+                self.next = Interface_interação(self.user, self.user_pesquisa)
+                self.next = self.next.next
+                self.user_pesquisa = None
+                if self.next == self.perfil:
+                    self.user_menu()
     
     def musica_menu(self) -> None:
 
