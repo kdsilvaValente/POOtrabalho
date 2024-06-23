@@ -1,0 +1,87 @@
+Olá! Bem vindo al Albumatic. Para começarmos a usar o programa, precisamos primeiro criar um
+espaço virtual e instalatr as devidas dependências, para que o nosso programa funcione de ma-
+neira correta. 
+
+Criando espaço virtual no VSCode. 
+
+1) Instalar Python:
+    Certifique-se de que o Python esteja instalado em seu sistema.
+    Você pode baixar o Python do site oficial ou da MicrosoftStore.
+
+2) Instalar Visual Studio Code (VSCode):
+    Baixe e instale o VSCode do site oficial.
+    Instalar a Extensão Python no VSCode:
+
+3) Abra o VSCode no diretório do projeto.
+
+4) Instale a extensão de Python no VSCode
+    Vá para a aba de Extensões (ícone de quadrados no lado esquerdo ou pressione Ctrl+Shift+X).
+    Procure por "Python" e instale a extensão oficial da Microsoft.
+
+5) Crie o ambiente virtual.
+    No diretórioC: ...\projeto poo\Projeto\src, selecione o arquico ZInterfacemain.py 
+    Pressione Ctrl+Shift+P
+    Selecine a opcão "Show and run commands"
+    Selecione Python "Create environment"
+    Selecine o seu ambiente de preferência, seleecione o arquivo requirements.txt para instalação 
+    das dependências e bibliotecas necessárias para execução do programa. 
+
+6) Aproveite! 
+    Pronto, agora só executar script Python (ZInterfacemain) no terminal dedicado e criar seu usuário. 
+    Obs: para administradores é possível também consultar o nosso banco, utilie o CompassDB e o conecte
+    com o seguinte endereço : 
+    "mongodb+srv://pooalbumatic:tr%40balhopoo@cluster0.lb2khsh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+    No nosso aplicativo, faça login de admin com as seguintes credenciais: 
+        Email: gabrielapoo@gmail.com
+        Senha: 12345
+
+-------------------------------
+Criando espaço virtual no Spyder
+1) Instalar Python:
+    Certifique-se de que o Python esteja instalado em seu sistema.
+    Você pode baixar o Python do site oficial ou da Microsoft Store.
+
+2) Instalar Spyder:
+    Baixe e instale o Spyder como parte da distribuição Anaconda ou diretamente do site oficial.
+    
+3) Criar o Ambiente Virtual:
+    Abra o Anaconda Navigator.
+    Vá para a aba "Environments" e clique no botão "Create" para criar um novo ambiente.
+    Nomeie seu ambiente e selecione a versão do Python desejada.
+    Clique em "Create" para finalizar a criação do ambiente.
+
+4) Ativar o Ambiente Virtual:
+    Abra o terminal Anaconda Prompt.
+    Ative o ambiente virtual com o comando:
+        "conda activate nome_do_ambiente"
+
+5) Instalar Dependências:
+
+    Navegue até o diretório do seu projeto no terminal (se for windows, comando cd ...\diretório)
+    Instale as dependências listadas no arquivo requirements.txt>
+        "pip install -r requirements.txt"
+
+6) Configurar Spyder para Usar o Ambiente Virtual:
+    Abra o Spyder.
+    Vá para "Tools" -> "Preferences" -> "Python Interpreter".
+    Selecione "Use the following Python interpreter" e navegue até o executável do Python no ambiente 
+    virtual criado.
+    Clique em "Apply" e depois em "OK".
+
+7) Abrir o Projeto no Spyder:
+    No Spyder, abra o diretório do seu projeto.
+    Selecione o arquivo ZInterfacemain.py para abrir e editar.
+    Executar o Script no Spyder:
+
+    Com o arquivo ZInterfacemain.py aberto, clique no botão "Run" (ícone de triângulo verde) ou pressione F5
+    para executar o script.
+    Aproveite!
+
+Pronto, agora você pode criar seu usuário e explorar as funcionalidades do Albumatic.
+Observação: Para administradores, é possível também consultar o banco de dados. Utilize o CompassDB e 
+conecte-o com o seguinte endereço:
+"mongodb+srv://pooalbumatic:tr%40balhopoo@cluster0.lb2khsh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+No nosso aplicativo, faça login de admin com as seguintes credenciais: 
+        Email: gabrielapoo@gmail.com
+        Senha: 12345
+----------------
