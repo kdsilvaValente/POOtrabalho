@@ -86,10 +86,10 @@ class User_interface(Menu):
             print("você não tem músicas favoritos ainda")
         else:
             print("Musicas favoritas:")
+            number=1
             for i in range(len(dados)):
                 search = Search("Musica")
                 result = search.get_by_id(ObjectId(dados[i]))
-                number=1
                 if result is not None:
                    print(f"{number}. {result['titulo']}")
                    number+=1
@@ -99,10 +99,10 @@ class User_interface(Menu):
             print("você não tem albuns favoritos ainda")
         else:
             print("Albuns favoritos:")
+            number=1
             for i in range(len(dados)):
                 search = Search("Albuns")
                 result = search.get_by_id(ObjectId(dados[i]))
-                number=1
                 if result is not None:
                      print(f"{number}. {result['album']}")
                      number+=1
