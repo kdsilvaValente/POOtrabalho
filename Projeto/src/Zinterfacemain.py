@@ -56,7 +56,7 @@ class Interface_main:
                     self.admin_login()
                 elif option == 4:
                     limpar_terminal()
-                    print("encerrando Albumagic...")
+                    print("encerrando Albumatic...")
                     sys.exit()
                 else:
                     print(emoji.emojize("Opção inválida. Por favor, escolha uma opção de 1 a 2:prohibited: "))
